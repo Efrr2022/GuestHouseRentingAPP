@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/Owner": {
+      "name": "/Owner",
+      "lambdaFunction": "GuestHouseRentalAPP",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

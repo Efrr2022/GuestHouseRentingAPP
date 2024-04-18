@@ -1,0 +1,29 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-guesthouserentingapp-dev-fbf24-authRole",
+      "UnauthRoleArn": "arn:aws:iam::730335654565:role/amplify-guesthouserentingapp-dev-fbf24-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::730335654565:role/amplify-guesthouserentingapp-dev-fbf24-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-guesthouserentingapp-dev-fbf24-deployment",
+      "UnauthRoleName": "amplify-guesthouserentingapp-dev-fbf24-unauthRole",
+      "StackName": "amplify-guesthouserentingapp-dev-fbf24",
+      "StackId": "arn:aws:cloudformation:us-east-1:730335654565:stack/amplify-guesthouserentingapp-dev-fbf24/4f1e63e0-fd65-11ee-b17e-0e75aa85f423",
+      "AmplifyAppId": "d2vljaz45nhhn2"
+    },
+    "categories": {
+      "function": {
+        "GuestHouseRentalAPP": {
+          "deploymentBucketName": "amplify-guesthouserentingapp-dev-fbf24-deployment",
+          "s3Key": "amplify-builds/GuestHouseRentalAPP-5a712f4667567574362f-build.zip"
+        }
+      },
+      "api": {
+        "Owner": {}
+      },
+      "hosting": {
+        "S3AndCloudFront": {}
+      }
+    }
+  }
+}
