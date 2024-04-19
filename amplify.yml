@@ -10,7 +10,7 @@ frontend:
         - echo "I am runing on build commands"
         - npm run build
   artifacts:
-    baseDirectory: dist/project/browser
+    baseDirectory: dist/amplify-app
     files:
       - '**/*'
   cache:
