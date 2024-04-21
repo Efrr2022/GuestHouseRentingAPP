@@ -25,16 +25,6 @@ backend:
         - echo "Installing Pip enviroment and __________________________________"
         - pip3.8 install pipenv
         - pip install virtualenv
-        - echo "Installing dependencies..."
-        - pip install -r requirements.txt -t lib
-        - echo "Zipping deployment package..."
-        - cd lib
-        - zip -r9 ../deployment_package.zip .
-        - cd ..
-        - zip -g deployment_package.zip index.py
-        - echo "Updating lambda Function..."
-        - aws lambda update-function-code --function-name GuestHouseRentalAPP-dev --zip-file fileb://deployment_package.zip
-        - echo "DONE!!"
         - amplifyPush --simple
        
    
