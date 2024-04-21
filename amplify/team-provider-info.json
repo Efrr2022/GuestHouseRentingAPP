@@ -15,7 +15,7 @@
       "function": {
         "GuestHouseRentalAPP": {
           "deploymentBucketName": "amplify-guesthouserentingapp-dev-fbf24-deployment",
-          "s3Key": "amplify-builds/GuestHouseRentalAPP-6976716c734b686c734e-build.zip"
+          "s3Key": "amplify-builds/GuestHouseRentalAPP-31767246494c556c6a55-build.zip"
         }
       },
       "api": {
