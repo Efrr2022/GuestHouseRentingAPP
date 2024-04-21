@@ -32,10 +32,10 @@ backend:
         - zip -r9 ../deployment_package.zip .
         - cd ..
         - zip -g deployment_package.zip index.py
+        - echo "Updating lambda Function..."
+        - aws lambda update-function-code --function-name GuestHouseRentalAPP-dev --zip-file fileb://deployment_package.zip
+        - echo "DONE!!"
         - amplifyPush --simple
        
-    post_build:
-      commands:
-        - echo "Updating lambda Function..."
-        - aws lambda update-function-code --function-name GuestHouseRentalAPP --zip-file fileb://deployment_package.zip
-        - echo "DONE!!"
+   
+        
