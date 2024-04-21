@@ -47,12 +47,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "GuestHousesRentalAPP",
+            "GuestHouseRentalAPP",
             {
               "Fn::Join": [
                 "",
                 [
-                  "GuestHousesRentalAPP",
+                  "GuestHouseRentalAPP",
                   "-",
                   {
                     "Ref": "env"
@@ -89,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "guesthouserentingappLambdaRole8fe85bad",
+            "guesthouserentingappLambdaRole955bd9ce",
             {
               "Fn::Join": [
                 "",
                 [
-                  "guesthouserentingappLambdaRole8fe85bad",
+                  "guesthouserentingappLambdaRole955bd9ce",
                   "-",
                   {
                     "Ref": "env"

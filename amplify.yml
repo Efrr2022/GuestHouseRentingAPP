@@ -25,6 +25,7 @@ backend:
         - echo "Installing Pip enviroment and __________________________________"
         - pip3.8 install pipenv
         - pip install virtualenv
+        - pip install -r requirements.txt
         - amplifyPush --simple
        
    

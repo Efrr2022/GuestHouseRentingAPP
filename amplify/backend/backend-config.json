@@ -13,20 +13,6 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
-    },
-    "properties": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
-          "resourceName": "GuestHouseRentalAPP"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
     }
   },
   "auth": {
@@ -78,11 +64,6 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
-    },
-    "GuestHousesRentalAPP": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
     }
   },
   "hosting": {
@@ -105,22 +86,6 @@
         {
           "category": "function",
           "resourceName": "GuestHouseRentalAPP"
-        }
-      ]
-    },
-    "AMPLIFY_function_GuestHousesRentalAPP_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "GuestHousesRentalAPP"
-        }
-      ]
-    },
-    "AMPLIFY_function_GuestHousesRentalAPP_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "GuestHousesRentalAPP"
         }
       ]
     }
