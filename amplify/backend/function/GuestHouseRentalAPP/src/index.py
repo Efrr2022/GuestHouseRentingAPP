@@ -30,6 +30,7 @@ def handler(event, context):
             })
         }
   
+
     return {
         'statusCode': response.get('statusCode', 200),
         'headers': {
@@ -175,3 +176,4 @@ def handle_get_request(event):
 def handle_patch_request(event):
     pass
  
+

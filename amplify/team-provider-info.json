@@ -12,9 +12,17 @@
       "AmplifyAppId": "d2vljaz45nhhn2"
     },
     "categories": {
+      "hosting": {
+        "S3AndCloudFront": {}
+      },
+      "auth": {
+        "guesthouserentingappb62531c3": {},
+        "userPoolGroups": {}
+      },
       "function": {
         "GuestHouseRentalAPP": {
           "deploymentBucketName": "amplify-guesthouserentingapp-dev-fbf24-deployment",
+<<<<<<< HEAD
           "s3Key": "amplify-builds/GuestHouseRentalAPP-566f4d5944794f78526e-build.zip"
         }
       },
@@ -28,6 +36,13 @@
       "auth": {
         "guesthouserentingappb62531c3": {},
         "userPoolGroups": {}
+=======
+          "s3Key": "amplify-builds/GuestHouseRentalAPP-71316557546e66334476-build.zip"
+        }
+      },
+      "api": {
+        "Owner": {}
+>>>>>>> 9ee0211458ba4020cad2f281cf3f49553fea02f0
       }
     }
   }

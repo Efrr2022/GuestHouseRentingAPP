@@ -18,10 +18,15 @@ frontend:
       - .npm/**/*
 backend:
   phases:
+    
     build:
       commands:
         - sudo update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.8 11
         - echo "Installing Pip enviroment and __________________________________"
         - pip3.8 install pipenv
         - pip install virtualenv
+        - pip install -r requirements.txt
         - amplifyPush --simple
+       
+   
+        

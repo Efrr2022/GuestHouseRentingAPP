@@ -27,6 +27,22 @@ export type AmplifyDependentResourcesAttributes = {
       "HostGroupRole": "string"
     }
   },
+  "auth": {
+    "guesthouserentingappb62531c3": {
+      "AppClientID": "string",
+      "AppClientIDWeb": "string",
+      "IdentityPoolId": "string",
+      "IdentityPoolName": "string",
+      "UserPoolArn": "string",
+      "UserPoolId": "string",
+      "UserPoolName": "string"
+    },
+    "userPoolGroups": {
+      "AdminGroupRole": "string",
+      "GuestGroupRole": "string",
+      "HostGroupRole": "string"
+    }
+  },
   "function": {
     "GuestHouseRentalAPP": {
       "Arn": "string",
