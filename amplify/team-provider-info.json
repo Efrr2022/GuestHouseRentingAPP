@@ -15,14 +15,19 @@
       "function": {
         "GuestHouseRentalAPP": {
           "deploymentBucketName": "amplify-guesthouserentingapp-dev-fbf24-deployment",
-          "s3Key": "amplify-builds/GuestHouseRentalAPP-5a712f4667567574362f-build.zip"
+          "s3Key": "amplify-builds/GuestHouseRentalAPP-566f4d5944794f78526e-build.zip"
         }
       },
       "api": {
-        "Owner": {}
+        "Owner": {},
+        "properties": {}
       },
       "hosting": {
         "S3AndCloudFront": {}
+      },
+      "auth": {
+        "guesthouserentingappb62531c3": {},
+        "userPoolGroups": {}
       }
     }
   }
