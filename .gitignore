@@ -62,3 +62,9 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+amplify/backend/api/Owner/cli-inputs.json
+amplify/backend/backend-config.json
+amplify/backend/types/amplify-dependent-resources-ref.d.ts
+amplify/team-provider-info.json
+
+amplify/backend/**/*.json
