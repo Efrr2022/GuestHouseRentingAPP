@@ -31,6 +31,7 @@ def handler(event, context):
         }
   
 
+
     return {
         'statusCode': response.get('statusCode', 200),
         'headers': {
