@@ -73,50 +73,6 @@
       "service": "Cognito-UserPool-Groups"
     }
   },
-  "auth": {
-    "guesthouserentingappb62531c3": {
-      "customAuth": false,
-      "dependsOn": [],
-      "frontendAuthConfig": {
-        "mfaConfiguration": "OFF",
-        "mfaTypes": [
-          "SMS"
-        ],
-        "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [],
-          "passwordPolicyMinLength": 8
-        },
-        "signupAttributes": [
-          "EMAIL"
-        ],
-        "socialProviders": [],
-        "usernameAttributes": [
-          "EMAIL"
-        ],
-        "verificationMechanisms": [
-          "EMAIL"
-        ]
-      },
-      "providerPlugin": "awscloudformation",
-      "service": "Cognito"
-    },
-    "userPoolGroups": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId",
-            "AppClientIDWeb",
-            "AppClientID",
-            "IdentityPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "guesthouserentingappb62531c3"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "Cognito-UserPool-Groups"
-    }
-  },
   "function": {
     "GuestHouseRentalAPP": {
       "build": true,
@@ -132,14 +88,6 @@
   },
   "parameters": {
     "AMPLIFY_function_GuestHouseRentalAPP_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "GuestHouseRentalAPP"
-        }
-      ]
-    },
-    "AMPLIFY_function_GuestHouseRentalAPP_s3Key": {
       "usedBy": [
         {
           "category": "function",
