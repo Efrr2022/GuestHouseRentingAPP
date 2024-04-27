@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "paths": {
+    "/owner": {
+      "name": "/owner",
+      "lambdaFunction": "OwnersAndRenters",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/status": {
+      "name": "/status",
+      "lambdaFunction": "OwnersAndRenters",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

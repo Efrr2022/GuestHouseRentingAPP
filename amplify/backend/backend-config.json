@@ -13,10 +13,87 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
+    },
+    "ownerAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "OwnersAndRenters"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "properties": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "GuestHouseRentalAPP"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "auth": {
+    "guesthouserentingappb62531c3": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    },
+    "userPoolGroups": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId",
+            "AppClientIDWeb",
+            "AppClientID",
+            "IdentityPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "guesthouserentingappb62531c3"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito-UserPool-Groups"
     }
   },
   "function": {
     "GuestHouseRentalAPP": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "OwnersAndRenters": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -42,6 +119,22 @@
         {
           "category": "function",
           "resourceName": "GuestHouseRentalAPP"
+        }
+      ]
+    },
+    "AMPLIFY_function_OwnersAndRenters_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "OwnersAndRenters"
+        }
+      ]
+    },
+    "AMPLIFY_function_OwnersAndRenters_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "OwnersAndRenters"
         }
       ]
     }

@@ -15,14 +15,25 @@
       "function": {
         "GuestHouseRentalAPP": {
           "deploymentBucketName": "amplify-guesthouserentingapp-dev-fbf24-deployment",
-          "s3Key": "amplify-builds/GuestHouseRentalAPP-5a712f4667567574362f-build.zip"
+          "s3Key": "amplify-builds/GuestHouseRentalAPP-566f4d5944794f78526e-build.zip"
+        },
+        "OwnersAndRentals": {},
+        "OwnersAndRenters": {
+          "deploymentBucketName": "amplify-guesthouserentingapp-dev-fbf24-deployment",
+          "s3Key": "amplify-builds/OwnersAndRenters-45356c55432b55393457-build.zip"
         }
       },
       "api": {
-        "Owner": {}
+        "Owner": {},
+        "properties": {},
+        "ownerAPI": {}
       },
       "hosting": {
         "S3AndCloudFront": {}
+      },
+      "auth": {
+        "guesthouserentingappb62531c3": {},
+        "userPoolGroups": {}
       }
     }
   }
