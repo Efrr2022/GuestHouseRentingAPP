@@ -17,7 +17,58 @@
       },
       "auth": {
         "guesthouserentingappb62531c3": {},
-        "userPoolGroups": {}
+        "userPoolGroups": {},
+        "deploymentBucketName": {
+          "0": "a",
+          "1": "m",
+          "2": "p",
+          "3": "l",
+          "4": "i",
+          "5": "f",
+          "6": "y",
+          "7": "-",
+          "8": "g",
+          "9": "u",
+          "10": "e",
+          "11": "s",
+          "12": "t",
+          "13": "h",
+          "14": "o",
+          "15": "u",
+          "16": "s",
+          "17": "e",
+          "18": "r",
+          "19": "e",
+          "20": "n",
+          "21": "t",
+          "22": "i",
+          "23": "n",
+          "24": "g",
+          "25": "a",
+          "26": "p",
+          "27": "p",
+          "28": "-",
+          "29": "d",
+          "30": "e",
+          "31": "v",
+          "32": "-",
+          "33": "f",
+          "34": "b",
+          "35": "f",
+          "36": "2",
+          "37": "4",
+          "38": "-",
+          "39": "d",
+          "40": "e",
+          "41": "p",
+          "42": "l",
+          "43": "o",
+          "44": "y",
+          "45": "m",
+          "46": "e",
+          "47": "n",
+          "48": "t"
+        }
       },
       "function": {
         "GuestHouseRentalAPP": {
@@ -31,18 +82,9 @@
         }
       },
       "api": {
-        "Owner": {},
         "properties": {},
         "ownerAPI": {}
-      },
-      "hosting": {
-        "S3AndCloudFront": {}
-      },
-      "auth": {
-        "guesthouserentingappb62531c3": {},
-        "userPoolGroups": {},
-          "deploymentBucketName": "amplify-guesthouserentingapp-dev-fbf24-deployment"
-        }
       }
     }
   }
+}

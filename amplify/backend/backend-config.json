@@ -1,19 +1,5 @@
 {
   "api": {
-    "Owner": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
-          "resourceName": "GuestHouseRentalAPP"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
-    },
     "properties": {
       "dependsOn": [
         {
@@ -92,7 +78,423 @@
     }
   },
   "parameters": {
+    "AMPLIFY_auth_deploymentBucketName_0": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_1": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_10": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_11": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_12": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_13": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_14": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_15": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_16": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_17": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_18": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_19": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_2": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_20": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_21": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_22": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_23": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_24": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_25": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_26": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_27": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_28": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_29": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_3": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_30": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_31": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_32": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_33": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_34": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_35": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_36": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_37": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_38": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_39": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_4": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_40": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_41": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_42": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_43": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_44": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_45": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_46": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_47": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_48": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_5": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_6": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_7": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_8": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
+    "AMPLIFY_auth_deploymentBucketName_9": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "deploymentBucketName"
+        }
+      ]
+    },
     "AMPLIFY_function_GuestHouseRentalAPP_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GuestHouseRentalAPP"
+        }
+      ]
+    },
+    "AMPLIFY_function_GuestHouseRentalAPP_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GuestHouseRentalAPP"
+        }
+      ]
+    },
+    "AMPLIFY_function_OwnersAndRenters_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "OwnersAndRenters"
+        }
+      ]
+    },
+    "AMPLIFY_function_OwnersAndRenters_s3Key": {
       "usedBy": [
         {
           "category": "function",
