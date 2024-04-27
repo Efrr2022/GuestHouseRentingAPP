@@ -89,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "guesthouserentingappLambdaRole955bd9ce",
+            "guesthouserentingappLambdaRole9581e794",
             {
               "Fn::Join": [
                 "",
                 [
-                  "guesthouserentingappLambdaRole955bd9ce",
+                  "guesthouserentingappLambdaRole9581e794",
                   "-",
                   {
                     "Ref": "env"

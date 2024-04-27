@@ -30,8 +30,6 @@ def handler(event, context):
             })
         }
   
-
-
     return {
         'statusCode': response.get('statusCode', 200),
         'headers': {
@@ -83,13 +81,10 @@ def handle_post_request(event):
                         '{house_payment_type}', {location_id}, {is_verified}, {price}, {owner_id}, '{last_modified}', 
                         {area}, {house_type}, {latitude}, {longitude}, {house_status})"""
         
-
-        
         # Execute query
         mycursor.execute(sql_query)
         db.commit()
-        
-    
+
         response_post={
             'statusCode': 200,
             'body': json.dumps('Property added successfully')
@@ -177,4 +172,3 @@ def handle_get_request(event):
 def handle_patch_request(event):
     pass
  
-
