@@ -14,20 +14,6 @@
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
     },
-    "ownerAPI": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
-          "resourceName": "OwnersAndRenters"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
-    },
     "properties": {
       "dependsOn": [
         {
@@ -107,30 +93,6 @@
   },
   "parameters": {
     "AMPLIFY_function_GuestHouseRentalAPP_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "GuestHouseRentalAPP"
-        }
-      ]
-    },
-    "AMPLIFY_function_GuestHouseRentalAPP_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "GuestHouseRentalAPP"
-        }
-      ]
-    },
-    "AMPLIFY_function_OwnersAndRenters_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "OwnersAndRenters"
-        }
-      ]
-    },
-    "AMPLIFY_function_OwnersAndRenters_s3Key": {
       "usedBy": [
         {
           "category": "function",
