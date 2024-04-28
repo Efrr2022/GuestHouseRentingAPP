@@ -12,6 +12,8 @@
       "AmplifyAppId": "d2kz9vhsbs7hot"
     }
   },
+<<<<<<< HEAD
+=======
   "api": {
     "OwnerAPI": {
       "dependsOn": [
@@ -62,10 +64,14 @@
       }
     }
   },
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
   "function": {
     "OwnerAndRenterFunction": {
       "build": true,
       "providerPlugin": "awscloudformation",
+<<<<<<< HEAD
+      "service": "Lambda"
+=======
       "service": "Lambda",
       "output": {
         "LambdaExecutionRoleArn": "arn:aws:iam::730335654565:role/guesthouserentalappLambdaRole98a3e5b8-dev",
@@ -83,10 +89,44 @@
         "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
         "s3Key": "amplify-builds/OwnerAndRenterFunction-64534f52624347416550-build.zip"
       }
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
     },
     "PropertyFunction": {
       "build": true,
       "providerPlugin": "awscloudformation",
+<<<<<<< HEAD
+      "service": "Lambda"
+    }
+  },
+  "api": {
+    "OwnerAPI": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "OwnerAndRenterFunction",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
+    },
+    "PropertyAPI": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "PropertyFunction",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
+=======
       "service": "Lambda",
       "output": {
         "LambdaExecutionRoleArn": "arn:aws:iam::730335654565:role/guesthouserentalappLambdaRole4bd64752-dev",
@@ -104,6 +144,7 @@
         "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
         "s3Key": "amplify-builds/PropertyFunction-66446a71336b75314e5a-build.zip"
       }
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
     }
   }
 }

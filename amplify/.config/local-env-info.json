@@ -1,5 +1,11 @@
 {
+<<<<<<< HEAD
+  "projectPath": "C:\\Users\\Cp9-30\\Desktop\\New folder\\GuestHouseRentingAPP\\amplify-app",
+  "defaultEditor": "Visual Studio Code",
+  "envName": "dev"
+=======
   "projectPath": "C:\\Users\\natu\\GuestHouseRentingAPP",
   "envName": "dev",
   "defaultEditor": "vscode"
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
 }

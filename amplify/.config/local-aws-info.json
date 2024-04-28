@@ -2,6 +2,10 @@
   "dev": {
     "configLevel": "project",
     "useProfile": false,
+<<<<<<< HEAD
+    "awsConfigFilePath": "C:\\Users\\Cp9-30\\.amplify\\awscloudformation\\Q6zhfi2TIe"
+=======
     "awsConfigFilePath": "C:\\Users\\natu\\.amplify\\awscloudformation\\MeEBFvhMdH"
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
   }
 }

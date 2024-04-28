@@ -151,6 +151,8 @@
           "Ref": "UnauthRoleName"
         }
       }
+<<<<<<< HEAD
+=======
     },
     "apiOwnerAPI": {
       "Type": "AWS::CloudFormation::Stack",
@@ -215,6 +217,7 @@
           "env": "dev"
         }
       }
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
     }
   }
 }

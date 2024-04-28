@@ -11,6 +11,8 @@
       "StackId": "arn:aws:cloudformation:us-east-1:730335654565:stack/amplify-guesthouserentalapp-dev-f9808/7baa8e80-055c-11ef-aa77-0edf34d8965f",
       "AmplifyAppId": "d2kz9vhsbs7hot"
     }
+<<<<<<< HEAD
+=======
   },
   "api": {
     "OwnerAPI": {
@@ -117,5 +119,6 @@
       },
       "lastPushDirHash": "Gkv5rTgeVREk/FdpiqjDkYEPHqA="
     }
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
   }
 }

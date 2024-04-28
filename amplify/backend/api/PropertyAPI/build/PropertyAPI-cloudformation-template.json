@@ -368,7 +368,11 @@
         "Name": "PropertyAPI"
       }
     },
+<<<<<<< HEAD
+    "PropertyAPIDefault4XXResponsee0122b64": {
+=======
     "PropertyAPIDefault4XXResponse4e60e240": {
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
       "Type": "AWS::ApiGateway::GatewayResponse",
       "Properties": {
         "ResponseType": "DEFAULT_4XX",
@@ -383,7 +387,11 @@
         }
       }
     },
+<<<<<<< HEAD
+    "PropertyAPIDefault5XXResponsee0122b64": {
+=======
     "PropertyAPIDefault5XXResponse4e60e240": {
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
       "Type": "AWS::ApiGateway::GatewayResponse",
       "Properties": {
         "ResponseType": "DEFAULT_5XX",
@@ -398,7 +406,11 @@
         }
       }
     },
+<<<<<<< HEAD
+    "DeploymentAPIGWPropertyAPI1c7ded39": {
+=======
     "DeploymentAPIGWPropertyAPIa2ab67d7": {
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -416,8 +428,13 @@
         }
       },
       "DependsOn": [
+<<<<<<< HEAD
+        "PropertyAPIDefault4XXResponsee0122b64",
+        "PropertyAPIDefault5XXResponsee0122b64"
+=======
         "PropertyAPIDefault4XXResponse4e60e240",
         "PropertyAPIDefault5XXResponse4e60e240"
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
       ]
     }
   }
