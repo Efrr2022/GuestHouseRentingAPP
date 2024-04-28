@@ -160,7 +160,6 @@ def handle_get_request(event):
             "latitude": float(row[18]),  
             "longitude": float(row[19]),  
             "houseStatus": row[20]  
-        
     })
 
 
