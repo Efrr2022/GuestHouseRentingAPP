@@ -23,7 +23,7 @@ def handler(event, context):
     elif event["httpMethod"] == "POST":
         response=handle_post_request(event)
     elif event["httpMethod"] == "DELETE":
-        response=handle_delete_request(event)
+        response= handle_delete_request(event)
     else:
          response = {
             'statusCode': 405,
