@@ -40,5 +40,39 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
+  },
+  "parameters": {
+    "AMPLIFY_function_OwnerAndRenterFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "OwnerAndRenterFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_OwnerAndRenterFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "OwnerAndRenterFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_PropertyFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PropertyFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_PropertyFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PropertyFunction"
+        }
+      ]
+    }
   }
 }

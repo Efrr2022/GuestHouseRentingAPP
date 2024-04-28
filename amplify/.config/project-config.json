@@ -1,17 +1,17 @@
 {
+  "providers": [
+    "awscloudformation"
+  ],
   "projectName": "GuestHouseRentalAPP",
   "version": "3.1",
   "frontend": "javascript",
   "javascript": {
-    "framework": "angular",
+    "framework": "none",
     "config": {
       "SourceDir": "src",
       "DistributionDir": "dist",
       "BuildCommand": "npm.cmd run-script build",
-      "StartCommand": "ng serve"
+      "StartCommand": "npm.cmd run-script start"
     }
-  },
-  "providers": [
-    "awscloudformation"
-  ]
+  }
 }
