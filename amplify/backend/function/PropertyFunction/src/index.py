@@ -24,6 +24,8 @@ def handler(event, context):
         response=handle_post_request(event)
     elif event["httpMethod"] == "DELETE":
         response= handle_delete_request(event)
+    elif event["httpMethod"] == "PATCH":
+        response= handle_patch_request(event)
     else:
          response = {
             'statusCode': 405,
@@ -173,10 +175,7 @@ def handle_get_request(event):
     response["statusCode"]=200
     return response
 
-
-
-def handle_patch_request(event):
-    pass
+    
 
 def handle_delete_request(event):
     mycursor = db.cursor()
@@ -215,3 +214,51 @@ def handle_delete_request(event):
         mycursor.close()
     
     return response_delete
+
+
+
+def handle_patch_request(event):
+    mycursor = db.cursor()
+
+    try:
+        # Parse request body
+        data = json.loads(event['body'])
+
+        # Extract data fields
+        house_id = data.get('houseId')
+        fields_to_update = data.get('fieldsToUpdate', {})  # Assuming fields to update are provided in the request body
+
+        # Construct SQL query
+        set_pairs = []
+        for key, value in fields_to_update.items():
+            set_pairs.append(f"{key} = '{value}'")
+        set_clause = ", ".join(set_pairs)
+        sql_query = f"""UPDATE tblHouses
+                        SET {set_clause}
+                        WHERE houseId = {house_id}"""
+        
+        # Execute query
+        mycursor.execute(sql_query)
+        db.commit()
+    
+        response_patch = {
+            'statusCode': 200,
+            'body': json.dumps('Property updated successfully')
+        }
+    except Exception as e:
+        print(f'There was an exception: {e}')
+        response_patch = {
+            'statusCode': 500,
+            'body': json.dumps({'error': 'Internal Server Error'})
+        }
+    finally:
+        mycursor.close()
+    
+    return response_patch
+
+
+
+
+
+
+
