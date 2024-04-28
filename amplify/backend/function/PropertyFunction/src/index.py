@@ -22,6 +22,8 @@ def handler(event, context):
         response=handle_get_request(event)
     elif event["httpMethod"] == "POST":
         response=handle_post_request(event)
+    elif event["httpMethod"] == "DELETE":
+        response=handle_delete_request(event)
     else:
          response = {
             'statusCode': 405,
@@ -176,3 +178,41 @@ def handle_get_request(event):
 
 def handle_patch_request(event):
     pass
+
+def handle_delete_request(event):
+    mycursor = db.cursor()
+
+    try:
+        # Extract house IDs to delete from query parameters
+        query_params = event.get("queryStringParameters", {})
+        house_ids_str = query_params.get('houseIds', '')
+        # house_ids = [int(id) for id in house_ids_str.split(',') if id.strip()]
+        house_ids = []
+        for id_str in house_ids_str.split(','):
+            if id_str.strip():
+                house_ids.append(int(id_str))
+
+        if not house_ids:
+            raise ValueError("No house IDs provided for deletion.")
+
+        # Construct SQL query for each house ID
+        for house_id in house_ids:
+            sql_query = f"DELETE FROM tblHouses WHERE houseId = {house_id}"
+            mycursor.execute(sql_query)
+        
+        db.commit()
+
+        response_delete = {
+            'statusCode': 200,
+            'body': json.dumps('Houses deleted successfully')
+        }
+    except Exception as e:
+        print(f'There was an exception: {e}')
+        response_delete = {
+            'statusCode': 500,
+            'body': json.dumps({'error': 'Internal Server Error'})
+        }
+    finally:
+        mycursor.close()
+    
+    return response_delete
