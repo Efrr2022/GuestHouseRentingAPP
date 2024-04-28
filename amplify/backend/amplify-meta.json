@@ -1,0 +1,57 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-guesthouserentalapp-dev-f9808-authRole",
+      "UnauthRoleArn": "arn:aws:iam::730335654565:role/amplify-guesthouserentalapp-dev-f9808-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::730335654565:role/amplify-guesthouserentalapp-dev-f9808-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
+      "UnauthRoleName": "amplify-guesthouserentalapp-dev-f9808-unauthRole",
+      "StackName": "amplify-guesthouserentalapp-dev-f9808",
+      "StackId": "arn:aws:cloudformation:us-east-1:730335654565:stack/amplify-guesthouserentalapp-dev-f9808/7baa8e80-055c-11ef-aa77-0edf34d8965f",
+      "AmplifyAppId": "d2kz9vhsbs7hot"
+    }
+  },
+  "function": {
+    "OwnerAndRenterFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "PropertyFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "api": {
+    "OwnerAPI": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "OwnerAndRenterFunction",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
+    },
+    "PropertyAPI": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "PropertyFunction",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
+    }
+  }
+}
