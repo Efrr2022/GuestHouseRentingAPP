@@ -1,0 +1,15 @@
+{
+  "aws_project_region": "us-east-1",
+  "aws_cloud_logic_custom": [
+    {
+      "name": "OwnerAPI",
+      "endpoint": "https://1e9x45pikj.execute-api.us-east-1.amazonaws.com/dev",
+      "region": "us-east-1"
+    },
+    {
+      "name": "PropertyAPI",
+      "endpoint": "https://wu9cyiffi2.execute-api.us-east-1.amazonaws.com/dev",
+      "region": "us-east-1"
+    }
+  ]
+}
