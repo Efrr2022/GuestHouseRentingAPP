@@ -79,7 +79,7 @@ def handle_post_request(event):
         house_status = data.get('houseStatus')  
 
         # Construct SQL query
-        sql_query = f"""INSERT INTO tblHouses (houseId, house_heading, number_of_bedroom, number_of_bedroom, number_of_balcony, 
+        sql_query = f"""INSERT INTO tblHouses (houseId, house_heading, number_of_bedroom, number_of_balcony, 
                         date_of_posting, is_active, house_description, house_number, house_floor_number, house_payment_type, house_payment_type, 
                         is_verified, price, ownerId, last_modified, area, house_type, latitude, longitude, houseStatus) 
                         VALUES ({house_id}, '{house_heading}', {number_of_bedroom}, {number_of_bathroom}, {number_of_balcony}, 
