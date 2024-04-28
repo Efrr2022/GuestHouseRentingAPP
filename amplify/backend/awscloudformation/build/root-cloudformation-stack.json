@@ -151,6 +151,73 @@
           "Ref": "UnauthRoleName"
         }
       }
+<<<<<<< HEAD
+=======
+    },
+    "apiOwnerAPI": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-guesthouserentalapp-dev-f9808-deployment/amplify-cfn-templates/api/OwnerAPI-cloudformation-template.json",
+        "Parameters": {
+          "functionOwnerAndRenterFunctionName": {
+            "Fn::GetAtt": [
+              "functionOwnerAndRenterFunction",
+              "Outputs.Name"
+            ]
+          },
+          "functionOwnerAndRenterFunctionArn": {
+            "Fn::GetAtt": [
+              "functionOwnerAndRenterFunction",
+              "Outputs.Arn"
+            ]
+          },
+          "env": "dev"
+        }
+      }
+    },
+    "apiPropertyAPI": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-guesthouserentalapp-dev-f9808-deployment/amplify-cfn-templates/api/PropertyAPI-cloudformation-template.json",
+        "Parameters": {
+          "functionPropertyFunctionName": {
+            "Fn::GetAtt": [
+              "functionPropertyFunction",
+              "Outputs.Name"
+            ]
+          },
+          "functionPropertyFunctionArn": {
+            "Fn::GetAtt": [
+              "functionPropertyFunction",
+              "Outputs.Arn"
+            ]
+          },
+          "env": "dev"
+        }
+      }
+    },
+    "functionOwnerAndRenterFunction": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-guesthouserentalapp-dev-f9808-deployment/amplify-cfn-templates/function/OwnerAndRenterFunction-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
+          "s3Key": "amplify-builds/OwnerAndRenterFunction-64534f52624347416550-build.zip",
+          "env": "dev"
+        }
+      }
+    },
+    "functionPropertyFunction": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-guesthouserentalapp-dev-f9808-deployment/amplify-cfn-templates/function/PropertyFunction-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
+          "s3Key": "amplify-builds/PropertyFunction-66446a71336b75314e5a-build.zip",
+          "env": "dev"
+        }
+      }
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
     }
   }
 }

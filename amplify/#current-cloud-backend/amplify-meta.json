@@ -11,5 +11,114 @@
       "StackId": "arn:aws:cloudformation:us-east-1:730335654565:stack/amplify-guesthouserentalapp-dev-f9808/7baa8e80-055c-11ef-aa77-0edf34d8965f",
       "AmplifyAppId": "d2kz9vhsbs7hot"
     }
+<<<<<<< HEAD
+=======
+  },
+  "api": {
+    "OwnerAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "OwnerAndRenterFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-guesthouserentalapp-dev-f9808-deployment/amplify-cfn-templates/api/OwnerAPI-cloudformation-template.json",
+        "logicalId": "apiOwnerAPI"
+      },
+      "lastPushTimeStamp": "2024-04-28T13:12:41.151Z",
+      "output": {
+        "ApiName": "OwnerAPI",
+        "RootUrl": "https://1e9x45pikj.execute-api.us-east-1.amazonaws.com/dev",
+        "ApiId": "1e9x45pikj"
+      },
+      "lastPushDirHash": "bV/To8b9EQlDgGO4f31n2R97ZYA="
+    },
+    "PropertyAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "PropertyFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-guesthouserentalapp-dev-f9808-deployment/amplify-cfn-templates/api/PropertyAPI-cloudformation-template.json",
+        "logicalId": "apiPropertyAPI"
+      },
+      "lastPushTimeStamp": "2024-04-28T13:12:41.151Z",
+      "output": {
+        "ApiName": "PropertyAPI",
+        "RootUrl": "https://wu9cyiffi2.execute-api.us-east-1.amazonaws.com/dev",
+        "ApiId": "wu9cyiffi2"
+      },
+      "lastPushDirHash": "AI+8zngAPLYCYtW29/sTqwTQ/98="
+    }
+  },
+  "function": {
+    "OwnerAndRenterFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "lastBuildTimeStamp": "2024-04-28T13:11:00.914Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2024-04-28T13:11:02.601Z",
+      "distZipFilename": "OwnerAndRenterFunction-64534f52624347416550-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
+        "s3Key": "amplify-builds/OwnerAndRenterFunction-64534f52624347416550-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-guesthouserentalapp-dev-f9808-deployment/amplify-cfn-templates/function/OwnerAndRenterFunction-cloudformation-template.json",
+        "logicalId": "functionOwnerAndRenterFunction"
+      },
+      "lastPushTimeStamp": "2024-04-28T13:12:41.151Z",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::730335654565:role/guesthouserentalappLambdaRole98a3e5b8-dev",
+        "Region": "us-east-1",
+        "Arn": "arn:aws:lambda:us-east-1:730335654565:function:OwnerAndRenterFunction-dev",
+        "Name": "OwnerAndRenterFunction-dev",
+        "LambdaExecutionRole": "guesthouserentalappLambdaRole98a3e5b8-dev"
+      },
+      "lastPushDirHash": "S3qB4+6rBWxsnlPHAYV3VhXtxdU="
+    },
+    "PropertyFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "lastBuildTimeStamp": "2024-04-28T13:11:07.915Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2024-04-28T13:11:09.609Z",
+      "distZipFilename": "PropertyFunction-66446a71336b75314e5a-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
+        "s3Key": "amplify-builds/PropertyFunction-66446a71336b75314e5a-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-guesthouserentalapp-dev-f9808-deployment/amplify-cfn-templates/function/PropertyFunction-cloudformation-template.json",
+        "logicalId": "functionPropertyFunction"
+      },
+      "lastPushTimeStamp": "2024-04-28T13:12:41.151Z",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::730335654565:role/guesthouserentalappLambdaRole4bd64752-dev",
+        "Region": "us-east-1",
+        "Arn": "arn:aws:lambda:us-east-1:730335654565:function:PropertyFunction-dev",
+        "Name": "PropertyFunction-dev",
+        "LambdaExecutionRole": "guesthouserentalappLambdaRole4bd64752-dev"
+      },
+      "lastPushDirHash": "Gkv5rTgeVREk/FdpiqjDkYEPHqA="
+    }
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
   }
 }

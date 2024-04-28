@@ -12,15 +12,89 @@
       "AmplifyAppId": "d2kz9vhsbs7hot"
     }
   },
+<<<<<<< HEAD
+=======
+  "api": {
+    "OwnerAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "OwnerAndRenterFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway",
+      "output": {
+        "ApiName": "OwnerAPI",
+        "RootUrl": "https://1e9x45pikj.execute-api.us-east-1.amazonaws.com/dev",
+        "ApiId": "1e9x45pikj"
+      },
+      "lastPushTimeStamp": "2024-04-28T14:22:31.703Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-guesthouserentalapp-dev-f9808-deployment/amplify-cfn-templates/api/OwnerAPI-cloudformation-template.json",
+        "logicalId": "apiOwnerAPI"
+      }
+    },
+    "PropertyAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "PropertyFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway",
+      "output": {
+        "ApiName": "PropertyAPI",
+        "RootUrl": "https://wu9cyiffi2.execute-api.us-east-1.amazonaws.com/dev",
+        "ApiId": "wu9cyiffi2"
+      },
+      "lastPushTimeStamp": "2024-04-28T14:22:31.708Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-guesthouserentalapp-dev-f9808-deployment/amplify-cfn-templates/api/PropertyAPI-cloudformation-template.json",
+        "logicalId": "apiPropertyAPI"
+      }
+    }
+  },
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
   "function": {
     "OwnerAndRenterFunction": {
       "build": true,
       "providerPlugin": "awscloudformation",
+<<<<<<< HEAD
       "service": "Lambda"
+=======
+      "service": "Lambda",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::730335654565:role/guesthouserentalappLambdaRole98a3e5b8-dev",
+        "Region": "us-east-1",
+        "Arn": "arn:aws:lambda:us-east-1:730335654565:function:OwnerAndRenterFunction-dev",
+        "Name": "OwnerAndRenterFunction-dev",
+        "LambdaExecutionRole": "guesthouserentalappLambdaRole98a3e5b8-dev"
+      },
+      "lastPushTimeStamp": "2024-04-28T14:22:31.734Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-guesthouserentalapp-dev-f9808-deployment/amplify-cfn-templates/function/OwnerAndRenterFunction-cloudformation-template.json",
+        "logicalId": "functionOwnerAndRenterFunction"
+      },
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
+        "s3Key": "amplify-builds/OwnerAndRenterFunction-64534f52624347416550-build.zip"
+      }
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
     },
     "PropertyFunction": {
       "build": true,
       "providerPlugin": "awscloudformation",
+<<<<<<< HEAD
       "service": "Lambda"
     }
   },
@@ -52,6 +126,25 @@
           ]
         }
       ]
+=======
+      "service": "Lambda",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::730335654565:role/guesthouserentalappLambdaRole4bd64752-dev",
+        "Region": "us-east-1",
+        "Arn": "arn:aws:lambda:us-east-1:730335654565:function:PropertyFunction-dev",
+        "Name": "PropertyFunction-dev",
+        "LambdaExecutionRole": "guesthouserentalappLambdaRole4bd64752-dev"
+      },
+      "lastPushTimeStamp": "2024-04-28T14:22:31.747Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-guesthouserentalapp-dev-f9808-deployment/amplify-cfn-templates/function/PropertyFunction-cloudformation-template.json",
+        "logicalId": "functionPropertyFunction"
+      },
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
+        "s3Key": "amplify-builds/PropertyFunction-66446a71336b75314e5a-build.zip"
+      }
+>>>>>>> e9d38501badbd20923c91421f225dfa28d279aaf
     }
   }
 }

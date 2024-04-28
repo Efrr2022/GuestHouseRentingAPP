@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/property": {
+      "name": "/property",
+      "lambdaFunction": "PropertyFunction",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
