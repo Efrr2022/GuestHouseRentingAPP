@@ -1,40 +1,89 @@
 import json
 import mysql.connector
 
+import boto3
+from botocore.exceptions import ClientError
 
-try:
-  db=mysql.connector.connect(
-    host="tectown-backend-q1-2024.c1s0muoa0qc4.us-east-1.rds.amazonaws.com",
-    user="admin",
-    database="rentalHouses",
-    password="Tectown1!"
-  )
-  print("database connected")
-except Exception as e:
-  print(f'There was an exception: {e}')
+
+def get_secret():
+    secret_name = "dev/rentalHouseApp"
+    region_name = "us-east-1"
+
+    # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+
+    try:
+        get_secret_value_response = client.get_secret_value(
+            SecretId=secret_name
+        )
+    except ClientError as e:
+        raise e
+
+    secret = get_secret_value_response['SecretString']
+    return json.loads(secret)
+
+
+    # Your code goes here.
+def connect_to_database():
+    # Fetch secrets from AWS Secrets Manager
+    secrets = get_secret()
+
+    try:
+        db = mysql.connector.connect(
+            host="tectown-backend-q1-2024.c1s0muoa0qc4.us-east-1.rds.amazonaws.com",
+            user=secrets['username'],
+            database="rentalHouses",
+            password=secrets['password']
+        )
+        print("Database connected")
+        return db
+    except Exception as e:
+        print(f'There was an exception: {e}')
+
+
+# try:
+#   db=mysql.connector.connect( 
+#     host="tectown-backend-q1-2024.c1s0muoa0qc4.us-east-1.rds.amazonaws.com",
+#     user="admin",
+#     database="rentalHouses",
+#     password="Tectown1!"
+#   )
+#   print("database connected")
+# except Exception as e:
+#   print(f'There was an exception: {e}')
 
 
 def handler(event, context):
-    print('received event:')
+    print('Received event:')
     print(event)
 
-    if event["httpMethod"] == "GET":
-        response=handle_get_request(event)
-    elif event["httpMethod"] == "POST":
-        response=handle_post_request(event)
-    elif event["httpMethod"] == "DELETE":
-        response= handle_delete_request(event)
-    elif event["httpMethod"] == "PATCH":
-        response= handle_patch_request(event)
-    else:
-         response = {
-            'statusCode': 405,
-            'body': json.dumps({
-                'message': 'Method Not Allowed'
-            })
-        }
-  
+    # Connect to the database
+    db = connect_to_database()
 
+    if not db:
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': 'Failed to connect to the database'})
+        }
+
+    # Handle HTTP requests
+    if event["httpMethod"] == "GET":
+        response = handle_get_request(event, db)
+    elif event["httpMethod"] == "POST":
+        response = handle_post_request(event, db)
+    elif event["httpMethod"] == "DELETE":
+        response = handle_delete_request(event, db)
+    elif event["httpMethod"] == "PATCH":
+        response = handle_patch_request(event, db)
+    else:
+        response = {
+            'statusCode': 405,
+            'body': json.dumps({'message': 'Method Not Allowed'})
+        }
 
     return {
         'statusCode': response.get('statusCode', 200),
@@ -43,12 +92,15 @@ def handler(event, context):
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
         },
-        'body': json.dumps(response.get('body', {})) 
+        'body': json.dumps(response.get('body', {}))
     }
+
+  
 
 
 # defining handle request method 
-def handle_post_request(event):
+def handle_post_request(event,db):
+    
     mycursor = db.cursor()
 
     try:
@@ -98,7 +150,7 @@ def handle_post_request(event):
             'statusCode': 200,
             'body': json.dumps('Property added successfully')
         }
-    except Exception as e:
+    except Exception as e:  
         print(f'There was an exception: {e}')
         response_post = {
             'statusCode': 500,
@@ -110,7 +162,7 @@ def handle_post_request(event):
 
 
 
-def handle_get_request(event):
+def handle_get_request(event,db):
     print('received event inside handle_get_request:')
     print(event)
     
@@ -177,7 +229,7 @@ def handle_get_request(event):
 
     
 
-def handle_delete_request(event):
+def handle_delete_request(event,db):
     mycursor = db.cursor()
 
     try:
@@ -217,7 +269,7 @@ def handle_delete_request(event):
 
 
 
-def handle_patch_request(event):
+def handle_patch_request(event,db):
     mycursor = db.cursor()
 
     try:
