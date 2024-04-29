@@ -3,6 +3,7 @@ import mysql.connector
 import base64
 import config
 from botocore.exceptions import ClientError
+import datetime
 
 host_url = config.secret.host
 user_name = config.secret.user
@@ -117,7 +118,7 @@ def get_users(limit,offset,userPath):
                'lastName': row[3],
                'address': row[4],
                'Contact Number': row[5],
-               'Date of birth': row[6],
+               'Date of birth': row[6].strftime("%d-%m-%Y"),
                'lastName': row[7],
                'address': row[8]
         })
@@ -139,7 +140,7 @@ def get_users(limit,offset,userPath):
                'Contact Number': row[5],
                'Email Address': row[6],
                'Password': row[7],
-               'Registration Time': row[8],
+               'Registration Time': row[8].strftime("%d-%m-%Y"),
                'Status': row[9]
         }) 
     mycursor.close()
