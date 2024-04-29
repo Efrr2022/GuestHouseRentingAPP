@@ -15,11 +15,11 @@
       "function": {
         "OwnerAndRenterFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
-          "s3Key": "amplify-builds/OwnerAndRenterFunction-424e68787836684c4567-build.zip"
+          "s3Key": "amplify-builds/OwnerAndRenterFunction-2b3853524c4549657456-build.zip"
         },
         "PropertyFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
-          "s3Key": "amplify-builds/PropertyFunction-417879526a6461697932-build.zip"
+          "s3Key": "amplify-builds/PropertyFunction-7a42386a4b646c764537-build.zip"
         }
       }
     }
