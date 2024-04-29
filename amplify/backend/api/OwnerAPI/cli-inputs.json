@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/owner": {
+      "name": "/owner",
+      "lambdaFunction": "OwnerAndRenterFunction",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
