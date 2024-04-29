@@ -15,7 +15,7 @@
       "function": {
         "OwnerAndRenterFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
-          "s3Key": "amplify-builds/OwnerAndRenterFunction-2b3853524c4549657456-build.zip"
+          "s3Key": "amplify-builds/OwnerAndRenterFunction-63555041453939485871-build.zip"
         },
         "PropertyFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
