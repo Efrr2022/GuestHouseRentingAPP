@@ -44,19 +44,6 @@ def connect_to_database():
     except Exception as e:
         print(f'There was an exception: {e}')
 
-
-# try:
-#   db=mysql.connector.connect( 
-#     host="tectown-backend-q1-2024.c1s0muoa0qc4.us-east-1.rds.amazonaws.com",
-#     user="admin",
-#     database="rentalHouses",
-#     password="Tectown1!"
-#   )
-#   print("database connected")
-# except Exception as e:
-#   print(f'There was an exception: {e}')
-
-
 def handler(event, context):
     print('Received event:')
     print(event)
