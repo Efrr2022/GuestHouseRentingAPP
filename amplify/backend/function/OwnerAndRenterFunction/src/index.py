@@ -296,7 +296,7 @@ def delete_user(id,userPath):
     if result:
         sql = f"Delete from tblOwner WHERE userId={id}"
         mycursor.execute(sql)
-        mydb.commit
+        mydb.commit()
         body = {
             'Operation': 'DELETE',
             'Message': 'SUCCESS',
@@ -314,7 +314,7 @@ def delete_user(id,userPath):
     if result:
         sql = f"Delete from tblRenter WHERE renterId={id}"
         mycursor.execute(sql)
-        mydb.commit
+        mydb.commit()
         body = {
             'Operation': 'DELETE',
             'Message': 'SUCCESS',
