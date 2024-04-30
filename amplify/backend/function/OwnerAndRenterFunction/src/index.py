@@ -125,7 +125,7 @@ def get_users(limit,offset,userPath):
                
     #Block fo selecting data from renter table  
     else:
-        stmt = f"SELECT * From tblrenter LIMIT {limit} OFFSET {offset}"
+        stmt = f"SELECT * From tblRenter LIMIT {limit} OFFSET {offset}"
         mycursor.execute(stmt)
         result = mycursor.fetchall()
         if result:
