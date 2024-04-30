@@ -62,29 +62,29 @@ def handler(event, context):
         # Post Methid for saving renters
         elif http_method == 'POST' and path == renter_path:
             body =json.loads(event['body'])
-            response = save_user(body,owner_path)
+            response = save_user(body,renter_path)
 
         # Patch Method for updating owners data
         elif http_method == 'PATCH' and path == owner_path:
             body = json.loads(event['body'])
             print(body['updateKey'])
             print(body['updateValue'])
-            response = modify_user(body['userId'],body['updateKey'],body['updateValue'])
+            response = modify_user(body['userId'],body['updateKey'],body['updateValue'],owner_path)
         # Patch Method for updating renters data
         elif http_method == 'PATCH' and path == renter_path:
             body = json.loads(event['body'])
             print(body['updateKey'])
             print(body['updateValue'])
-            response = modify_user(body['userId'],body['updateKey'],body['updateValue'])
+            response = modify_user(body['userId'],body['updateKey'],body['updateValue'],renter_path)
 
         # Delete Method for deleting a owner record
         elif http_method == 'DELETE' and path == owner_path:
             id = event['queryStringParameters']['id']
-            response = delete_user(id)
+            response = delete_user(id,owner_path)
         # Delete Method for deleting a owner record
         elif http_method == 'DELETE' and path == renter_path:
             id = event['queryStringParameters']['id']
-            response = delete_user(id)
+            response = delete_user(id,renter_path)
 
     # If exception happens 
     except Exception as e:
@@ -98,7 +98,6 @@ def handler(event, context):
 ###################################### Function to get Users with Limit and Offset ##############################  
   
 def get_users(limit,offset,userPath):
-    mycursor = mydb.connect
     print("i am inisde block get user")
     mycursor = mydb.cursor()
     print(f"Database connected {mycursor} Successfully")
@@ -151,7 +150,7 @@ def get_users(limit,offset,userPath):
 ############################## Function for for saving User to the database ######################################
 
 def save_user(request_body,userPath):
-  mycursor = mydb.connect
+  mycursor = mydb.cursor()
   print("Hiii from save_user function")
   # Block for saving Owner records
   if userPath == '/owner':
@@ -207,7 +206,7 @@ def save_user(request_body,userPath):
                             x["last_modified"], x["status"]))
               print(val)
               # Sql statement to insert data to the database  
-              sql="Insert into users (first_name,last_name,address,contact_number,email_address,password, \
+              sql="Insert into tblRenter (first_name,last_name,address,contact_number,email_address,password, \
               registration_time,last_modified,status,) values (%s, %s, %s, %s,%s, %s, \
               %s, %s,%s)"
               mycursor.executemany(sql,val)
@@ -229,31 +228,58 @@ def save_user(request_body,userPath):
 ############################## End of function save_user(body)###########################################
 
 ############################## Function For updater User #################################################
-def modify_user(userId, updateKey, updateValue):
-  mycursor = mydb.connect
+def modify_user(userId, updateKey, updateValue,userPath):
+  mycursor = mydb.cursor()
   print(updateKey)
   print(updateValue)
-  sql = f"select * from users where userId={userId}"
-  mycursor.execute(sql)
-  result = mycursor.fetchone()
-  if result:
-   sql = f"UPDATE users SET {updateKey}={updateValue} WHERE userID={userId};"
-   mycursor.execute(sql)
-   mydb.commit()
-   sql = f"select * from users where userId={userId}"
-   mycursor.execute(sql)
-   result = mycursor.fetchone()
-   body = {
-      'Operation': 'Update',
-      'Message': 'SUCCESS',
-      'User': result
-    }
-   status_code = 200
-  else:
-    body = {
-      'Message': f'User With Id={userId} not found'
-    }
-    status_code = 204
+
+  # Block of code for updating owner record
+  if userPath == '/owner':
+    sql = f"select * from tblOwner where ownerId={userId}"
+    mycursor.execute(sql)
+    result = mycursor.fetchone()
+    if result:
+        sql = f"UPDATE tblOwner SET {updateKey}={updateValue} WHERE ownerId={userId};"
+        mycursor.execute(sql)
+        mydb.commit()
+        sql = f"select * from tblOwner where ownerId={userId}"
+        mycursor.execute(sql)
+        result = mycursor.fetchone()
+        body = {
+        'Operation': 'Update',
+        'Message': 'SUCCESS',
+        'User': result
+        }
+        status_code = 200
+    else:
+        body = {
+        'Message': f'Owner With Id={userId} not found'
+        }
+        status_code = 204
+
+  # Block of code for updating record of renter      
+  elif userPath == '/renter':
+    sql = f"select * from tblRenter where renterID={userId}"
+    mycursor.execute(sql)
+    result = mycursor.fetchone()
+    if result:
+        sql = f"UPDATE tblRenter SET {updateKey}={updateValue} WHERE renterId={userId};"
+        mycursor.execute(sql)
+        mydb.commit()
+        sql = f"select * from tblRenter where renterId={userId}"
+        mycursor.execute(sql)
+        result = mycursor.fetchone()
+        body = {
+        'Operation': 'Update',
+        'Message': 'SUCCESS',
+        'User': result
+        }
+        status_code = 200
+    else:
+        body = {
+        'Message': f'renter With Id={userId} not found'
+        }
+        status_code = 204
   mycursor.close()
   mydb.close()
   return build_response(status_code, body)
@@ -261,25 +287,44 @@ def modify_user(userId, updateKey, updateValue):
 
 
 ############################## Function to delete a user ##################################################
-def delete_user(id):
-  mycursor = mydb.connect
-  sql = f"select * from users where userId={id}"
-  mycursor.execute(sql)
-  result = mycursor.fetchone()
-  if result:
-   sql = f"Delete from users WHERE userId={id}"
-   mycursor.execute(sql)
-   mydb.commit
-   body = {
-      'Operation': 'DELETE',
-      'Message': 'SUCCESS',
-    }
-   status_code = 200
-  else:
-   body = {
-    'Message': 'user not found'
-   }
-  status_code = 204
+def delete_user(id,userPath):
+  mycursor = mydb.cursor()
+  if userPath == '/owner':
+    sql = f"select * from tblOwner where ownerId={id}"
+    mycursor.execute(sql)
+    result = mycursor.fetchone()
+    if result:
+        sql = f"Delete from tblOwner WHERE userId={id}"
+        mycursor.execute(sql)
+        mydb.commit
+        body = {
+            'Operation': 'DELETE',
+            'Message': 'SUCCESS',
+            }
+        status_code = 200
+    else:
+        body = {
+            'Message': f'Owner with Id = {id} not found'
+        }
+        status_code = 204
+  elif userPath == '/renter':
+    sql = f"select * from tblRenter where renterId={id}"
+    mycursor.execute(sql)
+    result = mycursor.fetchone()
+    if result:
+        sql = f"Delete from tblRenter WHERE renterId={id}"
+        mycursor.execute(sql)
+        mydb.commit
+        body = {
+            'Operation': 'DELETE',
+            'Message': 'SUCCESS',
+            }
+        status_code = 200
+    else:
+        body = {
+            'Message': f'Owner with Id = {id} not found'
+        }
+        status_code = 204
   mycursor.close()
   mydb.close()
   return build_response(status_code, body)
