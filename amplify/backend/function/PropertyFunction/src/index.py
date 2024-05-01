@@ -279,7 +279,7 @@ def handle_update_house_with_features(event, db):
         # Construct SQL query to update house
         house_sql_query = f"""
                             UPDATE tblHouses
-                            SET houseHeading = '{house_data['houseHeading']}'
+                            SET house_heading = '{house_data['houseHeading']}'
                             WHERE houseId = {house_data['houseId']}
                             """
         
