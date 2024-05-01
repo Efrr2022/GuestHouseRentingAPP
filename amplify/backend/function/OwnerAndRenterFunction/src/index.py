@@ -5,27 +5,29 @@ import config
 from botocore.exceptions import ClientError
 import datetime
 
-host_url = config.secret.host
-user_name = config.secret.user
-password_database= config.secret.password
-database_dev = config.secret.database
 
-# resources comes from API Gateway
-status_check_path = '/status'
-owner_path = '/owner'
-renter_path = '/renter'
-
-# Credentials for connecting to the database 
-mydb= mysql.connector.connect(
-    host = host_url,
-    user = user_name,
-    password = password_database,
-    database = database_dev
-
-    )
 
 
 def handler(event, context): 
+    host_url = config.secret.host
+    user_name = config.secret.user
+    password_database= config.secret.password
+    database_dev = config.secret.database
+
+    # resources comes from API Gateway
+    status_check_path = '/status'
+    owner_path = '/owner'
+    renter_path = '/renter'
+
+    # Credentials for connecting to the database 
+    mydb= mysql.connector.connect(
+        host = host_url,
+        user = user_name,
+        password = password_database,
+        database = database_dev
+
+        )
+
     response = None
     # try and catch block to filter the path and method coming   
     try:
@@ -44,47 +46,47 @@ def handler(event, context):
         # GET Method with owner path    
         elif http_method == 'GET' and path == owner_path:
             if event['queryStringParameters'] == None:
-             response = get_users(5,0,owner_path)
+             response = get_users(5,0,owner_path,mydb)
             else:
-             response = get_users(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'],owner_path)
+             response = get_users(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'],owner_path,mydb)
         # GET Method with renter path    
         elif http_method == 'GET' and path == renter_path:
             if event['queryStringParameters'] == None:
-             response = get_users(5,0,renter_path)
+             response = get_users(5,0,renter_path,mydb)
             else:
-             response = get_users(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'], renter_path)   
+             response = get_users(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'], renter_path,mydb)   
 
         # Post Methid for saving owners
         elif http_method == 'POST' and path == owner_path:
             body =json.loads(event['body'])
             print(body)
-            response = save_user(body,owner_path)
+            response = save_user(body,owner_path,mydb)
         # Post Methid for saving renters
         elif http_method == 'POST' and path == renter_path:
             body =json.loads(event['body'])
-            response = save_user(body,renter_path)
+            response = save_user(body,renter_path,mydb)
 
         # Patch Method for updating owners data
         elif http_method == 'PATCH' and path == owner_path:
             body = json.loads(event['body'])
             print(body['updateKey'])
             print(body['updateValue'])
-            response = modify_user(body['userId'],body['updateKey'],body['updateValue'],owner_path)
+            response = modify_user(body['userId'],body['updateKey'],body['updateValue'],owner_path,mydb)
         # Patch Method for updating renters data
         elif http_method == 'PATCH' and path == renter_path:
             body = json.loads(event['body'])
             print(body['updateKey'])
             print(body['updateValue'])
-            response = modify_user(body['userId'],body['updateKey'],body['updateValue'],renter_path)
+            response = modify_user(body['userId'],body['updateKey'],body['updateValue'],renter_path,mydb)
 
         # Delete Method for deleting a owner record
         elif http_method == 'DELETE' and path == owner_path:
             id = event['queryStringParameters']['id']
-            response = delete_user(id,owner_path)
+            response = delete_user(id,owner_path,mydb)
         # Delete Method for deleting a owner record
         elif http_method == 'DELETE' and path == renter_path:
             id = event['queryStringParameters']['id']
-            response = delete_user(id,renter_path)
+            response = delete_user(id,renter_path,mydb)
 
     # If exception happens 
     except Exception as e:
@@ -92,12 +94,12 @@ def handler(event, context):
     # Return Value to api  
     return response
 
-#Close Session. 
+    #Close Session. 
 
 
 ###################################### Function to get Users with Limit and Offset ##############################  
   
-def get_users(limit,offset,userPath):
+def get_users(limit,offset,userPath,mydb):
     print("i am inisde block get user")
     mycursor = mydb.cursor()
     print(f"Database connected {mycursor} Successfully")
@@ -149,7 +151,7 @@ def get_users(limit,offset,userPath):
 
 ############################## Function for for saving User to the database ######################################
 
-def save_user(request_body,userPath):
+def save_user(request_body,userPath,mydb):
   mycursor = mydb.cursor()
   print("Hiii from save_user function")
   # Block for saving Owner records
@@ -228,7 +230,7 @@ def save_user(request_body,userPath):
 ############################## End of function save_user(body)###########################################
 
 ############################## Function For updater User #################################################
-def modify_user(userId, updateKey, updateValue,userPath):
+def modify_user(userId, updateKey, updateValue,userPath,mydb):
   mycursor = mydb.cursor()
   print(updateKey)
   print(updateValue)
@@ -245,6 +247,7 @@ def modify_user(userId, updateKey, updateValue,userPath):
         sql = f"select * from tblOwner where ownerId={userId}"
         mycursor.execute(sql)
         value = mycursor.fetchone()
+        print("updated data",value)
         if value:
             table_data = []
             for row in result:
@@ -258,7 +261,7 @@ def modify_user(userId, updateKey, updateValue,userPath):
                'Date of birth': row[6].strftime("%d-%m-%Y"),
                'lastName': row[7],
                'address': row[8]
-        }) 
+            }) 
         body = table_data
         status_code = 200
     else:
@@ -273,7 +276,7 @@ def modify_user(userId, updateKey, updateValue,userPath):
     sql = f"select * from tblRenter where renterID={userId}"
     mycursor.execute(sql)
     result = mycursor.fetchone()
-    print(result)
+    print("Data before updated",result)
     if result:
         sql = f"UPDATE tblRenter SET {updateKey}={updateValue} WHERE renterId={userId};"
         mycursor.execute(sql)
@@ -281,7 +284,7 @@ def modify_user(userId, updateKey, updateValue,userPath):
         sql = f"select * from tblRenter where renterId={userId}"
         mycursor.execute(sql)
         result = mycursor.fetchone()
-        print(result)
+        print("Data after updated",result)
         if result:
             table_data = []
             for row in result:
@@ -296,7 +299,7 @@ def modify_user(userId, updateKey, updateValue,userPath):
                'Registration Time': row[7].strftime("%d-%m-%Y"),
                'last_modified': row[8].strftime("%d-%m-%Y"),
                'Status': row[9]
-        }) 
+            }) 
         body = table_data
         status_code = 200
     else:
@@ -311,7 +314,7 @@ def modify_user(userId, updateKey, updateValue,userPath):
 
 
 ############################## Function to delete a user ##################################################
-def delete_user(id,userPath):
+def delete_user(id,userPath,mydb):
   mycursor = mydb.cursor()
   if userPath == '/owner':
     sql = f"select * from tblOwner where ownerId={id}"
