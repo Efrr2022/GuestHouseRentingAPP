@@ -244,31 +244,17 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
         sql = f"UPDATE tblOwner SET {updateKey}={updateValue} WHERE ownerId={userId};"
         mycursor.execute(sql)
         mydb.commit()
-        sql = f"select * from tblOwner where ownerId={userId}"
-        mycursor.execute(sql)
-        value = mycursor.fetchone()
-        print("updated data",value)
-        if value:
-            table_data = []
-            for row in result:
-                table_data.append({
-                    'ownerId': row[0],
-                    'firstName': row[1],
-                    'userPassword': row[2],
-                    'lastName': row[3],
-                    'address': row[4],
-                    'Contact Number': row[5],
-                    'Date of birth': row[6].strftime("%d-%m-%Y"),
-                    'gender': row[7],
-                    'email address': row[8]
-                }) 
-        print(table_data)
-        body = table_data
+        
+        body = {
+            'Operation': 'Update',
+            'Message': 'SUCCESS',
+        
+        }
         status_code = 200
     else:
         
         body = {
-        'Message': f'Owner With Id={userId} not found'
+            'Message': f'Owner With Id={userId} not found'
         }
         print(body)
         status_code = 204
@@ -284,31 +270,16 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
         sql = f"UPDATE tblRenter SET {updateKey}={updateValue} WHERE renterId={userId};"
         mycursor.execute(sql)
         mydb.commit()
-        sql = f"select * from tblRenter where renterId={userId}"
-        mycursor.execute(sql)
-        result = mycursor.fetchone()
-        print("Data after updated",result)
-        if result:
-            table_data = []
-            for row in result:
-                table_data.append({
-                    'renterId': row[0],
-                    'first Name': row[1],
-                    'last Name': row[2],
-                    'address': row[3],
-                    'Contact Number': row[4],
-                    'Email Address': row[5],
-                    'Password': row[6],
-                    'Registration Time': row[7].strftime("%d-%m-%Y"),
-                    'last_modified': row[8].strftime("%d-%m-%Y"),
-                    'Status': row[9]
-            }) 
-        print(table_data)
-        body = table_data
+        
+        body = {
+            'Operation': 'Update',
+            'Message': 'SUCCESS',
+            
+         }
         status_code = 200
     else:
         body = {
-        'Message': f'renter With Id={userId} not found'
+           'Message': f'renter With Id={userId} not found'
         }
         print(body)
         status_code = 204
