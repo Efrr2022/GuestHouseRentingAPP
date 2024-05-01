@@ -173,7 +173,7 @@ def save_user(request_body,userPath):
                   
               print(val)
               # Sql statement to insert data to the database  
-              sql="Insert into users (first_name,userPassword,last_name,address,contact_number,date_of_birth,gender, \
+              sql="Insert into tblOwner (first_name,userPassword,last_name,address,contact_number,date_of_birth,gender, \
               email_address,occupation,registration_time,last_modified,userStatus,profile_image) values (%s, %s, %s, %s,%s, %s, \
               %s, %s,%s, %s, %s, %s,%s)"
               mycursor.executemany(sql,val)
