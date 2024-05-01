@@ -15,17 +15,21 @@
       "function": {
         "OwnerAndRenterFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
-          "s3Key": "amplify-builds/OwnerAndRenterFunction-6a3059584a36554c6a59-build.zip"
+          "s3Key": "amplify-builds/OwnerAndRenterFunction-4f6a4559746753694e68-build.zip"
         },
         "PropertyFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
-          "s3Key": "amplify-builds/PropertyFunction-71465041307a54684a43-build.zip"
+          "s3Key": "amplify-builds/PropertyFunction-76693563363865475654-build.zip"
         },
-        "renterFunction": {}
+        "renterFunction": {
+          "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
+          "s3Key": "amplify-builds/renterFunction-5550504a4a484c74484b-build.zip"
+        }
       },
       "api": {
         "OwnerAPI": {},
-        "PropertyAPI": {}
+        "PropertyAPI": {},
+        "renterAPI": {}
       }
     }
   }

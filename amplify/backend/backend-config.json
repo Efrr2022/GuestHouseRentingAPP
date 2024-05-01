@@ -92,6 +92,22 @@
           "resourceName": "PropertyFunction"
         }
       ]
+    },
+    "AMPLIFY_function_renterFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "renterFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_renterFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "renterFunction"
+        }
+      ]
     }
   }
 }
