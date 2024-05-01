@@ -244,7 +244,8 @@ def modify_user(userId, updateKey, updateValue,userPath):
         mydb.commit()
         sql = f"select * from tblOwner where ownerId={userId}"
         mycursor.execute(sql)
-        result = mycursor.fetchone()
+        result = json.load(mycursor.fetchone())
+         
         body = {
         'Operation': 'Update',
         'Message': 'SUCCESS',
@@ -268,7 +269,7 @@ def modify_user(userId, updateKey, updateValue,userPath):
         mydb.commit()
         sql = f"select * from tblRenter where renterId={userId}"
         mycursor.execute(sql)
-        result = mycursor.fetchone()
+        result = json.load(mycursor.fetchone())
         body = {
         'Operation': 'Update',
         'Message': 'SUCCESS',
