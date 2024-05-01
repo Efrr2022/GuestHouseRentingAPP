@@ -245,8 +245,21 @@ def modify_user(userId, updateKey, updateValue,userPath):
         sql = f"select * from tblOwner where ownerId={userId}"
         mycursor.execute(sql)
         value = mycursor.fetchone()
-        result = json.load(value)
-         
+        if result:
+            table_data = []
+            for row in result:
+                table_data.append({
+               'ownerId': row[0],
+               'firstName': row[1],
+               'userPassword': row[2],
+               'lastName': row[3],
+               'address': row[4],
+               'Contact Number': row[5],
+               'Date of birth': row[6].strftime("%d-%m-%Y"),
+               'lastName': row[7],
+               'address': row[8]
+        }) 
+        result = json.loads(table_data)
         body = {
         'Operation': 'Update',
         'Message': 'SUCCESS',
@@ -270,7 +283,23 @@ def modify_user(userId, updateKey, updateValue,userPath):
         mydb.commit()
         sql = f"select * from tblRenter where renterId={userId}"
         mycursor.execute(sql)
-        result = json.load(mycursor.fetchone())
+        result = mycursor.fetchone()
+        if result:
+            table_data = []
+            for row in result:
+                table_data.append({
+               'renterId': row[0],
+               'first Name': row[1],
+               'last Name': row[2],
+               'address': row[3],
+               'Contact Number': row[4],
+               'Email Address': row[5],
+               'Password': row[6],
+               'Registration Time': row[7].strftime("%d-%m-%Y"),
+               'last_modified': row[8].strftime("%d-%m-%Y"),
+               'Status': row[9]
+        }) 
+        result = json.loads(table_data)
         body = {
         'Operation': 'Update',
         'Message': 'SUCCESS',
