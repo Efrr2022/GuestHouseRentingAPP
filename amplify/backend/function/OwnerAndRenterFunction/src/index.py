@@ -245,7 +245,7 @@ def modify_user(userId, updateKey, updateValue,userPath):
         sql = f"select * from tblOwner where ownerId={userId}"
         mycursor.execute(sql)
         value = mycursor.fetchone()
-        if result:
+        if value:
             table_data = []
             for row in result:
                 table_data.append({
@@ -269,9 +269,11 @@ def modify_user(userId, updateKey, updateValue,userPath):
 
   # Block of code for updating record of renter      
   elif userPath == '/renter':
+    print("inside modify renter")
     sql = f"select * from tblRenter where renterID={userId}"
     mycursor.execute(sql)
     result = mycursor.fetchone()
+    print(result)
     if result:
         sql = f"UPDATE tblRenter SET {updateKey}={updateValue} WHERE renterId={userId};"
         mycursor.execute(sql)
