@@ -259,12 +259,7 @@ def modify_user(userId, updateKey, updateValue,userPath):
                'lastName': row[7],
                'address': row[8]
         }) 
-        result = dict(table_data)
-        body = {
-        'Operation': 'Update',
-        'Message': 'SUCCESS',
-        'User': result
-        }
+        body = table_data
         status_code = 200
     else:
         body = {
@@ -284,6 +279,7 @@ def modify_user(userId, updateKey, updateValue,userPath):
         sql = f"select * from tblRenter where renterId={userId}"
         mycursor.execute(sql)
         result = mycursor.fetchone()
+        print(result)
         if result:
             table_data = []
             for row in result:
@@ -299,12 +295,7 @@ def modify_user(userId, updateKey, updateValue,userPath):
                'last_modified': row[8].strftime("%d-%m-%Y"),
                'Status': row[9]
         }) 
-        result = dict(table_data)
-        body = {
-        'Operation': 'Update',
-        'Message': 'SUCCESS',
-        'User': result
-        }
+        body = table_data
         status_code = 200
     else:
         body = {
