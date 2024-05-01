@@ -325,7 +325,7 @@ def delete_user(id,userPath):
     mycursor.execute(sql)
     result = mycursor.fetchone()
     if result:
-        sql = f"Delete from tblOwner WHERE userId={id}"
+        sql = f"Delete from tblOwner WHERE ownerId={id}"
         mycursor.execute(sql)
         mydb.commit()
         body = {
