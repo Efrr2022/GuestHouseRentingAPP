@@ -68,30 +68,35 @@ def handler(event, context):
 
 def handle_update_renter(event, db):
     try:
-        # Extract renter ID from the path parameters of the request
-        renter_id = event["pathParameters"]["renterId"]
-        
         # Parse request body to get updated renter information
-        request_body = json.loads(event["body"])
+        data = json.loads(event["body"])
+
+         # Extract renter ID from the request body
+        renter_id = data.get("renterId")
         
         # Construct SQL query to update renter information
         sql_query = f"""
                     UPDATE tblRenter 
-                    SET firstName = '{request_body.get('firstName')}',
-                        lastName = '{request_body.get('lastName')}',
-                        address = '{request_body.get('address')}',
-                        contactNumber = '{request_body.get('contactNumber')}',
-                        emailAddress = '{request_body.get('emailAddress')}',
-                        password = '{request_body.get('password')}',
+                    SET firstName = '{data.get('firstName')}',
+                        lastName = '{data.get('lastName')}',
+                        address = '{data.get('address')}',
+                        contactNumber = '{data.get('contactNumber')}',
+                        emailAddress = '{data.get('emailAddress')}',
+                        password = '{data.get('password')}',
                         lastModified = CURRENT_TIMESTAMP,
-                        status = {request_body.get('status')}
+                        status = {data.get('status')}
                     WHERE renterId = {renter_id}
                     """
         
+        # Create a cursor
+        cursor = db.cursor()
+        
         # Execute the SQL query
-        with db.cursor() as cursor:
-            cursor.execute(sql_query)
-            db.commit()
+        cursor.execute(sql_query)
+        db.commit()
+        
+        # Close the cursor
+        cursor.close()
         
         # Return success response
         return {
@@ -111,7 +116,7 @@ def handle_update_renter(event, db):
 def handle_delete_renter(event, db):
     try:
         # Extract renter ID from the path parameters of the request
-        renter_id = event["pathParameters"]["renterId"]
+        renter_id = event["queryStringParameters"]["renterId"]
         
         # Construct SQL query to delete renter
         sql_query = f"""
@@ -119,10 +124,15 @@ def handle_delete_renter(event, db):
                     WHERE renterId = {renter_id}
                     """
         
+        # Create a cursor
+        cursor = db.cursor()
+        
         # Execute the SQL query
-        with db.cursor() as cursor:
-            cursor.execute(sql_query)
-            db.commit()
+        cursor.execute(sql_query)
+        db.commit()
+        
+        # Close the cursor
+        cursor.close()
         
         # Return success response
         return {
@@ -147,10 +157,12 @@ def handle_list_renters(event, db):
                     FROM tblRenter
                     """
         
+        # Create a cursor
+        cursor = db.cursor()
+        
         # Execute the SQL query
-        with db.cursor() as cursor:
-            cursor.execute(sql_query)
-            renters = cursor.fetchall()
+        cursor.execute(sql_query)
+        renters = cursor.fetchall()
         
         # Prepare response data
         response_data = []
@@ -166,6 +178,9 @@ def handle_list_renters(event, db):
                 "lastModified": str(renter[7]),
                 "status": renter[8]
             })
+        
+        # Close the cursor
+        cursor.close()
         
         # Return success response with list of renters
         return {
@@ -183,10 +198,39 @@ def handle_list_renters(event, db):
         db.close()
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def handle_list_renters_by_house_id(event, db):
     try:
         # Extract houseId from the path parameters of the request
-        house_id = event["pathParameters"]["houseId"]
+        house_id = event["queryStringParameters"]["houseId"]
         
         # Construct SQL query to select renters based on houseId
         sql_query = f"""
@@ -196,10 +240,12 @@ def handle_list_renters_by_house_id(event, db):
                     WHERE hr.houseId = {house_id}
                     """
         
+        # Create a cursor
+        cursor = db.cursor()
+        
         # Execute the SQL query
-        with db.cursor() as cursor:
-            cursor.execute(sql_query)
-            renters = cursor.fetchall()
+        cursor.execute(sql_query)
+        renters = cursor.fetchall()
         
         # Prepare response data
         response_data = []
@@ -216,6 +262,9 @@ def handle_list_renters_by_house_id(event, db):
                 "status": renter[8]
             })
         
+        # Close the cursor
+        cursor.close()
+        
         # Return success response with list of renters
         return {
             'statusCode': 200,
@@ -230,3 +279,4 @@ def handle_list_renters_by_house_id(event, db):
     finally:
         # Close database connection
         db.close()
+
