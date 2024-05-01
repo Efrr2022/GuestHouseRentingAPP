@@ -34,9 +34,9 @@ def connect_to_database():
 
     try:
         db = mysql.connector.connect(
-            host="tectown-backend-q1-2024.c1s0muoa0qc4.us-east-1.rds.amazonaws.com",
+            host=secrets['host'],
             user=secrets['user'],
-            database="rentalHouses",
+            database=secrets['database'],
             password=secrets['password']
         )
         print("Database connected")
