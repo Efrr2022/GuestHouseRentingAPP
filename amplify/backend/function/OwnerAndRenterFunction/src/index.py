@@ -259,11 +259,11 @@ def modify_user(userId, updateKey, updateValue,userPath):
                'lastName': row[7],
                'address': row[8]
         }) 
-         
+        result = json.loads(table_data)
         body = {
         'Operation': 'Update',
         'Message': 'SUCCESS',
-        'User': table_data
+        'User': result
         }
         status_code = 200
     else:
@@ -299,10 +299,11 @@ def modify_user(userId, updateKey, updateValue,userPath):
                'last_modified': row[8].strftime("%d-%m-%Y"),
                'Status': row[9]
         }) 
+        result = json.loads(table_data)
         body = {
         'Operation': 'Update',
         'Message': 'SUCCESS',
-        'User': table_data
+        'User': result
         }
         status_code = 200
     else:
