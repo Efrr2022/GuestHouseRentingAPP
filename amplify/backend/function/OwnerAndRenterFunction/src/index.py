@@ -245,7 +245,9 @@ def modify_user(userId, updateKey, updateValue,userPath):
         sql = f"select * from tblOwner where ownerId={userId}"
         mycursor.execute(sql)
         value = mycursor.fetchone()
-        result = json.load(value)
+        print(value)
+        result = json.dumps(value)
+        print(result)
          
         body = {
         'Operation': 'Update',
