@@ -167,9 +167,9 @@ def save_user(request_body,userPath):
           val = []
           if result:
               for x in request_body:
-                  val.append((x["first_name"], x["userPassword"], x["last_name"], x["address"], x["contact_number"], \
+                  val.append(x["first_name"], x["userPassword"], x["last_name"], x["address"], x["contact_number"], \
                             x["date_of_birth"], x["gender"], x["email_address"],x["occupation"], x["registration_time"], \
-                            x["last_modified"], x["userStatus"]),x["profile_image"])
+                            x["last_modified"], x["userStatus"],x["profile_image"])
                   
               print(val)
               # Sql statement to insert data to the database  
@@ -201,9 +201,9 @@ def save_user(request_body,userPath):
           val = []
           if result:
               for x in request_body:
-                  val.append((x["first_name"], x["last_name"], x["address"], x["contact_number"], \
+                  val.append(x["first_name"], x["last_name"], x["address"], x["contact_number"], \
                             x["email_address"], x["password"], x["registration_time"], \
-                            x["last_modified"], x["status"]))
+                            x["last_modified"], x["status"])
               print(val)
               # Sql statement to insert data to the database  
               sql="Insert into tblRenter (first_name,last_name,address,contact_number,email_address,password, \
