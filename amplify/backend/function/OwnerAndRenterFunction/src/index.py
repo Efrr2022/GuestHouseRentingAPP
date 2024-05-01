@@ -252,22 +252,25 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
             table_data = []
             for row in result:
                 table_data.append({
-               'ownerId': row[0],
-               'firstName': row[1],
-               'userPassword': row[2],
-               'lastName': row[3],
-               'address': row[4],
-               'Contact Number': row[5],
-               'Date of birth': row[6].strftime("%d-%m-%Y"),
-               'lastName': row[7],
-               'address': row[8]
-            }) 
+                    'ownerId': row[0],
+                    'firstName': row[1],
+                    'userPassword': row[2],
+                    'lastName': row[3],
+                    'address': row[4],
+                    'Contact Number': row[5],
+                    'Date of birth': row[6].strftime("%d-%m-%Y"),
+                    'gender': row[7],
+                    'email address': row[8]
+                }) 
+        print(table_data)
         body = table_data
         status_code = 200
     else:
+        
         body = {
         'Message': f'Owner With Id={userId} not found'
         }
+        print(body)
         status_code = 204
 
   # Block of code for updating record of renter      
@@ -289,23 +292,25 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
             table_data = []
             for row in result:
                 table_data.append({
-               'renterId': row[0],
-               'first Name': row[1],
-               'last Name': row[2],
-               'address': row[3],
-               'Contact Number': row[4],
-               'Email Address': row[5],
-               'Password': row[6],
-               'Registration Time': row[7].strftime("%d-%m-%Y"),
-               'last_modified': row[8].strftime("%d-%m-%Y"),
-               'Status': row[9]
+                    'renterId': row[0],
+                    'first Name': row[1],
+                    'last Name': row[2],
+                    'address': row[3],
+                    'Contact Number': row[4],
+                    'Email Address': row[5],
+                    'Password': row[6],
+                    'Registration Time': row[7].strftime("%d-%m-%Y"),
+                    'last_modified': row[8].strftime("%d-%m-%Y"),
+                    'Status': row[9]
             }) 
+        print(table_data)
         body = table_data
         status_code = 200
     else:
         body = {
         'Message': f'renter With Id={userId} not found'
         }
+        print(body)
         status_code = 204
   mycursor.close()
   mydb.close()
