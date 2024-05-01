@@ -65,7 +65,7 @@ def handler(event, context):
     elif event["httpMethod"] == "DELETE":
         response = handle_delete_request(event, db)
     elif event["httpMethod"] == "PATCH":
-        response = handle_patch_request(event, db)
+        response = handle_update_house_with_features(event, db)
     else:
         response = {
             'statusCode': 405,
@@ -256,44 +256,68 @@ def handle_delete_request(event,db):
 
 
 
-def handle_patch_request(event,db):
-    mycursor = db.cursor()
-
+def handle_update_house_with_features(event, db):
     try:
         # Parse request body
         data = json.loads(event['body'])
 
-        # Extract data fields
-        house_id = data.get('houseId')
-        fields_to_update = data.get('fieldsToUpdate', {})  # Assuming fields to update are provided in the request body
+        # Extract data for updating the house
+        house_data = {
+            "houseId": data.get("houseId"),
+            "houseHeading": data.get("houseHeading"),
+            # Add more fields as needed
+        }
 
-        # Construct SQL query
-        set_pairs = []
-        for key, value in fields_to_update.items():
-            set_pairs.append(f"{key} = '{value}'")
-        set_clause = ", ".join(set_pairs)
-        sql_query = f"""UPDATE tblHouses
-                        SET {set_clause}
-                        WHERE houseId = {house_id}"""
+        # Extract data for updating house features (amenities)
+        features_data = {
+            "houseId": data.get("houseId"),
+            "numberOfCarParking": data.get("numberOfCarParking"),
+            "hasCarpet": data.get("hasCarpet"),
+            # Add more fields as needed
+        }
+
+        # Construct SQL query to update house
+        house_sql_query = f"""
+                            UPDATE tblHouses
+                            SET houseHeading = '{house_data['houseHeading']}'
+                            WHERE houseId = {house_data['houseId']}
+                            """
         
-        # Execute query
-        mycursor.execute(sql_query)
+        # Construct SQL query to update house features
+        features_sql_query = f"""
+                                UPDATE tblHouseFeatures
+                                SET numberOfCarParking = {features_data['numberOfCarParking']},
+                                    hasCarpet = {features_data['hasCarpet']}
+                                WHERE houseId = {features_data['houseId']}
+                                """
+
+        # Open a cursor
+        cursor = db.cursor()
+
+        # Execute the SQL queries
+        cursor.execute(house_sql_query)
+        cursor.execute(features_sql_query)
         db.commit()
-    
-        response_patch = {
+
+        # Close the cursor
+        cursor.close()
+
+        # Return success response
+        return {
             'statusCode': 200,
-            'body': json.dumps('Property updated successfully')
+            'body': json.dumps({'message': 'House and amenities updated successfully'})
         }
     except Exception as e:
-        print(f'There was an exception: {e}')
-        response_patch = {
+        # Return error response if any exception occurs
+        return {
             'statusCode': 500,
-            'body': json.dumps({'error': 'Internal Server Error'})
+            'body': json.dumps({'error': str(e)})
         }
     finally:
-        mycursor.close()
-    
-    return response_patch
+        # Close database connection
+        db.close()
+
+
 
 
 
