@@ -259,7 +259,7 @@ def modify_user(userId, updateKey, updateValue,userPath):
                'lastName': row[7],
                'address': row[8]
         }) 
-        result = json.loads(table_data)
+        result = json.dumps(table_data)
         body = {
         'Operation': 'Update',
         'Message': 'SUCCESS',
@@ -299,7 +299,7 @@ def modify_user(userId, updateKey, updateValue,userPath):
                'last_modified': row[8].strftime("%d-%m-%Y"),
                'Status': row[9]
         }) 
-        result = json.loads(table_data)
+        result = json.dumps(table_data)
         body = {
         'Operation': 'Update',
         'Message': 'SUCCESS',
