@@ -135,11 +135,11 @@ def get_users(limit,offset,userPath):
                'first Name': row[1],
                'last Name': row[2],
                'address': row[3],
-               'address': row[4],
-               'Contact Number': row[5],
-               'Email Address': row[6],
-               'Password': row[7],
-               'Registration Time': row[8].strftime("%d-%m-%Y"),
+               'Contact Number': row[4],
+               'Email Address': row[5],
+               'Password': row[6],
+               'Registration Time': row[7].strftime("%d-%m-%Y"),
+               'last_modified': row[8].strftime("%d-%m-%Y"),
                'Status': row[9]
         }) 
     mycursor.close()
