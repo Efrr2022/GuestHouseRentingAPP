@@ -207,7 +207,7 @@ def save_user(request_body,userPath):
               print(val)
               # Sql statement to insert data to the database  
               sql="Insert into tblRenter (first_name,last_name,address,contact_number,email_address,password, \
-              registration_time,last_modified,status,) values (%s, %s, %s, %s,%s, %s, \
+              registration_time,last_modified,status) values (%s, %s, %s, %s,%s, %s, \
               %s, %s,%s)"
               mycursor.executemany(sql,val)
               mydb.commit()  
