@@ -247,16 +247,9 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
         data = mycursor.execute(f'''SELECT 
             json_group_array(
                 json_object(
-                    'renterId': renterId,
+                    'renterId',renterId,
                     'first Name': first_name,
-                    'last Name': last_name,
-                    'address': address,
-                    'Contact Number': contact_number,
-                    'Email Address': email_address,
-                    'Password': password,
-                    'Registration Time': registration_time,
-                    'last_modified': last_modified,
-                    'Status': status
+                    
                     )
                 )
                 FROM tblOwner Where ownerId = {userId}''')
