@@ -244,20 +244,27 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
         sql = f"UPDATE tblOwner SET {updateKey}={updateValue} WHERE ownerId={userId};"
         mycursor.execute(sql)
         mydb.commit()
-        data = mycursor.execute(f'''SELECT 
-            json_group_array(
-                json_object(
-                    'renterId',renterId,
-                    'first Name': first_name,
-                    
-                    )
-                )
-                FROM tblOwner Where ownerId = {userId}''')
-        
+        sql = f"select * from tblRenter where renterId={userId}"
+        mycursor.execute(sql)
+        row = mycursor.fetchone()
+        print("updated data",row)
+        if row:
+            table_data = {
+                    'ownerId': row[0],
+                    'firstName': row[1],
+                    'userPassword': row[2],
+                    'lastName': row[3],
+                    'address': row[4],
+                    'Contact Number': row[5],
+                    'Date of birth': row[6].strftime("%d-%m-%Y"),
+                    'gender': row[7],
+                    'email address': row[8]
+                }
+        print(table_data)
         body = {
             'Operation': 'Update',
             'Message': 'SUCCESS',
-            'Owner User': data
+            'Owner User': table_data
         
         }
         status_code = 200
@@ -280,10 +287,29 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
         sql = f"UPDATE tblRenter SET {updateKey}={updateValue} WHERE renterId={userId};"
         mycursor.execute(sql)
         mydb.commit()
+        sql = f"select * from tblRenter where renterId={userId}"
+        mycursor.execute(sql)
+        row = mycursor.fetchone()
+        print("Data after updated",row)
+        if result:
+            table_data = {
+                    'renterId': row[0],
+                    'first Name': row[1],
+                    'last Name': row[2],
+                    'address': row[3],
+                    'Contact Number': row[4],
+                    'Email Address': row[5],
+                    'Password': row[6],
+                    'Registration Time': row[7].strftime("%d-%m-%Y"),
+                    'last_modified': row[8].strftime("%d-%m-%Y"),
+                    'Status': row[9]
+              }
+        print(table_data)
         
         body = {
             'Operation': 'Update',
             'Message': 'SUCCESS',
+            'renter User': table_data
             
          }
         status_code = 200
