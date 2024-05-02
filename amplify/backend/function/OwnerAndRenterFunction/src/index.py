@@ -244,10 +244,27 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
         sql = f"UPDATE tblOwner SET {updateKey}={updateValue} WHERE ownerId={userId};"
         mycursor.execute(sql)
         mydb.commit()
+        data = mycursor.execute(f'''SELECT 
+            json_group_array(
+                json_object(
+                    'renterId': renterId,
+                    'first Name': first_name,
+                    'last Name': last_name,
+                    'address': address,
+                    'Contact Number': contact_number,
+                    'Email Address': email_address,
+                    'Password': password,
+                    'Registration Time': registration_time,
+                    'last_modified': last_modified,
+                    'Status': status
+                    )
+                )
+                FROM tblOwner Where ownerId = {userId}''')
         
         body = {
             'Operation': 'Update',
             'Message': 'SUCCESS',
+            'Owner User': data
         
         }
         status_code = 200
