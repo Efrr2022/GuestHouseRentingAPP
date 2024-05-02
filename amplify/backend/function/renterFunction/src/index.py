@@ -53,13 +53,16 @@ def handler(event, context):
     
     # Extract HTTP method from the request
     http_method = event["httpMethod"]
+    query_params = event["queryStringParameters"]
     
-    if http_method == "PATCH":
+    if http_method == "GET" and query_params is not None and "houseId" in query_params:
+        return handle_list_renters_by_house_id(event, db)
+    elif http_method == "GET":
+        return handle_list_renters(event, db)
+    elif http_method == "PATCH":
         return handle_update_renter(event, db)
     elif http_method == "DELETE":
         return handle_delete_renter(event, db)
-    elif http_method == "GET":
-        return handle_list_renters(event, db)
     else:
         return {
             'statusCode': 405,
