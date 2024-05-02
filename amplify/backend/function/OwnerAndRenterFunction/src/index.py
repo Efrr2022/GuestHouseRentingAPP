@@ -244,7 +244,7 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
         sql = f"UPDATE tblOwner SET {updateKey}={updateValue} WHERE ownerId={userId};"
         mycursor.execute(sql)
         mydb.commit()
-        sql = f"select * from tblRenter where renterId={userId}"
+        sql = f"select * from tblOwner where ownerId={userId}"
         mycursor.execute(sql)
         row = mycursor.fetchone()
         print("updated data",row)
