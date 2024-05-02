@@ -78,13 +78,13 @@ def handle_update_renter(event, db):
         # Construct SQL query to update renter information
         sql_query = f"""
                     UPDATE tblRenter 
-                    SET firstName = '{data.get('firstName')}',
-                        lastName = '{data.get('lastName')}',
+                    SET first_name = '{data.get('firstName')}',
+                        last_name = '{data.get('lastName')}',
                         address = '{data.get('address')}',
-                        contactNumber = '{data.get('contactNumber')}',
-                        emailAddress = '{data.get('emailAddress')}',
+                        contact_number = '{data.get('contactNumber')}',
+                        email_address = '{data.get('emailAddress')}',
                         password = '{data.get('password')}',
-                        lastModified = CURRENT_TIMESTAMP,
+                        last_modified = CURRENT_TIMESTAMP,
                         status = {data.get('status')}
                     WHERE renterId = {renter_id}
                     """
@@ -156,7 +156,8 @@ def handle_list_renters(event, db):
     try:
         # Construct SQL query to select all renters
         sql_query = """
-                    SELECT renterId, firstName, lastName, address, contactNumber, emailAddress, registrationTime, lastModified, status
+                    SELECT renterId, first_name, last_name, address, contact_number, 
+                    email_address, password, registration_time, last_modified,status
                     FROM tblRenter
                     """
         
