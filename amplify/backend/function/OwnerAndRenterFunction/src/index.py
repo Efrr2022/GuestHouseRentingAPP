@@ -291,7 +291,7 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
         mycursor.execute(sql)
         row = mycursor.fetchone()
         print("Data after updated",row)
-        if result:
+        if row:
             table_data = {
                     'renterId': row[0],
                     'first Name': row[1],
