@@ -66,6 +66,7 @@ def handler(event, context):
             'body': json.dumps({'message': 'Method Not Allowed'})
         }
 
+
 def handle_update_renter(event, db):
     try:
         # Parse request body to get updated renter information
@@ -112,6 +113,8 @@ def handle_update_renter(event, db):
     finally:
         # Close database connection
         db.close()
+
+
 
 def handle_delete_renter(event, db):
     try:
