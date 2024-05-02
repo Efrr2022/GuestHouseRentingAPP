@@ -178,8 +178,8 @@ def handle_list_renters(event, db):
                 "address": renter[3],
                 "contactNumber": renter[4],
                 "emailAddress": renter[5],
-                "registrationTime": str(renter[6]),  #.strftime('%Y-%m-%d %H:%M:%S'),  # Convert datetime to string
-                "lastModified": str(renter[7]),      #.strftime('%Y-%m-%d %H:%M:%S'),  # Convert datetime to string
+                "registrationTime": renter[6], #.strftime('%Y-%m-%d %H:%M:%S'),
+                "lastModified": renter[7].strftime('%Y-%m-%d %H:%M:%S'), 
                 "status": renter[8]
         })
         
