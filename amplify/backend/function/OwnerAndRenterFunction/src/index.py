@@ -4,6 +4,7 @@ import base64
 import config
 from botocore.exceptions import ClientError
 import datetime
+import re
 
 
 
@@ -162,33 +163,38 @@ def save_user(request_body,userPath,mydb):
           stmt = "SHOW TABLES LIKE 'tblOwner'"
           print(stmt)
           mycursor.execute(stmt)
-          result = mycursor.fetchone()
-          print(result)
+          x = mycursor.fetchone()
+          print(x)
 
           # To prepare to the value to insert to the database 
           val = []
-          if result:
-              for x in request_body:
-                  val.append((x["first_name"], x["userPassword"], x["last_name"], x["address"], x["contact_number"], \
-                            x["date_of_birth"], x["gender"], x["email_address"],x["occupation"], x["registration_time"], \
-                            x["last_modified"], x["userStatus"],x["profile_image"]),)
-                  
-              print(val)
-              # Sql statement to insert data to the database  
-              sql="Insert into tblOwner (first_name,userPassword,last_name,address,contact_number,date_of_birth,gender, \
-              email_address,occupation,registration_time,last_modified,userStatus,profile_image) values (%s, %s, %s, %s,%s, %s, \
-              %s, %s,%s, %s, %s, %s,%s)"
-              mycursor.executemany(sql,val)
-              mydb.commit()  
-              body = {
+          if x:
+              if is_valid_email(x["email_address"]):
+              
+                val.append((x["first_name"], x["userPassword"], x["last_name"], x["address"], x["contact_number"], \
+                                x["date_of_birth"], x["gender"], x["email_address"],x["occupation"], x["registration_time"], \
+                                x["last_modified"], x["userStatus"],x["profile_image"]),)
+                print(val)
+                # Sql statement to insert data to the database  
+                sql="Insert into tblOwner (first_name,userPassword,last_name,address,contact_number,date_of_birth,gender, \
+                email_address,occupation,registration_time,last_modified,userStatus,profile_image) values (%s, %s, %s, %s,%s, %s, \
+                %s, %s,%s, %s, %s, %s,%s)"
+                mycursor.executemany(sql,val)
+                mydb.commit()  
+                body = {
                      'Operation': 'SAVE',
                      'Message': 'SUCCESS',
                      'Item': request_body
                       }
+                StatusCode = 201 
+              else:
+                body = "In Valid Email Address"
+                StatusCode = 400    
           # If table Users not found 
           else:
               body = "Table Owner doesn't found"
-          return build_response(201,body)
+              StatusCode = 400
+          return build_response(StatusCode,body)
       except ClientError as e:
            return build_response(400, e.response['Error']['Message'])
   # Block for saving rental records
@@ -197,33 +203,39 @@ def save_user(request_body,userPath,mydb):
           # To check Wether table users is available or not
           stmt = "SHOW TABLES LIKE 'tblRenter'"
           mycursor.execute(stmt)
-          result = mycursor.fetchone()
+          x = mycursor.fetchone()
 
           # To prepare to the value to insert to the database 
           val = []
-          if result:
-              for x in request_body:
+          if x:
+              if is_valid_email(x["email_address"]):
                   val.append((x["first_name"], x["last_name"], x["address"], x["contact_number"], \
                             x["email_address"], x["password"], x["registration_time"], \
                             x["last_modified"], x["status"]),)
-              print(val)
-              # Sql statement to insert data to the database  
-              sql="Insert into tblRenter (first_name,last_name,address,contact_number,email_address,password, \
-              registration_time,last_modified,status) values (%s, %s, %s, %s,%s, %s, \
-              %s, %s,%s)"
-              mycursor.executemany(sql,val)
-              mydb.commit()  
-              body = {
+                  print(val)
+                  # Sql statement to insert data to the database  
+                  sql="Insert into tblRenter (first_name,last_name,address,contact_number,email_address,password, \
+                  registration_time,last_modified,status) values (%s, %s, %s, %s,%s, %s, \
+                  %s, %s,%s)"
+                  mycursor.executemany(sql,val)
+                  mydb.commit()  
+                  body = {
                      'Operation': 'SAVE',
                      'Message': 'SUCCESS',
                      'Item': request_body
                       }
+                  StatusCode = 201
+              else:
+                body = "Invalid Email Address"
+                StatusCode = 400
+              
           # If table Users not found 
           else:
               body = "Table Renter doesn't found"
+              StatusCode = 400
           mycursor.close()
           mydb.close()
-          return build_response(201,body)
+          return build_response(StatusCode,body)
       except ClientError as e:
            return build_response(400, e.response['Error']['Message'])
      
@@ -241,14 +253,14 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
     mycursor.execute(sql)
     result = mycursor.fetchone()
     if result:
-        sql = f"UPDATE tblOwner SET {updateKey}={updateValue} WHERE ownerId={userId};"
-        mycursor.execute(sql)
-        mydb.commit()
-        sql = f"select * from tblOwner where ownerId={userId}"
-        mycursor.execute(sql)
-        row = mycursor.fetchone()
-        print("updated data",row)
-        if row:
+        if updateKey == "email_address" :
+         if is_valid_email(updateKey):
+            sql = f"UPDATE tblOwner SET {updateKey}={updateValue} WHERE ownerId={userId};"
+            mycursor.execute(sql)
+            mydb.commit()
+            sql = f"select * from tblOwner where ownerId={userId}"
+            mycursor.execute(sql)
+            row = mycursor.fetchone()
             table_data = {
                     'ownerId': row[0],
                     'firstName': row[1],
@@ -260,14 +272,45 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
                     'gender': row[7],
                     'email address': row[8]
                 }
-        print(table_data)
-        body = {
-            'Operation': 'Update',
-            'Message': 'SUCCESS',
-            'Owner User': table_data
+            print(table_data)
+            body = {
+                'Operation': 'Update',
+                'Message': 'SUCCESS',
+                'Owner User': table_data
         
-        }
-        status_code = 200
+             }
+            status_code = 200
+         else: 
+           body = "In Valid Email Address"
+           status_code = 400
+        else: 
+            sql = f"UPDATE tblOwner SET {updateKey}={updateValue} WHERE ownerId={userId};"
+            mycursor.execute(sql)
+            mydb.commit()
+            sql = f"select * from tblOwner where ownerId={userId}"
+            mycursor.execute(sql)
+            row = mycursor.fetchone()
+            table_data = {
+                    'ownerId': row[0],
+                    'firstName': row[1],
+                    'userPassword': row[2],
+                    'lastName': row[3],
+                    'address': row[4],
+                    'Contact Number': row[5],
+                    'Date of birth': row[6].strftime("%d-%m-%Y"),
+                    'gender': row[7],
+                    'email address': row[8]
+                }
+            print(table_data)
+            print("updated data",row)       
+            body = {
+                'Operation': 'Update',
+                'Message': 'SUCCESS',
+                'Owner User': table_data
+        
+             }
+            status_code = 200
+        
     else:
         
         body = {
@@ -284,14 +327,14 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
     result = mycursor.fetchone()
     print("Data before updated",result)
     if result:
-        sql = f"UPDATE tblRenter SET {updateKey}={updateValue} WHERE renterId={userId};"
-        mycursor.execute(sql)
-        mydb.commit()
-        sql = f"select * from tblRenter where renterId={userId}"
-        mycursor.execute(sql)
-        row = mycursor.fetchone()
-        print("Data after updated",row)
-        if row:
+       if updateKey == "email_address" :
+         if is_valid_email(updateKey):
+            sql = f"UPDATE tblRenter SET {updateKey}={updateValue} WHERE renterId={userId};"
+            mycursor.execute(sql)
+            mydb.commit()
+            sql = f"select * from tblRenter where renterId={userId}"
+            mycursor.execute(sql)
+            row = mycursor.fetchone()
             table_data = {
                     'renterId': row[0],
                     'first Name': row[1],
@@ -304,15 +347,44 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
                     'last_modified': row[8].strftime("%d-%m-%Y"),
                     'Status': row[9]
               }
-        print(table_data)
-        
-        body = {
-            'Operation': 'Update',
-            'Message': 'SUCCESS',
-            'renter User': table_data
+            print(table_data)
+            body = {
+                'Operation': 'Update',
+                'Message': 'SUCCESS',
+                'renter User': table_data
             
-         }
-        status_code = 200
+            }
+            status_code = 200
+         else: 
+           body = "In Valid Email Address"
+           status_code = 400
+       else: 
+          sql = f"UPDATE tblRenter SET {updateKey}={updateValue} WHERE renterId={userId};"
+          mycursor.execute(sql)
+          mydb.commit()
+          sql = f"select * from tblRenter where renterId={userId}"
+          mycursor.execute(sql)
+          row = mycursor.fetchone()
+          table_data = {
+                    'renterId': row[0],
+                    'first Name': row[1],
+                    'last Name': row[2],
+                    'address': row[3],
+                    'Contact Number': row[4],
+                    'Email Address': row[5],
+                    'Password': row[6],
+                    'Registration Time': row[7].strftime("%d-%m-%Y"),
+                    'last_modified': row[8].strftime("%d-%m-%Y"),
+                    'Status': row[9]
+              }
+          print(table_data)
+          body = {
+                'Operation': 'Update',
+                'Message': 'SUCCESS',
+                'renter User': table_data
+            
+            }
+          status_code = 200
     else:
         body = {
            'Message': f'renter With Id={userId} not found'
@@ -384,6 +456,28 @@ def build_response(status_code, body):
    	}
    	
 ################################ End of Build response ####################################################
+
+############################### Function to check wether an email is valid or not #########################
+
+def is_valid_email(email):
+
+    """Check if the email is a valid format."""
+
+    # Regular expression for validating an Email
+
+    regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
+
+    # If the string matches the regex, it is a valid email
+
+    if re.match(regex, email):
+
+        return True
+
+    else:
+
+        return False
+
+########################### End of function is_valid_email #############################
 
  
  
