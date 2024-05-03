@@ -193,7 +193,7 @@ def handle_list_renters(event, db):
         # Return success response with list of renters
         return {
             'statusCode': 200,
-            'body': json.dumps(response_data)
+            'body': json.dumps(response_data, default=str)  # Serialize datetime objects using default=str
         }
     except Exception as e:
         # Return error response if any exception occurs
@@ -209,6 +209,7 @@ def handle_list_renters(event, db):
 
 
 
+
 def handle_list_renters_by_house_id(event, db):
     try:
         # Extract houseId from the path parameters of the request
@@ -216,9 +217,9 @@ def handle_list_renters_by_house_id(event, db):
         
         # Construct SQL query to select renters based on houseId
         sql_query = f"""
-                    SELECT r.renterId, r.firstName, r.lastName, r.address, r.contactNumber, r.emailAddress, r.registrationTime, r.lastModified, r.status
+                    SELECT r.renterId, r.first_name, r.last_name, r.address, r.contact_number, r.email_address, r.registration_time, r.last_modified, r.status
                     FROM tblRenter r
-                    JOIN tblHouseReserved hr ON r.renterId = hr.renterId
+                    JOIN tblHouses hr ON r.renterId = hr.renterId
                     WHERE hr.houseId = {house_id}
                     """
         
