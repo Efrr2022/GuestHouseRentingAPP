@@ -2,16 +2,15 @@ import json
 import mysql.connector 
 import config
 from botocore.exceptions import ClientError
-import datetime
 import re
 import logging
-
+logging.basicConfig(level=logging.DEBUG,format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
 
 
 
 def handler(event, context): 
-    logging.basicConfig(level=logging.info,format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
+    
     
     host_url = config.secret.host
     user_name = config.secret.user
@@ -127,7 +126,7 @@ def get_users(limit,offset,userPath,mydb):
                'lastName': row[3],
                'address': row[4],
                'Contact Number': row[5],
-               'Date of birth': row[6].strftime("%Y-%m-%d"),
+               'Date of birth': row[6].strftime("%d/%m/%Y"),
                'lastName': row[7],
                'address': row[8]
                })
