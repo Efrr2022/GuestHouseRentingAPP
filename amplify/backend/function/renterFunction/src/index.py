@@ -156,9 +156,6 @@ def handle_delete_renter(event, db):
         # Close database connection
         db.close()
 
-import json
-import datetime
-
 def handle_list_renters(event, db):
     try:
         # Construct SQL query to select all renters
@@ -220,9 +217,9 @@ def handle_list_renters_by_house_id(event, db):
         
         # Construct SQL query to select renters based on houseId
         sql_query = f"""
-                    SELECT r.renterId, r.firstName, r.lastName, r.address, r.contactNumber, r.emailAddress, r.registrationTime, r.lastModified, r.status
+                    SELECT r.renterId, r.first_name, r.last_name, r.address, r.contact_number, r.email_address, r.registration_time, r.last_modified, r.status
                     FROM tblRenter r
-                    JOIN tblHouseReserved hr ON r.renterId = hr.renterId
+                    JOIN tblHouses hr ON r.renterId = hr.renterId
                     WHERE hr.houseId = {house_id}
                     """
         
