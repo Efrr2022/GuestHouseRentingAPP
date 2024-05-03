@@ -12,7 +12,7 @@ import logging
 
 
 def handler(event, context): 
-    logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
+    logging.basicConfig(level=logging.info,format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
     
     host_url = config.secret.host
     user_name = config.secret.user
