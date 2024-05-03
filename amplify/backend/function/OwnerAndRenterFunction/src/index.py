@@ -188,7 +188,7 @@ def save_user(request_body,userPath,mydb):
                       }
                 StatusCode = 201 
               else:
-                body = "In Valid Email Address"
+                body = "Invalid Email Address"
                 StatusCode = 400    
           # If table Users not found 
           else:
@@ -281,7 +281,7 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
              }
             status_code = 200
          else: 
-           body = "In Valid Email Address"
+           body = "Invalid Email Address"
            status_code = 400
         else: 
             sql = f"UPDATE tblOwner SET {updateKey}={updateValue} WHERE ownerId={userId};"
@@ -356,7 +356,7 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
             }
             status_code = 200
          else: 
-           body = "In Valid Email Address"
+           body = "Invalid Email Address"
            status_code = 400
        else: 
           sql = f"UPDATE tblRenter SET {updateKey}={updateValue} WHERE renterId={userId};"
