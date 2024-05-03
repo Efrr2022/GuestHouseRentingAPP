@@ -163,13 +163,17 @@ def save_user(request_body,userPath,mydb):
           stmt = "SHOW TABLES LIKE 'tblOwner'"
           print(stmt)
           mycursor.execute(stmt)
-          x = mycursor.fetchone()
-          print(x)
+          result = mycursor.fetchone()
+          print(result)
+          x = request_body
+
 
           # To prepare to the value to insert to the database 
           val = []
-          if x:
-              if is_valid_email(x["email_address"]):
+          if result:
+              email = x["email_address"]
+              print(email)
+              if is_valid_email(email):
               
                 val.append((x["first_name"], x["userPassword"], x["last_name"], x["address"], x["contact_number"], \
                                 x["date_of_birth"], x["gender"], x["email_address"],x["occupation"], x["registration_time"], \
@@ -203,11 +207,11 @@ def save_user(request_body,userPath,mydb):
           # To check Wether table users is available or not
           stmt = "SHOW TABLES LIKE 'tblRenter'"
           mycursor.execute(stmt)
-          x = mycursor.fetchone()
-
+          result = mycursor.fetchone()
+          x = request_body
           # To prepare to the value to insert to the database 
           val = []
-          if x:
+          if result:
               if is_valid_email(x["email_address"]):
                   val.append((x["first_name"], x["last_name"], x["address"], x["contact_number"], \
                             x["email_address"], x["password"], x["registration_time"], \
@@ -254,8 +258,8 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
     result = mycursor.fetchone()
     if result:
         if updateKey == "email_address" :
-         if is_valid_email(updateKey):
-            sql = f"UPDATE tblOwner SET {updateKey}={updateValue} WHERE ownerId={userId};"
+         if is_valid_email(updateValue):
+            sql = f"UPDATE tblOwner SET {updateKey}=\"{updateValue}\" WHERE ownerId={userId};"
             mycursor.execute(sql)
             mydb.commit()
             sql = f"select * from tblOwner where ownerId={userId}"
@@ -284,7 +288,7 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
            body = "Invalid Email Address"
            status_code = 400
         else: 
-            sql = f"UPDATE tblOwner SET {updateKey}={updateValue} WHERE ownerId={userId};"
+            sql = f"UPDATE tblOwner SET {updateKey}=\"{updateValue}\" WHERE ownerId={userId};"
             mycursor.execute(sql)
             mydb.commit()
             sql = f"select * from tblOwner where ownerId={userId}"
@@ -328,8 +332,8 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
     print("Data before updated",result)
     if result:
        if updateKey == "email_address" :
-         if is_valid_email(updateKey):
-            sql = f"UPDATE tblRenter SET {updateKey}={updateValue} WHERE renterId={userId};"
+         if is_valid_email(updateValue):
+            sql = f"UPDATE tblRenter SET {updateKey}=\"{updateValue}\" WHERE renterId={userId};"
             mycursor.execute(sql)
             mydb.commit()
             sql = f"select * from tblRenter where renterId={userId}"
@@ -359,7 +363,7 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
            body = "Invalid Email Address"
            status_code = 400
        else: 
-          sql = f"UPDATE tblRenter SET {updateKey}={updateValue} WHERE renterId={userId};"
+          sql = f"UPDATE tblRenter SET {updateKey}=\"{updateValue}\" WHERE renterId={userId};"
           mycursor.execute(sql)
           mydb.commit()
           sql = f"select * from tblRenter where renterId={userId}"
