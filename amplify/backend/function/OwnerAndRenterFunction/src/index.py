@@ -1,6 +1,5 @@
 import json
 import mysql.connector 
-import base64
 import config
 from botocore.exceptions import ClientError
 import datetime
@@ -128,7 +127,7 @@ def get_users(limit,offset,userPath,mydb):
                'lastName': row[3],
                'address': row[4],
                'Contact Number': row[5],
-               'Date of birth': row[6].strftime("%d-%m-%Y"),
+               'Date of birth': row[6].strftime("%Y-%m-%d"),
                'lastName': row[7],
                'address': row[8]
                })
