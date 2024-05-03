@@ -64,6 +64,8 @@ def handler(event, context):
         return handle_update_renter(event, db)
     elif http_method == "DELETE":
         return handle_delete_renter(event, db)
+    elif http_method == "POST":
+        return create_renter_in_record(event,db)
     else:
         return {
             'statusCode': 405,
@@ -252,6 +254,56 @@ def handle_list_renters_by_house_id(event, db):
         return {
             'statusCode': 200,
             'body': json.dumps(response_data)
+        }
+    except Exception as e:
+        # Return error response if any exception occurs
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': str(e)})
+        }
+    finally:
+        # Close database connection
+        db.close()
+
+
+
+def create_renter_in_record(event, db):
+    try:
+        # Parse request body to get renter in information
+        data = json.loads(event["body"])
+        
+        # Extract relevant data from the request body
+        leased_id = data.get("leasedId")
+        stat_electricity = data.get("statElectricity")
+        stat_paint = data.get("statPaint")
+        no_bulbs = data.get("noBulbs")
+        stat_bulbs = data.get("statBulbs")
+        stat_windows = data.get("statWindows")
+        status_toilet_sink = data.get("statusToiletSink")
+        stat_washing_sink = data.get("statWashingSink")
+        
+        # Construct SQL query to insert renter in record
+        sql_query = f"""
+                    INSERT INTO tblRenterIn (leasedId, stat_electricity, stat_paint, no_bulbs, stat_bulbs, stat_windows, 
+                    status_toiletSink, stat_washingSink, last_modified, renterInStatus)
+                    VALUES ({leased_id}, '{stat_electricity}', '{stat_paint}', {no_bulbs}, '{stat_bulbs}', '{stat_windows}', 
+                    '{status_toilet_sink}', '{stat_washing_sink}', CURRENT_TIMESTAMP, 1)
+                    """
+        
+        # Create a cursor
+        cursor = db.cursor()
+        
+        # Execute the SQL query
+        cursor.execute(sql_query)
+        db.commit()
+        
+        # Close the cursor
+        cursor.close()
+        
+        # Return success response
+        return {
+            'statusCode': 200,
+            'body': json.dumps({'message': 'Renter In record created successfully'})
         }
     except Exception as e:
         # Return error response if any exception occurs
