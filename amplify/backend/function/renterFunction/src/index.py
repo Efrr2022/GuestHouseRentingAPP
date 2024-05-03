@@ -156,6 +156,9 @@ def handle_delete_renter(event, db):
         # Close database connection
         db.close()
 
+import json
+import datetime
+
 def handle_list_renters(event, db):
     try:
         # Construct SQL query to select all renters
@@ -193,7 +196,7 @@ def handle_list_renters(event, db):
         # Return success response with list of renters
         return {
             'statusCode': 200,
-            'body': json.dumps(response_data)
+            'body': json.dumps(response_data, default=str)  # Serialize datetime objects using default=str
         }
     except Exception as e:
         # Return error response if any exception occurs
@@ -204,6 +207,7 @@ def handle_list_renters(event, db):
     finally:
         # Close database connection
         db.close()
+
 
 
 
