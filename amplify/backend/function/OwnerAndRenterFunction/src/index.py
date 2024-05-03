@@ -165,13 +165,15 @@ def save_user(request_body,userPath,mydb):
           mycursor.execute(stmt)
           result = mycursor.fetchone()
           print(result)
+          print(type(request_body))
           x = request_body
+          print(x)
 
 
           # To prepare to the value to insert to the database 
           val = []
           if result:
-              email = x["email_address"]
+              email = request_body["email_address"]
               print(email)
               if is_valid_email(email):
               
