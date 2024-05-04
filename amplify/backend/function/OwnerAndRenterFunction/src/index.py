@@ -3,7 +3,8 @@ import mysql.connector
 import config
 from botocore.exceptions import ClientError
 import re
-import logging
+import logger
+
 import datetime
 
 
@@ -12,20 +13,7 @@ import datetime
 
 
 def handler(event, context):
-    # Create a custom logger
-    logger = logging.getLogger()
-    
-
-    # Create handlers
-    c_handler = logging.StreamHandler()
-    c_handler.setLevel(logging.INFO)
-
-    # Add handlers to the logger
-    logger.addHandler(c_handler)
-    
-    
-    
-    
+   
     host_url = config.secret.host
     user_name = config.secret.user
     password_database= config.secret.password
@@ -39,16 +27,18 @@ def handler(event, context):
 
     # Credentials for connecting to the database 
     try:
-        mydb= mysql.connector.connect(
+        mydb = mysql.connector.connect(
             host = host_url,
             user = user_name,
             password = password_database,
             database = database_dev
 
             )
-        logging.error("Connected to the database Successfully %s", mydb)
+        
+      
+        logger.logger.info("Connected to the database Successfully")
     except Exception as e:
-       logging.error("Can not connect to the database error occured", exc_info=True)
+       logger.logger.error("Can not connect to the database error occured", exc_info=True)
 
     response = None
     # try and catch block to filter the path and method coming   
@@ -56,7 +46,7 @@ def handler(event, context):
         # Variables to hold http method and the resource path
         http_method = event.get('httpMethod')
         path = event.get('path')
-        logging.info('Lambda Handler OwnerAndRenterFunction is called from API method %s and path %s ', path , http_method)
+        logger.logger.info('Lambda Handler OwnerAndRenterFunction is called from API method %s and path %s ', path , http_method)
   
         # If statement for filtering the path and http method 
   
@@ -80,23 +70,23 @@ def handler(event, context):
         # Post Methid for saving owners
         elif http_method == 'POST' and path == owner_path:
             body =json.loads(event['body'])
-            logging.info("Data to save to the database", body)
+            logger.logger.info("Data to save to the database", body)
             response = save_user(body,owner_path,mydb)
         # Post Methid for saving renters
         elif http_method == 'POST' and path == renter_path:
             body =json.loads(event['body'])
-            logging.info("Data to save to the database", body)
+            logger.logger.info("Data to save to the database", body)
             response = save_user(body,renter_path,mydb)
 
         # Patch Method for updating owners data
         elif http_method == 'PATCH' and path == owner_path:
             body = json.loads(event['body'])
-            logging.info("Owner Id %s, field to update %s, value %s ",body['userId'],body['updateKey'],body['updateValue'] )
+            logger.logger.info("Owner Id %s, field to update %s, value %s ",body['userId'],body['updateKey'],body['updateValue'] )
             response = modify_user(body['userId'],body['updateKey'],body['updateValue'],owner_path,mydb)
         # Patch Method for updating renters data
         elif http_method == 'PATCH' and path == renter_path:
             body = json.loads(event['body'])
-            logging.info("Owner Id %s, field to update %s, value %s ",body['userId'],body['updateKey'],body['updateValue'] )
+            logger.logger.info("Owner Id %s, field to update %s, value %s ",body['userId'],body['updateKey'],body['updateValue'] )
             response = modify_user(body['userId'],body['updateKey'],body['updateValue'],renter_path,mydb)
 
         # Delete Method for deleting a owner record
@@ -110,7 +100,7 @@ def handler(event, context):
 
     # If exception happens 
     except Exception as e:
-        logging.error("Exception Occured",exc_info=True )
+        logger.logger.error("Exception Occured",exc_info=True )
         response = build_response(400, f"Error Processing Request {e}")
     # Return Value to api  
     return response
@@ -119,17 +109,18 @@ def handler(event, context):
 
 
 ###################################### Function to get Users with Limit and Offset ##############################  
-  
 def get_users(limit,offset,userPath,mydb):
-    logging.info("i am inisde block get user")
     mycursor = mydb.cursor()
-    logging.info("My Currsor connected to the database", mycursor)
+    logger.logger.info("i am inisde block get user")
+    
+    logger.logger.info("My Currsor connected to the database")
     # Block for reterving data from owner table
     if userPath == '/owner':
-        logging.info("inside if block of owner path")
+        logger.logger.info("inside if block of owner path")
         stmt = f"SELECT * From tblOwner LIMIT {limit} OFFSET {offset};"
         mycursor.execute(stmt)
         result = mycursor.fetchall()
+        logger.logger.info(result)
         if result:
            table_data = []
            for row in result:
@@ -144,11 +135,11 @@ def get_users(limit,offset,userPath,mydb):
                'lastName': row[7],
                'address': row[8]
                })
-        logging.info("data to return", table_data)
+        logger.logger.info("data to return", table_data)
                
     #Block fo selecting data from renter table  
     else:
-        logging.info("inside if block of renter path")
+        logger.logger.info("inside if block of renter path")
         stmt = f"SELECT * From tblRenter LIMIT {limit} OFFSET {offset}"
         mycursor.execute(stmt)
         result = mycursor.fetchall()
@@ -167,7 +158,7 @@ def get_users(limit,offset,userPath,mydb):
                'last_modified': row[8].strftime("%d-%m-%Y"),
                'Status': row[9]
             }) 
-            logging.info("data to return", table_data)
+            logger.logger.info("data to return", table_data)
                 
     mycursor.close()
     mydb.close()
@@ -176,10 +167,10 @@ def get_users(limit,offset,userPath,mydb):
 
 ############################## Function for for saving User to the database ######################################
 
-def save_user(request_body,userPath,mydb):
+def save_user(request_body,userPath,mycursor):
   # Block for saving Owner records
   logging.info("Inside block code of save user")
-  mycursor = mydb.cursor()
+ 
   logging.info("My Currsor connected to the database", mycursor)
   
   if userPath == '/owner':
