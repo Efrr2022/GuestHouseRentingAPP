@@ -14,10 +14,7 @@ import datetime
 
 def handler(event, context):
    
-    host_url = config.secret.host
-    user_name = config.secret.user
-    password_database= config.secret.password
-    database_dev = config.secret.database
+    
 
     # resources comes from API Gateway
     status_check_path = '/status'
@@ -25,20 +22,7 @@ def handler(event, context):
     renter_path = '/renter'
     
 
-    # Credentials for connecting to the database 
-    try:
-        mydb = mysql.connector.connect(
-            host = host_url,
-            user = user_name,
-            password = password_database,
-            database = database_dev
-
-            )
-        
-      
-        logger.logger.info("Connected to the database Successfully")
-    except Exception as e:
-       logger.logger.error("Can not connect to the database error occured", exc_info=True)
+    
 
     response = None
     # try and catch block to filter the path and method coming   
@@ -57,46 +41,46 @@ def handler(event, context):
         # GET Method with owner path    
         elif http_method == 'GET' and path == owner_path:
             if event['queryStringParameters'] == None:
-             response = get_users(5,0,owner_path,mydb)
+             response = get_users(5,0,owner_path)
             else:
-             response = get_users(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'],owner_path,mydb)
+             response = get_users(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'],owner_path)
         # GET Method with renter path    
         elif http_method == 'GET' and path == renter_path:
             if event['queryStringParameters'] == None:
-             response = get_users(5,0,renter_path,mydb)
+             response = get_users(5,0,renter_path)
             else:
-             response = get_users(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'], renter_path,mydb)   
+             response = get_users(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'], renter_path)   
 
         # Post Methid for saving owners
         elif http_method == 'POST' and path == owner_path:
             body =json.loads(event['body'])
             logger.logger.info("Data to save to the database", body)
-            response = save_user(body,owner_path,mydb)
+            response = save_user(body,owner_path)
         # Post Methid for saving renters
         elif http_method == 'POST' and path == renter_path:
             body =json.loads(event['body'])
             logger.logger.info("Data to save to the database", body)
-            response = save_user(body,renter_path,mydb)
+            response = save_user(body,renter_path)
 
         # Patch Method for updating owners data
         elif http_method == 'PATCH' and path == owner_path:
             body = json.loads(event['body'])
             logger.logger.info("Owner Id %s, field to update %s, value %s ",body['userId'],body['updateKey'],body['updateValue'] )
-            response = modify_user(body['userId'],body['updateKey'],body['updateValue'],owner_path,mydb)
+            response = modify_user(body['userId'],body['updateKey'],body['updateValue'],owner_path)
         # Patch Method for updating renters data
         elif http_method == 'PATCH' and path == renter_path:
             body = json.loads(event['body'])
             logger.logger.info("Owner Id %s, field to update %s, value %s ",body['userId'],body['updateKey'],body['updateValue'] )
-            response = modify_user(body['userId'],body['updateKey'],body['updateValue'],renter_path,mydb)
+            response = modify_user(body['userId'],body['updateKey'],body['updateValue'],renter_path)
 
         # Delete Method for deleting a owner record
         elif http_method == 'DELETE' and path == owner_path:
             id = event['queryStringParameters']['id']
-            response = delete_user(id,owner_path,mydb)
+            response = delete_user(id,owner_path)
         # Delete Method for deleting a owner record
         elif http_method == 'DELETE' and path == renter_path:
             id = event['queryStringParameters']['id']
-            response = delete_user(id,renter_path,mydb)
+            response = delete_user(id,renter_path)
 
     # If exception happens 
     except Exception as e:
@@ -109,10 +93,11 @@ def handler(event, context):
 
 
 ###################################### Function to get Users with Limit and Offset ##############################  
-def get_users(limit,offset,userPath,mydb):
-    mycursor = mydb.cursor()
-    logger.logger.info("i am inisde block get user")
+def get_users(limit,offset,userPath):
     
+    logger.logger.info("i am inisde block get user")
+    db = connect_to_database()
+    mycursor = db.cursor()
     logger.logger.info("My Currsor connected to the database")
     # Block for reterving data from owner table
     if userPath == '/owner':
@@ -161,16 +146,17 @@ def get_users(limit,offset,userPath,mydb):
             logger.logger.info("data to return", table_data)
                 
     mycursor.close()
-    mydb.close()
+    db.close()
     return build_response(200, table_data)
 ############################### End of Functon Users #############################################################
 
 ############################## Function for for saving User to the database ######################################
 
-def save_user(request_body,userPath,mydb):
+def save_user(request_body,userPath):
   # Block for saving Owner records
   logger.logger.info("Inside block code of save user")
-  mycursor = mydb.cursor()
+  db = connect_to_database()
+  mycursor = db.cursor()
   logger.logger.info("My Currsor connected to the database", mycursor)
   
   if userPath == '/owner':
@@ -197,7 +183,7 @@ def save_user(request_body,userPath,mydb):
                 email_address,occupation,registration_time,last_modified,userStatus,profile_image) values (%s, %s, %s, %s,%s, %s, \
                 %s, %s,%s, %s, %s, %s,%s)"
                 mycursor.executemany(sql,val)
-                mydb.commit()  
+                db.commit()  
                 body = {
                      'Operation': 'SAVE',
                      'Message': 'SUCCESS',
@@ -238,7 +224,7 @@ def save_user(request_body,userPath,mydb):
                   registration_time,last_modified,status) values (%s, %s, %s, %s,%s, %s, \
                   %s, %s,%s)"
                   mycursor.executemany(sql,val)
-                  mydb.commit()  
+                  db.commit()  
                   body = {
                      'Operation': 'SAVE',
                      'Message': 'SUCCESS',
@@ -257,7 +243,7 @@ def save_user(request_body,userPath,mydb):
               StatusCode = 400
               logger.logger.error(body)
           mycursor.close()
-          mydb.close()
+          db.close()
           return build_response(StatusCode,body)
       except ClientError as e:
            logger.logger.exception("Excpetion Occured", exc_info=True)
@@ -266,9 +252,10 @@ def save_user(request_body,userPath,mydb):
 ############################## End of function save_user(body)###########################################
 
 ############################## Function For updater User #################################################
-def modify_user(userId, updateKey, updateValue,userPath,mydb):
+def modify_user(userId, updateKey, updateValue,userPath):
   # Block of code for updating owner record
-  mycursor = mydb.cursor()
+  db = connect_to_database()
+  mycursor = db.cursor()
   logger.logger.info("My Currsor connected to the database", mycursor)
   
   if userPath == '/owner':
@@ -280,7 +267,7 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
          if is_valid_email(updateValue):
             sql = f"UPDATE tblOwner SET {updateKey}=\"{updateValue}\" WHERE ownerId={userId};"
             mycursor.execute(sql)
-            mydb.commit()
+            db.commit()
             sql = f"select * from tblOwner where ownerId={userId}"
             mycursor.execute(sql)
             row = mycursor.fetchone()
@@ -311,7 +298,7 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
         else: 
             sql = f"UPDATE tblOwner SET {updateKey}=\"{updateValue}\" WHERE ownerId={userId};"
             mycursor.execute(sql)
-            mydb.commit()
+            db.commit()
             sql = f"select * from tblOwner where ownerId={userId}"
             mycursor.execute(sql)
             row = mycursor.fetchone()
@@ -358,7 +345,7 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
          if is_valid_email(updateValue):
             sql = f"UPDATE tblRenter SET {updateKey}=\"{updateValue}\" WHERE renterId={userId};"
             mycursor.execute(sql)
-            mydb.commit()
+            db.commit()
             sql = f"select * from tblRenter where renterId={userId}"
             mycursor.execute(sql)
             row = mycursor.fetchone()
@@ -390,7 +377,7 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
        else: 
           sql = f"UPDATE tblRenter SET {updateKey}=\"{updateValue}\" WHERE renterId={userId};"
           mycursor.execute(sql)
-          mydb.commit()
+          db.commit()
           sql = f"select * from tblRenter where renterId={userId}"
           mycursor.execute(sql)
           row = mycursor.fetchone()
@@ -423,14 +410,15 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
         status_code = 204
         logger.logger.error(body)
   mycursor.close()
-  mydb.close()
+  db.close()
   return build_response(status_code, body)
 ########################################### End of Function update_user##############################################
 
 
 ############################## Function to delete a user ##################################################
-def delete_user(id,userPath,mydb):
-  mycursor = mydb.cursor()
+def delete_user(id,userPath):
+  db = connect_to_database()
+  mycursor = db.cursor()
   logger.logger.info("My Currsor connected to the database", mycursor)
   if userPath == '/owner':
     sql = f"select * from tblOwner where ownerId={id}"
@@ -439,7 +427,7 @@ def delete_user(id,userPath,mydb):
     if result:
         sql = f"Delete from tblOwner WHERE ownerId={id}"
         mycursor.execute(sql)
-        mydb.commit()
+        db.commit()
         body = {
             'Operation': 'DELETE',
             'Message': 'SUCCESS',
@@ -459,7 +447,7 @@ def delete_user(id,userPath,mydb):
     if result:
         sql = f"Delete from tblRenter WHERE renterId={id}"
         mycursor.execute(sql)
-        mydb.commit()
+        db.commit()
         body = {
             'Operation': 'DELETE',
             'Message': 'SUCCESS',
@@ -473,7 +461,7 @@ def delete_user(id,userPath,mydb):
         status_code = 204
         logger.logger.error(body)
   mycursor.close()
-  mydb.close()
+  db.close()
   return build_response(status_code, body)
 ############################## End of delete_user Function ################################################
 
@@ -514,6 +502,28 @@ def is_valid_email(email):
         return False
 
 ########################### End of function is_valid_email #############################
+
+########################## Function to Connect to the database ########################
+def connect_to_database():
+   host_url = config.secret.host
+   user_name = config.secret.user
+   password_database= config.secret.password
+   database_dev = config.secret.database
+
+   # Credentials for connecting to the database 
+   try:
+        mydb = mysql.connector.connect(
+            host = host_url,
+            user = user_name,
+            password = password_database,
+            database = database_dev
+
+            )
+        logger.logger.info("Connected to the database Successfully")
+   except Exception as e:
+       logger.logger.error("Can not connect to the database error occured", exc_info=True)
+   return mydb
+   
 
  
  
