@@ -3,7 +3,8 @@ import mysql.connector
 import config
 from botocore.exceptions import ClientError
 import re
-import logging
+import logger
+
 import datetime
 
 
@@ -12,20 +13,7 @@ import datetime
 
 
 def handler(event, context):
-    # Create a custom logger
-    logger = logging.getLogger()
-    
-
-    # Create handlers
-    c_handler = logging.StreamHandler()
-    c_handler.setLevel(logging.INFO)
-
-    # Add handlers to the logger
-    logger.addHandler(c_handler)
-    
-    
-    
-    
+   
     host_url = config.secret.host
     user_name = config.secret.user
     password_database= config.secret.password
@@ -39,16 +27,18 @@ def handler(event, context):
 
     # Credentials for connecting to the database 
     try:
-        mydb= mysql.connector.connect(
+        mydb = mysql.connector.connect(
             host = host_url,
             user = user_name,
             password = password_database,
             database = database_dev
 
             )
-        logging.error("Connected to the database Successfully %s", mydb)
+        
+      
+        logger.logger.info("Connected to the database Successfully")
     except Exception as e:
-       logging.error("Can not connect to the database error occured", exc_info=True)
+       logger.logger.error("Can not connect to the database error occured", exc_info=True)
 
     response = None
     # try and catch block to filter the path and method coming   
@@ -56,7 +46,7 @@ def handler(event, context):
         # Variables to hold http method and the resource path
         http_method = event.get('httpMethod')
         path = event.get('path')
-        logging.info('Lambda Handler OwnerAndRenterFunction is called from API method %s and path %s ', path , http_method)
+        logger.logger.info('Lambda Handler OwnerAndRenterFunction is called from API method %s and path %s ', path , http_method)
   
         # If statement for filtering the path and http method 
   
@@ -80,23 +70,23 @@ def handler(event, context):
         # Post Methid for saving owners
         elif http_method == 'POST' and path == owner_path:
             body =json.loads(event['body'])
-            logging.info("Data to save to the database", body)
+            logger.logger.info("Data to save to the database", body)
             response = save_user(body,owner_path,mydb)
         # Post Methid for saving renters
         elif http_method == 'POST' and path == renter_path:
             body =json.loads(event['body'])
-            logging.info("Data to save to the database", body)
+            logger.logger.info("Data to save to the database", body)
             response = save_user(body,renter_path,mydb)
 
         # Patch Method for updating owners data
         elif http_method == 'PATCH' and path == owner_path:
             body = json.loads(event['body'])
-            logging.info("Owner Id %s, field to update %s, value %s ",body['userId'],body['updateKey'],body['updateValue'] )
+            logger.logger.info("Owner Id %s, field to update %s, value %s ",body['userId'],body['updateKey'],body['updateValue'] )
             response = modify_user(body['userId'],body['updateKey'],body['updateValue'],owner_path,mydb)
         # Patch Method for updating renters data
         elif http_method == 'PATCH' and path == renter_path:
             body = json.loads(event['body'])
-            logging.info("Owner Id %s, field to update %s, value %s ",body['userId'],body['updateKey'],body['updateValue'] )
+            logger.logger.info("Owner Id %s, field to update %s, value %s ",body['userId'],body['updateKey'],body['updateValue'] )
             response = modify_user(body['userId'],body['updateKey'],body['updateValue'],renter_path,mydb)
 
         # Delete Method for deleting a owner record
@@ -110,7 +100,7 @@ def handler(event, context):
 
     # If exception happens 
     except Exception as e:
-        logging.error("Exception Occured",exc_info=True )
+        logger.logger.error("Exception Occured",exc_info=True )
         response = build_response(400, f"Error Processing Request {e}")
     # Return Value to api  
     return response
@@ -119,17 +109,18 @@ def handler(event, context):
 
 
 ###################################### Function to get Users with Limit and Offset ##############################  
-  
 def get_users(limit,offset,userPath,mydb):
-    logging.info("i am inisde block get user")
     mycursor = mydb.cursor()
-    logging.info("My Currsor connected to the database", mycursor)
+    logger.logger.info("i am inisde block get user")
+    
+    logger.logger.info("My Currsor connected to the database")
     # Block for reterving data from owner table
     if userPath == '/owner':
-        logging.info("inside if block of owner path")
+        logger.logger.info("inside if block of owner path")
         stmt = f"SELECT * From tblOwner LIMIT {limit} OFFSET {offset};"
         mycursor.execute(stmt)
         result = mycursor.fetchall()
+        logger.logger.info(result)
         if result:
            table_data = []
            for row in result:
@@ -144,11 +135,11 @@ def get_users(limit,offset,userPath,mydb):
                'lastName': row[7],
                'address': row[8]
                })
-        logging.info("data to return", table_data)
+        logger.logger.info("data to return", table_data)
                
     #Block fo selecting data from renter table  
     else:
-        logging.info("inside if block of renter path")
+        logger.logger.info("inside if block of renter path")
         stmt = f"SELECT * From tblRenter LIMIT {limit} OFFSET {offset}"
         mycursor.execute(stmt)
         result = mycursor.fetchall()
@@ -167,7 +158,7 @@ def get_users(limit,offset,userPath,mydb):
                'last_modified': row[8].strftime("%d-%m-%Y"),
                'Status': row[9]
             }) 
-            logging.info("data to return", table_data)
+            logger.logger.info("data to return", table_data)
                 
     mycursor.close()
     mydb.close()
@@ -178,12 +169,12 @@ def get_users(limit,offset,userPath,mydb):
 
 def save_user(request_body,userPath,mydb):
   # Block for saving Owner records
-  logging.info("Inside block code of save user")
+  logger.logger.info("Inside block code of save user")
   mycursor = mydb.cursor()
-  logging.info("My Currsor connected to the database", mycursor)
+  logger.logger.info("My Currsor connected to the database", mycursor)
   
   if userPath == '/owner':
-      logging.info("I am inside block owner safe")
+      logger.logger.info("I am inside block owner safe")
       try:
           # To check Wether table users is available or not
           stmt = "SHOW TABLES LIKE 'tblOwner'"
@@ -213,19 +204,19 @@ def save_user(request_body,userPath,mydb):
                      'Item': request_body
                       }
                 StatusCode = 201
-                logging.info("Body to return %s and Status Code %s", body,StatusCode) 
+                logger.logger.info("Body to return %s and Status Code %s", body,StatusCode) 
               else:
                 body = "Invalid Email Address"
                 StatusCode = 400  
-                logging.error(body)  
+                logger.logger.error(body)  
           # If table Users not found 
           else:
               body = "Table Owner doesn't found"
               StatusCode = 400
-              logging.error(body)
+              logger.logger.error(body)
           return build_response(StatusCode,body)
       except ClientError as e:
-           logging.exception("Excpetion Occured", exc_info=True)
+           logger.logger.exception("Excpetion Occured", exc_info=True)
            return build_response(400, e.response['Error']['Message'])
   # Block for saving rental records
   else: 
@@ -254,22 +245,22 @@ def save_user(request_body,userPath,mydb):
                      'Item': request_body
                       }
                   StatusCode = 201
-                  logging.info("Body to return %s and Status Code %s", body,StatusCode) 
+                  logger.logger.info("Body to return %s and Status Code %s", body,StatusCode) 
               else:
                 body = "Invalid Email Address"
                 StatusCode = 400
-                logging.error(body)
+                logger.logger.error(body)
               
           # If table Users not found 
           else:
               body = "Table Renter doesn't found"
               StatusCode = 400
-              logging.error(body)
+              logger.logger.error(body)
           mycursor.close()
           mydb.close()
           return build_response(StatusCode,body)
       except ClientError as e:
-           logging.exception("Excpetion Occured", exc_info=True)
+           logger.logger.exception("Excpetion Occured", exc_info=True)
            return build_response(400, e.response['Error']['Message'])
      
 ############################## End of function save_user(body)###########################################
@@ -278,7 +269,7 @@ def save_user(request_body,userPath,mydb):
 def modify_user(userId, updateKey, updateValue,userPath,mydb):
   # Block of code for updating owner record
   mycursor = mydb.cursor()
-  logging.info("My Currsor connected to the database", mycursor)
+  logger.logger.info("My Currsor connected to the database", mycursor)
   
   if userPath == '/owner':
     sql = f"select * from tblOwner where ownerId={userId}"
@@ -312,11 +303,11 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
         
              }
             status_code = 200
-            logging.info("return data: %s with statuscode %s", body,status_code)
+            logger.logger.info("return data: %s with statuscode %s", body,status_code)
          else: 
            body = "Invalid Email Address"
            status_code = 400
-           logging.error(body)
+           logger.logger.error(body)
         else: 
             sql = f"UPDATE tblOwner SET {updateKey}=\"{updateValue}\" WHERE ownerId={userId};"
             mycursor.execute(sql)
@@ -343,7 +334,7 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
         
              }
             status_code = 200
-            logging.info("return data: %s with statuscode %s", body,status_code)
+            logger.logger.info("return data: %s with statuscode %s", body,status_code)
             
         
     else:
@@ -353,15 +344,15 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
         }
         print(body)
         status_code = 204
-        logging.error(body)
+        logger.logger.error(body)
 
   # Block of code for updating record of renter      
   elif userPath == '/renter':
-    logging.info("inside modify renter")
+    logger.logger.info("inside modify renter")
     sql = f"select * from tblRenter where renterID={userId}"
     mycursor.execute(sql)
     result = mycursor.fetchone()
-    logging.info("Data before updated",result)
+    logger.logger.info("Data before updated",result)
     if result:
        if updateKey == "email_address" :
          if is_valid_email(updateValue):
@@ -391,11 +382,11 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
             
             }
             status_code = 200
-            logging.info("return data: %s with statuscode %s", body,status_code)
+            logger.logger.info("return data: %s with statuscode %s", body,status_code)
          else: 
            body = "Invalid Email Address"
            status_code = 400
-           logging.error(body)
+           logger.logger.error(body)
        else: 
           sql = f"UPDATE tblRenter SET {updateKey}=\"{updateValue}\" WHERE renterId={userId};"
           mycursor.execute(sql)
@@ -423,14 +414,14 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
             
             }
           status_code = 200
-          logging.info("return data: %s with statuscode %s", body,status_code)
+          logger.logger.info("return data: %s with statuscode %s", body,status_code)
     else:
         body = {
            'Message': f'renter With Id={userId} not found'
         }
         print(body)
         status_code = 204
-        logging.error(body)
+        logger.logger.error(body)
   mycursor.close()
   mydb.close()
   return build_response(status_code, body)
@@ -440,7 +431,7 @@ def modify_user(userId, updateKey, updateValue,userPath,mydb):
 ############################## Function to delete a user ##################################################
 def delete_user(id,userPath,mydb):
   mycursor = mydb.cursor()
-  logging.info("My Currsor connected to the database", mycursor)
+  logger.logger.info("My Currsor connected to the database", mycursor)
   if userPath == '/owner':
     sql = f"select * from tblOwner where ownerId={id}"
     mycursor.execute(sql)
@@ -454,13 +445,13 @@ def delete_user(id,userPath,mydb):
             'Message': 'SUCCESS',
             }
         status_code = 200
-        logging.info("return data: %s with statuscode %s", body,status_code)
+        logger.logger.info("return data: %s with statuscode %s", body,status_code)
     else:
         body = {
             'Message': f'Owner with Id = {id} not found'
         }
         status_code = 204
-        logging.error(body)
+        logger.logger.error(body)
   elif userPath == '/renter':
     sql = f"select * from tblRenter where renterId={id}"
     mycursor.execute(sql)
@@ -474,13 +465,13 @@ def delete_user(id,userPath,mydb):
             'Message': 'SUCCESS',
             }
         status_code = 200
-        logging.info("return data: %s with statuscode %s", body,status_code)
+        logger.logger.info("return data: %s with statuscode %s", body,status_code)
     else:
         body = {
             'Message': f'Owner with Id = {id} not found'
         }
         status_code = 204
-        logging.error(body)
+        logger.logger.error(body)
   mycursor.close()
   mydb.close()
   return build_response(status_code, body)
