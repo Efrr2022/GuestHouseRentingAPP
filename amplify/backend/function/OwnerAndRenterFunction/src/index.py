@@ -2,20 +2,27 @@ import json
 import mysql.connector 
 import config
 from botocore.exceptions import ClientError
-import datetime
 import re
 import logging
+import datetime
+
 
 
 
 
 
 def handler(event, context):
+    # Create a custom logger
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-    fmt = logging.Formatter("%(message)s\n")
-    hdlr = logger.handlers[0]
-    hdlr.setFormatter(fmt)
+    
+
+    # Create handlers
+    c_handler = logging.StreamHandler()
+    c_handler.setLevel(logging.INFO)
+
+    # Add handlers to the logger
+    logger.addHandler(c_handler)
+    
     
     
     
@@ -39,7 +46,7 @@ def handler(event, context):
             database = database_dev
 
             )
-        logging.info("Connected to the database Successfully %s", mydb)
+        logging.error("Connected to the database Successfully %s", mydb)
     except Exception as e:
        logging.error("Can not connect to the database error occured", exc_info=True)
 
