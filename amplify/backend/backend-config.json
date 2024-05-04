@@ -28,6 +28,20 @@
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
     },
+    "paymentAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "paymentFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
     "renterAPI": {
       "dependsOn": [
         {
@@ -50,6 +64,11 @@
       "service": "Lambda"
     },
     "PropertyFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "paymentFunction": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -90,6 +109,22 @@
         {
           "category": "function",
           "resourceName": "PropertyFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_paymentFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "paymentFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_paymentFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "paymentFunction"
         }
       ]
     },
