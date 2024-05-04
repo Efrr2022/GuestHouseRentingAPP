@@ -116,7 +116,7 @@ def get_users(limit,offset,userPath):
                'lastName': row[3],
                'address': row[4],
                'Contact Number': row[5],
-               'Date of birth': row[6].strftime("%B %d, %Y")
+               'Date of birth': row[6].strftime("%B %d, %Y"),
                'lastName': row[7],
                'address': row[8]
                })
