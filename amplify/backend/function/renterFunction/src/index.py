@@ -54,7 +54,8 @@ def handler(event, context):
     
     # Extract HTTP method from the request
     http_method = event["httpMethod"]
-    query_params = event["queryStringParameters"]
+    query_params = event.get("queryStringParameters", {})
+    renter_out = query_params.get("renterOut", "0")  # Default to "0" if parameter is not provided
     
     if http_method == "GET" and query_params is not None and "houseId" in query_params:
         return handle_list_renters_by_house_id(event, db)
@@ -65,12 +66,16 @@ def handler(event, context):
     elif http_method == "DELETE":
         return handle_delete_renter(event, db)
     elif http_method == "POST":
-        return create_renter_in_record(event,db)
+        if renter_out == "1":
+            return create_renter_out_record(event, db)
+        else:
+            return create_renter_in_record(event, db)
     else:
         return {
             'statusCode': 405,
             'body': json.dumps({'message': 'Method Not Allowed'})
         }
+
 
 
 def handle_update_renter(event, db):
@@ -312,5 +317,54 @@ def create_renter_in_record(event, db):
         }
     finally:
         # Close database connection
+        db.close()
+
+
+
+def create_renter_out_record(event,db):
+
+    try:
+        data=json.loads(event["body"])
+
+        leased_id=data.get("leasedId")
+        stat_electricity = data.get("statElectricity")
+        stat_paint = data.get("statPaint")
+        no_bulbs = data.get("noBulbs")
+        stat_bulbs = data.get("statBulbs")
+        stat_windows = data.get("statWindows")
+        status_toilet_sink = data.get("statusToiletSink")
+        stat_washing_sink = data.get("statWashingSink")
+
+        sql_query = f"""
+                    INSERT INTO tblRenterOut (leasedId, stat_electricity, stat_paint, no_bulbs, stat_bulbs, stat_windows, 
+                    status_toiletSink, stat_washingSink, last_modified, renterInStatus)
+                    VALUES ({leased_id}, '{stat_electricity}', '{stat_paint}', {no_bulbs}, '{stat_bulbs}', '{stat_windows}', 
+                    '{status_toilet_sink}', '{stat_washing_sink}', CURRENT_TIMESTAMP, 1)
+                    """
+        
+       # Create a cursor
+        cursor = db.cursor()
+        
+        # Execute the SQL query
+        cursor.execute(sql_query)
+        db.commit()
+        
+        # Close the cursor
+        cursor.close()
+
+         # Return success response
+        return {
+            'statusCode': 200,
+            'body': json.dumps({'message': 'Renter In record created successfully'})
+        }
+
+
+    except Exception as e:
+        # Return error response if any exception occurs
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': str(e)})
+        }
+    finally:
         db.close()
 
