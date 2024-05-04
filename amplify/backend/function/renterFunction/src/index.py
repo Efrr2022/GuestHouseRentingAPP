@@ -214,14 +214,13 @@ def handle_list_renters(event, db):
 
 def handle_list_renters_by_house_id(event, db):
     try:
-        # Extract houseId from the path parameters of the request
         house_id = event["queryStringParameters"]["houseId"]
         
         # Construct SQL query to select renters based on houseId
         sql_query = f"""
                     SELECT r.renterId, r.first_name, r.last_name, r.address, r.contact_number, r.email_address, r.registration_time, r.last_modified, r.status
                     FROM tblRenter r
-                    JOIN tblHouses hr ON r.renterId = hr.renterId
+                    JOIN tblLeasedHouses hr ON r.renterId = hr.renterId
                     WHERE hr.houseId = {house_id}
                     """
         
