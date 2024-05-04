@@ -109,6 +109,7 @@ def get_users(limit,offset,userPath):
         if result:
            table_data = []
            for row in result:
+               logger.logger.info(row[6])
                table_data.append({
                'userId': row[0],
                'firstName': row[1],
