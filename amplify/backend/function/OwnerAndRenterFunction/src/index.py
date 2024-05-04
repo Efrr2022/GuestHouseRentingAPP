@@ -12,7 +12,11 @@ import logging
 
 def handler(event, context):
     logger = logging.getLogger()
-    logger.setLevel("INFO") 
+    logger.setLevel(logging.DEBUG)
+    fmt = logging.Formatter("%(message)s\n")
+    hdlr = logger.handlers[0]
+    hdlr.setFormatter(fmt)
+    
     
     
     host_url = config.secret.host
