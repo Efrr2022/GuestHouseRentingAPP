@@ -5,12 +5,14 @@ from botocore.exceptions import ClientError
 import datetime
 import re
 import logging
-logging.basicConfig(level=logging.DEBUG,format='%(asctime)s - %(message)s')
 
 
 
 
-def handler(event, context): 
+
+def handler(event, context):
+    logger = logging.getLogger()
+    logger.setLevel("INFO") 
     
     
     host_url = config.secret.host
@@ -108,12 +110,12 @@ def handler(event, context):
 ###################################### Function to get Users with Limit and Offset ##############################  
   
 def get_users(limit,offset,userPath,mydb):
-    logging.error("i am inisde block get user")
+    logging.info("i am inisde block get user")
     mycursor = mydb.cursor()
-    logging.error("My Currsor connected to the database", mycursor)
+    logging.info("My Currsor connected to the database", mycursor)
     # Block for reterving data from owner table
     if userPath == '/owner':
-        logging.error("inside if block of owner path")
+        logging.info("inside if block of owner path")
         stmt = f"SELECT * From tblOwner LIMIT {limit} OFFSET {offset};"
         mycursor.execute(stmt)
         result = mycursor.fetchall()
@@ -131,7 +133,7 @@ def get_users(limit,offset,userPath,mydb):
                'lastName': row[7],
                'address': row[8]
                })
-        logging.error("data to return", table_data)
+        logging.info("data to return", table_data)
                
     #Block fo selecting data from renter table  
     else:
