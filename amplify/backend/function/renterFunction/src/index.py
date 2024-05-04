@@ -337,7 +337,7 @@ def create_renter_out_record(event,db):
 
         sql_query = f"""
                     INSERT INTO tblRenterOut (leasedId, stat_electricity, stat_paint, no_bulbs, stat_bulbs, stat_windows, 
-                    status_toiletSink, stat_washingSink, last_modified, renterInStatus)
+                    status_toiletSink, stat_washingSink, last_modified, renterOutStatus)
                     VALUES ({leased_id}, '{stat_electricity}', '{stat_paint}', {no_bulbs}, '{stat_bulbs}', '{stat_windows}', 
                     '{status_toilet_sink}', '{stat_washing_sink}', CURRENT_TIMESTAMP, 1)
                     """
@@ -356,7 +356,7 @@ def create_renter_out_record(event,db):
         return {
             'statusCode': 200,
             'body': json.dumps({'message': 'Renter In record created successfully'})
-        }
+        }   
 
 
     except Exception as e:
