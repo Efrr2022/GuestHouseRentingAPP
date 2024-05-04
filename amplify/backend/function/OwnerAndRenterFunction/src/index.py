@@ -2,9 +2,10 @@ import json
 import mysql.connector 
 import config
 from botocore.exceptions import ClientError
+import datetime
 import re
 import logging
-logging.basicConfig(level=logging.DEBUG,format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(level=logging.DEBUG,format='%(asctime)s - %(message)s')
 
 
 
@@ -107,12 +108,12 @@ def handler(event, context):
 ###################################### Function to get Users with Limit and Offset ##############################  
   
 def get_users(limit,offset,userPath,mydb):
-    logging.info("i am inisde block get user")
+    logging.error("i am inisde block get user")
     mycursor = mydb.cursor()
-    logging.info("My Currsor connected to the database", mycursor)
+    logging.error("My Currsor connected to the database", mycursor)
     # Block for reterving data from owner table
     if userPath == '/owner':
-        logging.info("inside if block of owner path")
+        logging.error("inside if block of owner path")
         stmt = f"SELECT * From tblOwner LIMIT {limit} OFFSET {offset};"
         mycursor.execute(stmt)
         result = mycursor.fetchall()
@@ -126,11 +127,11 @@ def get_users(limit,offset,userPath,mydb):
                'lastName': row[3],
                'address': row[4],
                'Contact Number': row[5],
-               'Date of birth': row[6].strftime("%d/%m/%Y"),
+               'Date of birth': row[6].strftime("%d-%m-%Y"),
                'lastName': row[7],
                'address': row[8]
                })
-               logging.info("data to return", table_data)
+        logging.error("data to return", table_data)
                
     #Block fo selecting data from renter table  
     else:
@@ -153,7 +154,8 @@ def get_users(limit,offset,userPath,mydb):
                'last_modified': row[8].strftime("%d-%m-%Y"),
                'Status': row[9]
             }) 
-                logging.info("data to return", table_data)
+            logging.info("data to return", table_data)
+                
     mycursor.close()
     mydb.close()
     return build_response(200, table_data)
