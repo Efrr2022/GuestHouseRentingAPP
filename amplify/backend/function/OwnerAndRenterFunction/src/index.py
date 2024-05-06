@@ -4,23 +4,20 @@ import config
 from botocore.exceptions import ClientError
 import re
 import logging
-
+import sys
 
 def handler(event, context):
     # Create a custom logger
     logger = logging.getLogger("lambdaOwnerAndRental")
-    logger.basicConfig(
-    format="%(name)s: %(asctime)s | %(levelname)s | %(filename)s:%(lineno)s | %(process)d >>> %(message)s",
-    datefmt="%Y-%m-%dT%H:%M:%SZ",
-)
-        
+    
     # Create handlers
-    c_handler = logger.StreamHandler()
-    logger.setLevel(logger.INFO)
-    #c_handler.setLevel(logger.INFO)
+    c_handler = logger.StreamHandler(stream=sys.stdout)
+   
+    c_handler.setLevel(logging.INFO)
 
     # Add handlers to the logger
     logger.addHandler(c_handler)
+    logger.setLevel(logging.INFO)
     
     
 
