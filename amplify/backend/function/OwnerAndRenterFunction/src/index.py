@@ -97,7 +97,7 @@ def handler(event, context):
 
 
 ###################################### Function to get Users with Limit and Offset ##############################  
-def get_users(limit,offset,userPath,logger):
+def get_users(limit,offset,userPath):
     
     logger.info("i am inisde block get user")
     db = connect_to_database()
