@@ -55,7 +55,6 @@ def handler(event, context):
     # Extract HTTP method from the request
     http_method = event["httpMethod"]
     query_params = event.get("queryStringParameters", {})
-    renter_out = query_params.get("renterOut", "0")  # Default to "0" if parameter is not provided
     
     if http_method == "GET" and query_params is not None and "houseId" in query_params:
         return handle_list_renters_by_house_id(event, db)
@@ -66,6 +65,7 @@ def handler(event, context):
     elif http_method == "DELETE":
         return handle_delete_renter(event, db)
     elif http_method == "POST":
+        renter_out = query_params.get("renterOut", "0")
         if renter_out == "1":
             return create_renter_out_record(event, db)
         else:
