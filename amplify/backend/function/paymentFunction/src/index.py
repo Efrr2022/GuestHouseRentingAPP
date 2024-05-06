@@ -56,7 +56,7 @@ def handler(event, context):
             'body': json.dumps({'error': 'Failed to connect to the database'})
         }
     
-    httpMethod=event['httpMehtod']
+    httpMethod=event['httpMethod']
 
     if httpMethod == "GET":
         response=handle_get_payment(event,db)
