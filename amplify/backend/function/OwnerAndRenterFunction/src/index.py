@@ -5,19 +5,18 @@ from botocore.exceptions import ClientError
 import re
 import logging
 import sys
-
-def handler(event, context):
-    # Create a custom logger
-    logger = logging.getLogger("lambdaOwnerAndRental")
-    
-    # Create handlers
-    c_handler = logging.StreamHandler(stream=sys.stdout)
+# Create a custom logger
+logger = logging.getLogger("lambdaOwnerAndRental")
+        
+# Create handlers
+c_handler = logging.StreamHandler(stream=sys.stdout)
+c_handler.setLevel(logging.INFO)
+# Add handlers to the logger
+logger.addHandler(c_handler)
+logger.setLevel(logging.INFO)
    
-    c_handler.setLevel(logging.INFO)
-
-    # Add handlers to the logger
-    logger.addHandler(c_handler)
-    logger.setLevel(logging.INFO)
+  
+def handler(event, context):
     
     
 
@@ -98,7 +97,7 @@ def handler(event, context):
 
 
 ###################################### Function to get Users with Limit and Offset ##############################  
-def get_users(limit,offset,userPath):
+def get_users(limit,offset,userPath,logger):
     
     logger.info("i am inisde block get user")
     db = connect_to_database()
