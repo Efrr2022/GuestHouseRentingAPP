@@ -126,8 +126,6 @@ def get_users(limit,offset,userPath):
                'address': row[4],
                'Contact Number': row[5],
                'Date of birth': row[6],
-               'lastName': row[7],
-               'address': row[8]
                })
         logger.info(table_data)
                
