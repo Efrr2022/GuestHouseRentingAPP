@@ -193,7 +193,7 @@ def handle_list_renters(event, db):
             #     "lastModified": renter[7].strftime('%Y-%m-%d %H:%M:%S') if isinstance(renter[7], datetime.datetime) else renter[7], 
             #     "status": renter[8]
             # })
-            print(f"data:{renter[6]} type:{type(renter[6])} renter: {renter[6].strftime('%Y-%m-%d %H:%M:%S')} isinstance: {isinstance(renter[7], datetime.datetime)}")
+            print(f"data:{renter[6]} type:{type(renter[6])} renter: {renter[6].strftime('%Y-%m-%d %H:%M:%S')} isinstance: {isinstance(renter[6], datetime.datetime)}")
         
         # Close the cursor
         cursor.close()
