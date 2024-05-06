@@ -11,7 +11,7 @@ def handler(event, context):
     logger = logging.getLogger("lambdaOwnerAndRental")
     
     # Create handlers
-    c_handler = logger.StreamHandler(stream=sys.stdout)
+    c_handler = logging.StreamHandler(stream=sys.stdout)
    
     c_handler.setLevel(logging.INFO)
 
