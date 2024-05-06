@@ -28,6 +28,20 @@
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
     },
+    "ReservationAndLeasedHouses": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "ReservationAndLeasedHouseFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
     "paymentAPI": {
       "dependsOn": [
         {
@@ -64,6 +78,11 @@
       "service": "Lambda"
     },
     "PropertyFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "ReservationAndLeasedHouseFunction": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
