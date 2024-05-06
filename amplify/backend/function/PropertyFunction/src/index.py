@@ -156,6 +156,7 @@ def handle_get_request(event,db):
     # db=db_connected()
     # Create a cursor object to execute SQL queries
     mycursor=db.cursor()
+    
     query_param=event.get("queryStringParameters",None)
     if query_param is not None:
         limit = int(query_param.get('limit', 10))  # Convert limit to an integer
