@@ -105,7 +105,7 @@ def handle_get_payment(event,db):
 
     response_get={
         'statusCode' : 200,
-        'body' : json.dumps(response_list)
+        'body' : json.dumps(response_list,default=str)
     }
     return response_get
 
