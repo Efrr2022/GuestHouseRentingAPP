@@ -5,6 +5,7 @@ from botocore.exceptions import ClientError
 import re
 import logging
 import sys
+import datetime
 # Create a custom logger
 logger = logging.getLogger("lambdaOwnerAndRental")
         
@@ -125,7 +126,7 @@ def get_users(limit,offset,userPath):
                'lastName': row[3],
                'address': row[4],
                'Contact Number': row[5],
-               'Date of birth': row[6],
+               'Date of birth': row[6].strftime("%Y-%m-%d"),
                })
         logger.info(table_data)
                
