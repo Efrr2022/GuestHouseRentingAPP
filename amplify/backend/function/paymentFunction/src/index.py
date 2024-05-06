@@ -98,13 +98,14 @@ def handle_get_payment(event,db):
             'paymentId' : payments[0],
             'leasedId' : payments[1],
             'paymentAmount' : payments[2],
-            'paymentDate' : payments[3]
+            'paymentDate' : str(payments[3])
         })
 
     mycursor.close()
 
-    response={}
-    response["body"]=response_list
-    response["statusCode"]=200
-    return response
+    response_get={
+        'statusCode' : 200,
+        'body' : json.dumps(response_list)
+    }
+    return response_get
 
