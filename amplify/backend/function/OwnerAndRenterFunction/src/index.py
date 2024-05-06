@@ -129,7 +129,7 @@ def get_users(limit,offset,userPath):
                'lastName': row[7],
                'address': row[8]
                })
-        logger.info("data to return", table_data)
+        logger.info(table_data)
                
     #Block fo selecting data from renter table  
     else:
@@ -152,7 +152,7 @@ def get_users(limit,offset,userPath):
                'last_modified': row[8].strftime("%d-%m-%Y"),
                'Status': row[9]
             }) 
-        logger.info("data to return", table_data)
+        logger.info(table_data)
                 
     mycursor.close()
     db.close()
