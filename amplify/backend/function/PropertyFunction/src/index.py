@@ -266,7 +266,6 @@ def handle_update_house_with_features(event, db):
         house_data = {
             "houseId": data.get("houseId"),
             "houseHeading": data.get("houseHeading"),
-            # Add more fields as needed
         }
 
         # Extract data for updating house features (amenities)
@@ -274,7 +273,6 @@ def handle_update_house_with_features(event, db):
             "houseId": data.get("houseId"),
             "numberOfCarParking": data.get("numberOfCarParking"),
             "hasCarpet": data.get("hasCarpet"),
-            # Add more fields as needed
         }
 
         # Construct SQL query to update house
@@ -287,8 +285,8 @@ def handle_update_house_with_features(event, db):
         # Construct SQL query to update house features
         features_sql_query = f"""
                                 UPDATE tblHouseFeatures
-                                SET numberOfCarParking = {features_data['numberOfCarParking']},
-                                    hasCarpet = {features_data['hasCarpet']}
+                                SET num_of_car_parking = {features_data['numberOfCarParking']},
+                                    has_carpet = {features_data['hasCarpet']}
                                 WHERE houseId = {features_data['houseId']}
                                 """
 
