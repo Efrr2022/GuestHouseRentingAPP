@@ -4,22 +4,17 @@ import config
 from botocore.exceptions import ClientError
 import re
 import logger
-
-
-
-
-
-
+import boto3
 
 
 def handler(event, context):
-   
-    
 
     # resources comes from API Gateway
     status_check_path = '/status'
-    owner_path = '/owner'
-    renter_path = '/renter'
+    reservation_path = '/reservation'
+    leased_path = '/leased'
+    rate_path = '/rate'
+    category_path= '/category'
     
 
     
@@ -37,50 +32,93 @@ def handler(event, context):
         # Check the service working or not 
         if http_method == 'GET' and path == status_check_path:
             response = build_response(200, 'Service is Operational')
-
-        # GET Method with owner path    
-        elif http_method == 'GET' and path == owner_path:
+############################################# GET Methods ################################################################
+        # GET Method with reservation path    
+        elif http_method == 'GET' and path == reservation_path:
             if event['queryStringParameters'] == None:
-             response = get_users(5,0,owner_path)
+             response = get_method(5,0,reservation_path)
             else:
-             response = get_users(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'],owner_path)
-        # GET Method with renter path    
-        elif http_method == 'GET' and path == renter_path:
+             response = get_method(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'],reservation_path)
+        # GET Method with reservation path    
+        elif http_method == 'GET' and path == leased_path:
             if event['queryStringParameters'] == None:
-             response = get_users(5,0,renter_path)
+             response = get_method(5,0,leased_path)
             else:
-             response = get_users(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'], renter_path)   
+             response = get_method(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'], leased_path) 
+        # GET Method with rate path    
+        elif http_method == 'GET' and path == rate_path:
+            if event['queryStringParameters'] == None:
+             response = get_method(5,0,rate_path)
+            else:
+             response = get_method(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'],rate_path)
+        # GET Method with reservation path    
+        elif http_method == 'GET' and path == category_path:
+            if event['queryStringParameters'] == None:
+             response = get_method(5,0,category_path)
+            else:
+             response = get_method(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'], category_path) 
+####################################### End of GET Method ######################################################    
 
-        # Post Methid for saving owners
-        elif http_method == 'POST' and path == owner_path:
+####################################### Post Methods ###########################################################
+        # Post Methid for saving Reservation
+        elif http_method == 'POST' and path == reservation_path:
             body =json.loads(event['body'])
             logger.logger.info("Data to save to the database", body)
-            response = save_user(body,owner_path)
-        # Post Methid for saving renters
-        elif http_method == 'POST' and path == renter_path:
+            response = save_method(body,reservation_path)
+        # Post Methid for saving leased Houses
+        elif http_method == 'POST' and path == leased_path:
             body =json.loads(event['body'])
             logger.logger.info("Data to save to the database", body)
-            response = save_user(body,renter_path)
+            response = save_method(body,leased_path)
+        # Post Methid for saving rate of a house
+        elif http_method == 'POST' and path == rate_path:
+            body =json.loads(event['body'])
+            logger.logger.info("Data to save to the database", body)
+            response = save_method(body,rate_path)
+        # Post Methid for saving category for rate
+        elif http_method == 'POST' and path == category_path:
+            body =json.loads(event['body'])
+            logger.logger.info("Data to save to the database", body)
+            response = save_method(body,category_path)
+#################################### End of Post Methods ############################################################
 
-        # Patch Method for updating owners data
-        elif http_method == 'PATCH' and path == owner_path:
+#################################### PATCH Methods ##################################################################
+        # Patch Method for updating reservation 
+        elif http_method == 'PATCH' and path == reservation_path:
             body = json.loads(event['body'])
-            logger.logger.info("Owner Id %s, field to update %s, value %s ",body['userId'],body['updateKey'],body['updateValue'] )
-            response = modify_user(body['userId'],body['updateKey'],body['updateValue'],owner_path)
-        # Patch Method for updating renters data
-        elif http_method == 'PATCH' and path == renter_path:
+            response = modify_method(body['userId'],body['updateKey'],body['updateValue'],reservation_path)
+        # Patch Method for updating leased houses data
+        elif http_method == 'PATCH' and path == leased_path:
             body = json.loads(event['body'])
-            logger.logger.info("Owner Id %s, field to update %s, value %s ",body['userId'],body['updateKey'],body['updateValue'] )
-            response = modify_user(body['userId'],body['updateKey'],body['updateValue'],renter_path)
+            response = modify_method(body['userId'],body['updateKey'],body['updateValue'],leased_path)
+        # Patch Method for updating rate of a house
+        elif http_method == 'PATCH' and path == rate_path:
+            body = json.loads(event['body'])
+            response = modify_method(body['userId'],body['updateKey'],body['updateValue'],rate_path)
+        # Patch Method for updating category for category houses data
+        elif http_method == 'PATCH' and path == category_path:
+            body = json.loads(event['body'])
+            response = modify_method(body['userId'],body['updateKey'],body['updateValue'],category_path)
+################################### End of Patch methods #############################################################
 
-        # Delete Method for deleting a owner record
-        elif http_method == 'DELETE' and path == owner_path:
+################################### Delete Methods ####################################################################
+        # Delete Method for deleting a reservation of a house record
+        elif http_method == 'DELETE' and path == reservation_path:
             id = event['queryStringParameters']['id']
-            response = delete_user(id,owner_path)
-        # Delete Method for deleting a owner record
-        elif http_method == 'DELETE' and path == renter_path:
+            response = delete_method(id,reservation_path)
+        # Delete Method for deleting a leased record
+        elif http_method == 'DELETE' and path ==leased_path:
             id = event['queryStringParameters']['id']
-            response = delete_user(id,renter_path)
+            response = delete_method(id,leased_path)
+        # Delete Method for deleting a rate of a house record
+        elif http_method == 'DELETE' and path == rate_path:
+            id = event['queryStringParameters']['id']
+            response = delete_method(id,rate_path)
+        # Delete Method for deleting a category record
+        elif http_method == 'DELETE' and path ==category_path:
+            id = event['queryStringParameters']['id']
+            response = delete_method(id,category_path)
+##################################  End of Delete Methods ###############################################################
 
     # If exception happens 
     except Exception as e:
@@ -92,8 +130,8 @@ def handler(event, context):
     #Close Session. 
 
 
-###################################### Function to get Users with Limit and Offset ##############################  
-def get_users(limit,offset,userPath):
+###################################### Function to get  with Limit and Offset ##############################  
+def get_method(limit,offset,userPath):
     
     logger.logger.info("i am inisde block get user")
     db = connect_to_database()
@@ -151,9 +189,9 @@ def get_users(limit,offset,userPath):
     return build_response(200, table_data)
 ############################### End of Functon Users #############################################################
 
-############################## Function for for saving User to the database ######################################
+############################## Function for for saving to the database ######################################
 
-def save_user(request_body,userPath):
+def save_method(request_body,userPath):
   # Block for saving Owner records
   logger.logger.info("Inside block code of save user")
   db = connect_to_database()
@@ -252,8 +290,8 @@ def save_user(request_body,userPath):
      
 ############################## End of function save_user(body)###########################################
 
-############################## Function For updater User #################################################
-def modify_user(userId, updateKey, updateValue,userPath):
+############################## Function For updater  #################################################
+def modify_method(userId, updateKey, updateValue,userPath):
   # Block of code for updating owner record
   db = connect_to_database()
   mycursor = db.cursor()
@@ -413,11 +451,11 @@ def modify_user(userId, updateKey, updateValue,userPath):
   mycursor.close()
   db.close()
   return build_response(status_code, body)
-########################################### End of Function update_user##############################################
+########################################### End of Function update##############################################
 
 
-############################## Function to delete a user ##################################################
-def delete_user(id,userPath):
+############################## Function to delete ##################################################
+def delete_method(id,userPath):
   db = connect_to_database()
   mycursor = db.cursor()
   logger.logger.info("My Currsor connected to the database", mycursor)
@@ -464,7 +502,7 @@ def delete_user(id,userPath):
   mycursor.close()
   db.close()
   return build_response(status_code, body)
-############################## End of delete_user Function ################################################
+############################## End of delete Function ################################################
 
 
 
@@ -506,10 +544,16 @@ def is_valid_email(email):
 
 ########################## Function to Connect to the database ########################
 def connect_to_database():
-   host_url = config.secret.host
-   user_name = config.secret.user
-   password_database= config.secret.password
-   database_dev = config.secret.database
+   secrets = get_secret()
+   host_url = secrets['host']
+   user_name = secrets['user']
+   database_dev = secrets['database']
+   password_database = secrets['password']
+   
+   '''' host_url = config.secret.host '''''
+   ''''user_name = config.secret.user '''''
+   '''''password_database= config.secret.password'''''
+   '''''database_dev = config.secret.database'''''
 
    # Credentials for connecting to the database 
    try:
@@ -524,6 +568,30 @@ def connect_to_database():
    except Exception as e:
        logger.logger.error("Can not connect to the database error occured", exc_info=True)
    return mydb
+####################### End of Function connect_to_database ####################################
+
+
+####################### Secret manager Configuration ###########################################
+def get_secret():
+    secret_name = "dev/rentalHouseApp"
+    region_name = "us-east-1"
+
+    # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+
+    try:
+        get_secret_value_response = client.get_secret_value(
+            SecretId=secret_name
+        )
+    except ClientError as e:
+        raise e
+
+    secret = get_secret_value_response['SecretString']
+    return json.loads(secret)
    
 
  

@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "paths": {
+    "/reservation": {
+      "name": "/reservation",
+      "lambdaFunction": "ReservationAndLeasedHouseFunction",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/leased": {
+      "name": "/leased",
+      "lambdaFunction": "ReservationAndLeasedHouseFunction",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/rate": {
+      "name": "/rate",
+      "lambdaFunction": "ReservationAndLeasedHouseFunction",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/category": {
+      "name": "/category",
+      "lambdaFunction": "ReservationAndLeasedHouseFunction",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
