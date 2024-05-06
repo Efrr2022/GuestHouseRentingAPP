@@ -11,6 +11,10 @@ logger = logging.getLogger("lambdaOwnerAndRental")
 # Create handlers
 c_handler = logging.StreamHandler(stream=sys.stdout)
 c_handler.setLevel(logging.INFO)
+fmt = logging.Formatter(
+    "%(name)s: %(asctime)s | %(levelname)s | %(filename)s:%(lineno)s | %(process)d >>> %(message)s"
+)
+c_handler.setFormatter(fmt)
 # Add handlers to the logger
 logger.addHandler(c_handler)
 logger.setLevel(logging.INFO)
