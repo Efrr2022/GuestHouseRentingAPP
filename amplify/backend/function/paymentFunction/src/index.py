@@ -60,20 +60,51 @@ def handler(event, context):
 
     if httpMethod == "GET":
         response=handle_get_payment(event,db)
+    else:
+        response = {
+            'statusCode': 405,
+            'body': json.dumps({'message': 'Method Not Allowed'})
+        }
 
   
     return {
-        'statusCode': 200,
+        'statusCode': response.get('statusCode'),
         'headers': {
             'Access-Control-Allow-Headers': '*',
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
         },
-        'body': json.dumps('Hello from your new Amplify Python lambda!')
+        'body': json.dumps(response.get('body'))
     }
 
 
 
 
 def handle_get_payment(event,db):
-    pass
+    query_params=event.get('queryStringParameters')
+    paymentId=query_params['id']
+
+    mycursor=db.cursor()
+
+    sql_query=f"""Select * from tblPayment where paymentId = {paymentId}"""
+
+    mycursor.execute(sql_query)
+
+    result = mycursor.fetchall()
+
+    response_list=[]
+    for payments in result:
+        response_list.append({
+            'paymentId' : payments[0],
+            'leasedId' : payments[1],
+            'paymentAmount' : payments[2],
+            'paymentDate' : payments[3]
+        })
+
+    mycursor.close()
+
+    response={}
+    response["body"]=response_list
+    response["statusCode"]=200
+    return response
+
