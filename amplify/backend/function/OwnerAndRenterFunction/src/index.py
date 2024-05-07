@@ -535,9 +535,9 @@ def connect_to_database():
             database = database_dev
 
             )
-        logger.logger.info("Connected to the database Successfully")
+        logger.info("Connected to the database Successfully")
    except Exception as e:
-       logger.logger.error("Can not connect to the database error occured", exc_info=True)
+       logger.error("Can not connect to the database error occured", exc_info=True)
    return mydb
 ####################### End of Function connect_to_database ####################################
 
