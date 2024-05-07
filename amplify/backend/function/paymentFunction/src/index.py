@@ -59,53 +59,56 @@ def handler(event, context):
     httpMethod=event['httpMethod']
 
     if httpMethod == "GET":
-        response=handle_get_payment(event,db)
+        handle_get_payment(event,db)
     else:
-        response = {
+         return {
             'statusCode': 405,
             'body': json.dumps({'message': 'Method Not Allowed'})
         }
 
   
-    return {
-        'statusCode': response.get('statusCode'),
-        'headers': {
-            'Access-Control-Allow-Headers': '*',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-        },
-        'body': json.dumps(response.get('body'))
-    }
 
 
 
 
 def handle_get_payment(event,db):
-    query_params=event.get('queryStringParameters')
-    paymentId=query_params['id']
+    
 
-    mycursor=db.cursor()
+    try:
+        query_params=event.get('queryStringParameters')
+        paymentId=query_params['id']
 
-    sql_query=f"""Select * from tblPayment where paymentId = {paymentId}"""
+        mycursor=db.cursor()
 
-    mycursor.execute(sql_query)
+        sql_query=f"""Select * from tblPayment where paymentId = {paymentId}"""
 
-    result = mycursor.fetchall()
+        mycursor.execute(sql_query)
 
-    response_list=[]
-    for payments in result:
-        response_list.append({
-            'paymentId' : payments[0],
-            'leasedId' : payments[1],
-            'paymentAmount' : payments[2],
-            'paymentDate' : str(payments[3])
-        })
+        result = mycursor.fetchall()
 
-    mycursor.close()
+        response_list=[]
+        for payments in result:
+            response_list.append({
+                'paymentId' : payments[0],
+                'leasedId' : payments[1],
+                'paymentAmount' : payments[2],
+                'paymentDate' : str(payments[3])
+            })
+        print(f" type of paymentdate: {type(payments[3])}  data:{payments[3]} ")
 
-    response_get={
-        'statusCode' : 200,
-        'body' : json.dumps(response_list,default=str)
-    }
-    return response_get
+
+        mycursor.close()
+
+        return {
+                'statusCode': 200,
+                'body': json.dumps(response_list, default=str)  # Serialize datetime objects using default=str
+            }
+    except Exception as e:
+        return {
+            'statusCode' : 500,
+            'body' : json.dumps({'error': str(e)})
+        }
+    finally:
+        db.close()
+    
 
