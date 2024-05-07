@@ -59,23 +59,14 @@ def handler(event, context):
     httpMethod=event['httpMethod']
 
     if httpMethod == "GET":
-        response=handle_get_payment(event,db)
+        handle_get_payment(event,db)
     else:
-        response = {
+         return {
             'statusCode': 405,
             'body': json.dumps({'message': 'Method Not Allowed'})
         }
 
   
-    return {
-        'statusCode': response.get('statusCode'),
-        'headers': {
-            'Access-Control-Allow-Headers': '*',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-        },
-        'body': json.dumps(response.get('body'))
-    }
 
 
 
@@ -103,9 +94,10 @@ def handle_get_payment(event,db):
 
     mycursor.close()
 
-    response_get={
-        'statusCode' : 200,
-        'body' : json.dumps(response_list,default=str)
-    }
-    return response_get
+
+    return {
+            'statusCode': 200,
+            'body': json.dumps(response_list, default=str)  # Serialize datetime objects using default=str
+        }
+    
 
