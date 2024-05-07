@@ -59,7 +59,11 @@ def handler(event, context):
         httpMethod=event['httpMethod']
 
         if httpMethod == "GET":
-            response=handle_get_payment(event,db)
+            if 'id' in event['queryStringParameters']:
+                response = handle_get_payment(event, db)
+            elif 'renterId' in event['queryStringParameters']:
+                response = handle_get_payment_by_renter(event, db)
+                
         else:
             return {
                 'statusCode': 405,
@@ -76,10 +80,10 @@ def handler(event, context):
         'body': json.dumps(response.get('body'))
     }
 
+
+
+
     
-
-
-
 
 def handle_get_payment(event,db):
         
@@ -125,5 +129,46 @@ def handle_get_payment(event,db):
             }
         finally:
             db.close()
+
+
+
+def handle_get_payment_by_renter(event, db):
+    try:
+        query_params = event.get('queryStringParameters')
+        renter_id = query_params['renterId']
+
+        mycursor = db.cursor()
+
+        sql_query = f"""SELECT * FROM tblPayment WHERE renterId = {renter_id}"""
+
+        mycursor.execute(sql_query)
+
+        result = mycursor.fetchall()
+
+        response_list = []
+        for payment in result:
+            response_list.append({
+                'paymentId': payment[0],
+                'leasedId': payment[1],
+                'paymentAmount': payment[2],
+                'paymentDate': str(payment[3])
+            })
+        print(f"Type of payment date: {type(payment[3])} Data: {payment[3]}")
+
+        mycursor.close()
+
+        response_get = {
+            'statusCode': 200,
+            'body': json.dumps(response_list, default=str)  # Serialize datetime objects using default=str
+        }
+
+        return response_get
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': str(e)})
+        }
+    finally:
+        db.close()
         
 
