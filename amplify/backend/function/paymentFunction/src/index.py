@@ -6,109 +6,124 @@ from botocore.exceptions import ClientError
 
 
 def get_secret():
-    secret_name = "dev/rentalHouseApp"
-    region_name = "us-east-1"
+        secret_name = "dev/rentalHouseApp"
+        region_name = "us-east-1"
 
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name
-    )
-
-    try:
-        get_secret_value_response = client.get_secret_value(
-            SecretId=secret_name
+        # Create a Secrets Manager client
+        session = boto3.session.Session()
+        client = session.client(
+            service_name='secretsmanager',
+            region_name=region_name
         )
-    except ClientError as e:
-        raise e
 
-    secret = get_secret_value_response['SecretString']
-    return json.loads(secret)
+        try:
+            get_secret_value_response = client.get_secret_value(
+                SecretId=secret_name
+            )
+        except ClientError as e:
+            raise e
+
+        secret = get_secret_value_response['SecretString']
+        return json.loads(secret)
 
 
-    # Your code goes here.
+        # Your code goes here.
 def connect_to_database():
-    # Fetch secrets from AWS Secrets Manager
-    secrets = get_secret()
+        # Fetch secrets from AWS Secrets Manager
+        secrets = get_secret()
 
-    try:
-        db = mysql.connector.connect(
-            host=secrets['host'],
-            user=secrets['user'],
-            database=secrets['database'],
-            password=secrets['password']
-        )
-        print("Database connected")
-        return db
-    except Exception as e:
-        print(f'There was an exception: {e}')
+        try:
+            db = mysql.connector.connect(
+                host=secrets['host'],
+                user=secrets['user'],
+                database=secrets['database'],
+                password=secrets['password']
+            )
+            print("Database connected")
+            return db
+        except Exception as e:
+            print(f'There was an exception: {e}')
 
 def handler(event, context):
-    print('received event:')
-    print(event)
+        print('received event:')
+        print(event)
 
-    db = connect_to_database()
+        db = connect_to_database()
 
-    if not db:
+        if not db:
+            return {
+                'statusCode': 500,
+                'body': json.dumps({'error': 'Failed to connect to the database'})
+            }
+        
+        httpMethod=event['httpMethod']
+
+        if httpMethod == "GET":
+            response=handle_get_payment(event,db)
+        else:
+            return {
+                'statusCode': 405,
+                'body': json.dumps({'message': 'Method Not Allowed'})
+            }
+        
         return {
-            'statusCode': 500,
-            'body': json.dumps({'error': 'Failed to connect to the database'})
-        }
+        'statusCode': response.get('statusCode', 200),
+        'headers': {
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+        },
+        'body': json.dumps(response.get('body'))
+    }
+
     
-    httpMethod=event['httpMethod']
-
-    if httpMethod == "GET":
-        handle_get_payment(event,db)
-    else:
-         return {
-            'statusCode': 405,
-            'body': json.dumps({'message': 'Method Not Allowed'})
-        }
-
-  
 
 
 
 
 def handle_get_payment(event,db):
-    
+        
 
-    try:
-        query_params=event.get('queryStringParameters')
-        paymentId=query_params['id']
+        try:
+            query_params=event.get('queryStringParameters')
+            paymentId=query_params['id']
 
-        mycursor=db.cursor()
+            mycursor=db.cursor()
 
-        sql_query=f"""Select * from tblPayment where paymentId = {paymentId}"""
+            sql_query=f"""Select * from tblPayment where paymentId = {paymentId}"""
 
-        mycursor.execute(sql_query)
+            mycursor.execute(sql_query)
 
-        result = mycursor.fetchall()
+            result = mycursor.fetchall()
 
-        response_list=[]
-        for payments in result:
-            response_list.append({
-                'paymentId' : payments[0],
-                'leasedId' : payments[1],
-                'paymentAmount' : payments[2],
-                'paymentDate' : str(payments[3])
-            })
-        print(f" type of paymentdate: {type(payments[3])}  data:{payments[3]} ")
+            response_list=[]
+            for payments in result:
+                response_list.append({
+                    'paymentId' : payments[0],
+                    'leasedId' : payments[1],
+                    'paymentAmount' : payments[2],
+                    'paymentDate' : str(payments[3])
+                })
+            print(f" type of paymentdate: {type(payments[3])}  data:{payments[3]} ")
 
 
-        mycursor.close()
+            mycursor.close()
 
-        return {
+            response_get={
                 'statusCode': 200,
                 'body': json.dumps(response_list, default=str)  # Serialize datetime objects using default=str
+
             }
-    except Exception as e:
-        return {
-            'statusCode' : 500,
-            'body' : json.dumps({'error': str(e)})
-        }
-    finally:
-        db.close()
-    
+
+            return response_get
+                   
+                
+        except Exception as e:
+            return {
+                'statusCode' : 500,
+                'body' : json.dumps({'error': str(e)})
+            }
+        finally:
+            db.close()
+        
 
