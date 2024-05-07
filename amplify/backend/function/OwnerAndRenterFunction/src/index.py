@@ -5,7 +5,9 @@ from botocore.exceptions import ClientError
 import re
 import logging
 import sys
+import boto3
 import datetime
+
 # Create a custom logger
 logger = logging.getLogger("lambdaOwnerAndRental")
         
@@ -513,10 +515,16 @@ def is_valid_email(email):
 
 ########################## Function to Connect to the database ########################
 def connect_to_database():
-   host_url = config.secret.host
-   user_name = config.secret.user
-   password_database= config.secret.password
-   database_dev = config.secret.database
+   secrets = get_secret()
+   host_url = secrets['host']
+   user_name = secrets['user']
+   database_dev = secrets['database']
+   password_database = secrets['password']
+   
+   '''' host_url = config.secret.host '''''
+   ''''user_name = config.secret.user '''''
+   '''''password_database= config.secret.password'''''
+   '''''database_dev = config.secret.database'''''
 
    # Credentials for connecting to the database 
    try:
@@ -527,10 +535,35 @@ def connect_to_database():
             database = database_dev
 
             )
-        logger.info("Connected to the database Successfully")
+        logger.logger.info("Connected to the database Successfully")
    except Exception as e:
-       logger.error("Can not connect to the database error occured", exc_info=True)
+       logger.logger.error("Can not connect to the database error occured", exc_info=True)
    return mydb
+####################### End of Function connect_to_database ####################################
+
+
+####################### Secret manager Configuration ###########################################
+def get_secret():
+    secret_name = "dev/rentalHouseApp"
+    region_name = "us-east-1"
+
+    # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+
+    try:
+        get_secret_value_response = client.get_secret_value(
+            SecretId=secret_name
+        )
+    except ClientError as e:
+        raise e
+
+    secret = get_secret_value_response['SecretString']
+    return json.loads(secret)
+   
    
 
  
