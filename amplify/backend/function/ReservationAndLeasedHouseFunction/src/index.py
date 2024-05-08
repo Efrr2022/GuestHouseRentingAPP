@@ -305,8 +305,8 @@ def save_method(request_body,methodPath):
            logger.exception("Excpetion Occured", exc_info=True)
            return build_response(400, e.response['Error']['Message'])
     # Block for saving reserved houses records
-    elif methodPath == "/reserved": 
-      logger.info("I am inside if block of reserved house  ")
+    elif methodPath == "/reservation": 
+      logger.info("I am inside if block of reserved house")
       try:
           # To check Wether table reserved house is available or not
           stmt = "SHOW TABLES LIKE 'tblHouseReserved'"
