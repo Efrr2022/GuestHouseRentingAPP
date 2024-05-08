@@ -164,7 +164,7 @@ def handle_post_request(event,db):
 
 
 def handle_get_request(event,db):
-    logging.info("received event inside handle_get_request:")
+    logging.error("received event inside handle_get_request:")
     logging.info(event)
     print(f'this is print statment:received event inside handle_get_request:')
     # print(event)
