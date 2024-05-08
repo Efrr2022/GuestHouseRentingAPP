@@ -61,7 +61,7 @@ def handler(event, context):
     logging.info(event)
     # print('Received event:')
     # print(event)
-
+    
     # Connect to the database
     db = connect_to_database()
 
@@ -70,10 +70,12 @@ def handler(event, context):
             'statusCode': 500,
             'body': json.dumps({'error': 'Failed to connect to the database'})
         }
+    query_params=event["queryStringParameters"]
 
-    # Handle HTTP requests
-    if event["httpMethod"] == "GET":
-        response = handle_get_request(event, db)
+    if event["httpMethod"] == "GET" and query_params is not None and "houseId" in query_params:
+        response = handle_get_house_by_id(event, db)
+    elif event["httpMethod"] == "GET":
+         response = handle_get_request(event, db)
     elif event["httpMethod"] == "POST":
         response = handle_post_request(event, db)
     elif event["httpMethod"] == "DELETE":
@@ -160,6 +162,81 @@ def handle_post_request(event,db):
     finally:
         mycursor.close()
     return response_post
+
+
+
+def handle_get_house_by_id(event, db):
+    logging.info("Received event inside handle_get_house_by_id:")
+    logging.info(event)
+    
+    # Extract house ID from query string parameters
+    house_id = event.get("queryStringParameters", {}).get("houseId")
+    
+    if not house_id:
+        return {
+            'statusCode': 400,
+            'body': json.dumps({'error': 'House ID is missing'})
+        }
+    
+    # Create a cursor object to execute SQL queries
+    mycursor = db.cursor()
+
+    try:
+        # Construct SQL query to select a single house by its ID
+        sql_query = f"SELECT * FROM tblHouses WHERE houseId = {house_id}"
+
+        # Execute the SQL query
+        mycursor.execute(sql_query)
+        
+        # Fetch the result
+        result = mycursor.fetchone()
+        
+        if not result:
+            return {
+                'statusCode': 404,
+                'body': json.dumps({'error': 'House not found'})
+            }
+
+        # Prepare response data
+        house_data = {
+            "houseId": result[0],  
+            "houseHeading": result[1],  
+            "numberOfBedroom": result[2],  
+            "numberOfBathroom": result[3],  
+            "numberOfBalcony": result[4],  
+            "dateOfPosting": str(result[5]),  
+            "isActive": result[6],  
+            "houseDescription": result[7],  
+            "houseNumber": result[8],  
+            "houseFloorNumber": result[9],  
+            "housePaymentType": result[10],  
+            "locationId": result[11],  
+            "isVerified": result[12],  
+            "price": float(result[13]), 
+            "ownerId": result[14],  
+            "lastModified": str(result[15]), 
+            "area": result[16], 
+            "houseType": result[17],  
+            "latitude": float(result[18]),  
+            "longitude": float(result[19]),  
+            "houseStatus": result[20]  
+        }
+        
+        return {
+            'statusCode': 200,
+            'body': json.dumps(house_data)
+        }
+    except Exception as e:
+        logging.error(f'Error retrieving house: {e}')
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': 'Internal Server Error'})
+        }
+    finally:
+        # Close the cursor
+        mycursor.close()
+
+
 
 
 
