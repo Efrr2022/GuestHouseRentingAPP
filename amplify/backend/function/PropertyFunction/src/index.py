@@ -3,6 +3,16 @@ import mysql.connector
 
 import boto3
 from botocore.exceptions import ClientError
+import logging
+
+
+logging.basicConfig(
+    format="%(levelname)s | %(asctime)s | %(message)s",
+    datefmt="%Y-%m-%dT%H:%M:%SZ",
+    level=logging.DEBUG
+)
+
+
 
 
 def get_secret():
@@ -39,14 +49,18 @@ def connect_to_database():
             database=secrets['database'],
             password=secrets['password']
         )
-        print("Database connected")
+        logging.info('Database connected')
+        # print("Database connected")
         return db
     except Exception as e:
-        print(f'There was an exception: {e}')
+        logging.error(f'failed to connect to database: {e}')
+        # print(f'There was an exception: {e}')
 
 def handler(event, context):
-    print('Received event:')
-    print(event)
+    logging.info("Received event:")
+    logging.info(event)
+    # print('Received event:')
+    # print(event)
 
     # Connect to the database
     db = connect_to_database()
@@ -150,8 +164,10 @@ def handle_post_request(event,db):
 
 
 def handle_get_request(event,db):
-    print('received event inside handle_get_request:')
-    print(event)
+    logging.info("received event inside handle_get_request:")
+    logging.info(event)
+    # print('received event inside handle_get_request:')
+    # print(event)
     
     # db=db_connected()
     # Create a cursor object to execute SQL queries
@@ -174,7 +190,8 @@ def handle_get_request(event,db):
     
      # Execute a SQL query to select all records from the "Expense" table
     mycursor.execute(sql_query)
-    print("executed query")
+    logging.info('executed query')
+    # print("executed query")
 
     # Fetch all the rows from the result set
     result = mycursor.fetchall()
