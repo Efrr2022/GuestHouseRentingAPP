@@ -680,12 +680,12 @@ def is_valid_email(email):
 def connect_to_database():
    secrets = get_secret()
    host_url = secrets['host']
-   method_name = secrets['user']
+   user_name = secrets['user']
    database_dev = secrets['database']
    password_database = secrets['password']
    
    '''' host_url = config.secret.host '''''
-   ''''method_name = config.secret.method '''''
+   ''''user_name = config.secret.user '''''
    '''''password_database= config.secret.password'''''
    '''''database_dev = config.secret.database'''''
 
@@ -693,7 +693,7 @@ def connect_to_database():
    try:
         mydb = mysql.connector.connect(
             host = host_url,
-            method = method_name,
+            user = user_name,
             password = password_database,
             database = database_dev
 
