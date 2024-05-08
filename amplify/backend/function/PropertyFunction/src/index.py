@@ -222,10 +222,11 @@ def handle_get_house_by_id(event, db):
             "houseStatus": result[20]  
         }
         
-        return {
+        response_get= {
             'statusCode': 200,
             'body': json.dumps(house_data)
         }
+        return response_get
     except Exception as e:
         logging.error(f'Error retrieving house: {e}')
         return {
