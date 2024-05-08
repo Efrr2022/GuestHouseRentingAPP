@@ -187,7 +187,7 @@ def get_method(limit,offset,methodPath):
                'renter id': row[10],
                'leased Status': row[11]
                })
-        logger.info("data to return", table_data)
+        logger.info(table_data)
                
     #Block fo selecting data from reservation table  
     elif methodPath == "/reservation":
@@ -210,7 +210,7 @@ def get_method(limit,offset,methodPath):
                'reserved status': row[8],
                
             }) 
-            logger.info("data to return", table_data)
+            logger.info( table_data)
     #Block fo selecting data from  table rate  
     elif methodPath == "/rate":
         logger.info("inside if block of rate path")
@@ -230,7 +230,7 @@ def get_method(limit,offset,methodPath):
                'rate status': row[6],
                
             }) 
-            logger.info("data to return", table_data)
+            logger.info( table_data)
 
     #Block fo selecting data from category table  
     elif methodPath == "/category":
@@ -248,7 +248,7 @@ def get_method(limit,offset,methodPath):
                'status': row[3],
                
             }) 
-            logger.info("data to return", table_data)
+            logger.info( table_data)
                 
     mycursor.close()
     db.close()
