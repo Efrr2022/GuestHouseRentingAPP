@@ -221,10 +221,13 @@ def handle_get_house_by_id(event, db):
             "longitude": float(result[19]),  
             "houseStatus": result[20]  
         }
+        # response={}
+        # response["body"]=house_data
+        # response["statusCode"]=200
         
         response_get= {
             'statusCode': 200,
-            'body': json.dumps(house_data)
+            'body': house_data
         }
         return response_get
     except Exception as e:
