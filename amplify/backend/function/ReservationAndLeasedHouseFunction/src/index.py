@@ -68,9 +68,9 @@ def handler(event, context):
         # GET Method with category path    
         elif http_method == 'GET' and path == category_path:
             if event['queryStringParameters'] == None:
-             response = get_method(5,0,category_path:)
+             response = get_method(5,0,category_path)
             else:
-             response = get_method(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'], category_path:)      
+             response = get_method(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'], category_path)      
 ##################################### End of Get Method ############################################################# 
 
 
