@@ -6,6 +6,7 @@ import boto3
 import logging
 import datetime
 import sys
+from decimal import Decimal
 
 # Create a custom logger
 logger = logging.getLogger("lambdaOwnerAndRental")
@@ -192,7 +193,7 @@ def get_method(limit,offset,methodPath):
     #Block fo selecting data from reservation table  
     elif methodPath == "/reservation":
         logger.info("inside if block of reservation path")
-        stmt = f"SELECT * From tblRHouseReserved LIMIT {limit} OFFSET {offset}"
+        stmt = f"SELECT * From tblHouseReserved LIMIT {limit} OFFSET {offset}"
         mycursor.execute(stmt)
         result = mycursor.fetchall()
         if result:
@@ -646,7 +647,7 @@ def delete_method(id,methodPath):
 def build_response(status_code, body):
     return {
      "statusCode": status_code,
-	 "body": json.dumps(body),
+	 "body": json.dumps(body, cls=DecimalEncoder),
 	 "headers": {
 	     "Content-Type": "application/json"
 		   }
@@ -727,6 +728,13 @@ def get_secret():
 
     secret = get_secret_value_response['SecretString']
     return json.loads(secret)
+
+
+class DecimalEncoder(json.JSONEncoder):
+  def default(self, obj):
+    if isinstance(obj, Decimal):
+      return str(obj)
+    return json.JSONEncoder.default(self, obj)
    
 
  
