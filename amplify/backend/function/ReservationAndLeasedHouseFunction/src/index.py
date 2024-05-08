@@ -355,10 +355,10 @@ def save_method(request_body,methodPath):
           # To prepare to the value to insert to the database 
           val = []
           if result:
-                val.append((x["rate id"], x["lease id"], x["rate category id"], x["rate"], x["rate description"], \
+                val.append(( x["lease id"], x["rate category id"], x["rate"], x["rate description"], \
                                 x["last modified"], x["rate status"]),)
                 # Sql statement to insert data to the database  
-                sql="Insert into tblRate (rateId,leasedId,rateCategoryId,rate,rateDes,last_modified,rateStatus) values (%s, %s, %s, %s,%s, %s, \
+                sql="Insert into tblRate (leasedId,rateCategoryId,rate,rateDes,last_modified,rateStatus) values ( %s, %s, %s,%s, %s, \
                 %s)"
                 mycursor.executemany(sql,val)
                 db.commit()  
