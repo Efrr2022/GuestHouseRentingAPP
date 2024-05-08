@@ -356,7 +356,7 @@ def create_renter_out_record(event,db):
          # Return success response
         return {
             'statusCode': 200,
-            'body': json.dumps({'message': 'Renter In record created successfully'})
+            'body': json.dumps({'message': 'Renter out record created successfully'})
         }   
 
 
