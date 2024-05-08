@@ -680,7 +680,7 @@ def is_valid_email(email):
 def connect_to_database():
    secrets = get_secret()
    host_url = secrets['host']
-   method_name = secrets['method']
+   method_name = secrets['user']
    database_dev = secrets['database']
    password_database = secrets['password']
    
