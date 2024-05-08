@@ -5,6 +5,7 @@ import re
 import boto3
 import logging
 import datetime
+import sys
 
 # Create a custom logger
 logger = logging.getLogger("lambdaOwnerAndRental")
