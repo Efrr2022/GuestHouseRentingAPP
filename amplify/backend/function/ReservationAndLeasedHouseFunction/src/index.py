@@ -263,7 +263,7 @@ def save_method(request_body,methodPath):
   try: 
     db = connect_to_database()
     mycursor = db.cursor()
-    logger.info("My Currsor connected to the database", mycursor)
+    logger.info("My Currsor connected to the database")
     # Block for saving leased information of a house 
     if methodPath == '/leased':
       logger.info("I am inside if block of leased house  ")
@@ -699,6 +699,7 @@ def connect_to_database():
 
             )
         logger.info("Connected to the database Successfully")
+    
    except Exception as e:
        logger.error("Can not connect to the database error occured", exc_info=True)
    return mydb
