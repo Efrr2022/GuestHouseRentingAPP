@@ -283,7 +283,7 @@ def save_method(request_body,methodPath):
                                 x["rentier grad"], x["renter grade"], x["house id"],x["last_modified"],x["rentier id"], x["leased status"]),)
                 # Sql statement to insert data to the database  
                 sql="Insert into tblLeasedHouses (time_from,time_to,price,discount,price_total,rentier_grade_description, \
-                retner_grade_description,houseId,last_modified,renterId,leasedStatus) values (%s, %s, %s, %s,%s, %s, \
+                renter_grade_description,houseId,last_modified,renterId,leasedStatus) values (%s, %s, %s, %s,%s, %s, \
                 %s, %s,%s, %s, %s)"
                 mycursor.executemany(sql,val)
                 db.commit()  
