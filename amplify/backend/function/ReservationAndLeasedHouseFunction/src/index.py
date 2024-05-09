@@ -279,22 +279,22 @@ def save_method(request_body,methodPath):
           start = x["time from"]
           end = x["time to"]
           print(houseId, start, end)
-          stmt1 = f"SELECT * 
-                   FROM tblHouseReserved
-                   WHERE houseId = '{houseId}' 
-                   AND date_out > '{start}' 
-                   AND date_in < '{end}';"
+          stmt1 = f"SELECT * \
+                   FROM tblHouseReserved \
+                   WHERE houseId = '{houseId}' \
+                   AND date_out >= '{start}' \
+                   AND date_in <= '{end}';"
           
           mycursor.execute(stmt1)
           check1 = mycursor.fetchmany()
           logger.info("From statement 1")
           logger.info(check1)
-          stmt2= f"SELECT * 
-                   FROM tblLeasedHouses
-                   WHERE houseId = '{houseId}' 
-                   AND time_to > '{start}' 
-                   AND time_from < '{end}';"
-         
+          stmt2= f"SELECT * \
+                   FROM tblLeasedHouses \
+                   WHERE houseId = '{houseId}' \
+                   AND time_to >= '{start}' \
+                   AND time_from <= '{end}';" 
+          mycursor.reset()
           mycursor.execute(stmt2)
           check2 = mycursor.fetchmany()
           logger.info("From statement 2")
