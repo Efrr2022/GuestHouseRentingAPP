@@ -275,9 +275,16 @@ def save_method(request_body,methodPath):
           result = mycursor.fetchone()
          
           x = request_body
-          stmt = f"Select * from tblHouseReserved where date_in > = '{x["time from"]}' and date_out < = '{x["time to"]}';"
+          houseId = x["house id"]
+          from_date = x["time from"]
+          to_date = x["time to"]
+          print(houseId, from_date, to_date)
+          stmt = f"SELECT * from tbleHouseReserved where houseId = {houseId} AND \
+                (time_from BETWEEN {from_date} AND {to_date}) OR  \
+                (time_to BETWEEN {from_date} AND {to_date}) OR  \
+                (time_from <= {from_date} AND time_to >= {to_date})"
           mycursor.execute(stmt)
-          booked = mycursor.fetchone()
+          booked = mycursor.fetchmany()
           logger.info(booked)
 
           # To prepare to the value to insert to the database 
