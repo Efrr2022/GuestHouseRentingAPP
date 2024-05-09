@@ -6,6 +6,7 @@ import boto3
 import logging
 import datetime
 import sys
+from decimal import Decimal
 
 # Create a custom logger
 logger = logging.getLogger("lambdaOwnerAndRental")
@@ -187,12 +188,12 @@ def get_method(limit,offset,methodPath):
                'renter id': row[10],
                'leased Status': row[11]
                })
-        logger.info("data to return", table_data)
+        logger.info(table_data)
                
     #Block fo selecting data from reservation table  
     elif methodPath == "/reservation":
         logger.info("inside if block of reservation path")
-        stmt = f"SELECT * From tblRHouseReserved LIMIT {limit} OFFSET {offset}"
+        stmt = f"SELECT * From tblHouseReserved LIMIT {limit} OFFSET {offset}"
         mycursor.execute(stmt)
         result = mycursor.fetchall()
         if result:
@@ -210,7 +211,7 @@ def get_method(limit,offset,methodPath):
                'reserved status': row[8],
                
             }) 
-            logger.info("data to return", table_data)
+            logger.info( table_data)
     #Block fo selecting data from  table rate  
     elif methodPath == "/rate":
         logger.info("inside if block of rate path")
@@ -230,7 +231,7 @@ def get_method(limit,offset,methodPath):
                'rate status': row[6],
                
             }) 
-            logger.info("data to return", table_data)
+            logger.info( table_data)
 
     #Block fo selecting data from category table  
     elif methodPath == "/category":
@@ -248,7 +249,7 @@ def get_method(limit,offset,methodPath):
                'status': row[3],
                
             }) 
-            logger.info("data to return", table_data)
+            logger.info( table_data)
                 
     mycursor.close()
     db.close()
@@ -263,7 +264,7 @@ def save_method(request_body,methodPath):
   try: 
     db = connect_to_database()
     mycursor = db.cursor()
-    logger.info("My Currsor connected to the database", mycursor)
+    logger.info("My Currsor connected to the database")
     # Block for saving leased information of a house 
     if methodPath == '/leased':
       logger.info("I am inside if block of leased house  ")
@@ -272,18 +273,39 @@ def save_method(request_body,methodPath):
           stmt = "SHOW TABLES LIKE 'tblLeasedHouses'"
           mycursor.execute(stmt)
           result = mycursor.fetchone()
+         
           x = request_body
-
+          houseId = x["house id"]
+          from_date = x["time from"]
+          to_date = x["time to"]
+          print(houseId, from_date, to_date)
+          stmt1 = f"SELECT * from tblHouseReserved where houseId = {houseId} AND \
+                (date_in BETWEEN {from_date} AND {to_date}) AND  \
+                (date_out BETWEEN {from_date} AND {to_date}) OR  \
+                (date_in >= {from_date} AND date_out <= {to_date})"
+          stmt2= f"SELECT CASE  WHEN COUNT(*) > 0 THEN 'Leased' \
+                      ELSE 'Available' 
+                        END AS reservation_status 
+                         FROM tblLeasedHouses WHERE 
+                           house_id = {houseId} AND (time_from <= {from_date} AND time_to >= {to_date});"
+          mycursor.execute(stmt1)
+          check1 = mycursor.fetchmany()
+          logger.info("From statement 1")
+          logger.info(check1)
+          mycursor.execute(stmt2)
+          check2 = mycursor.fetchmany()
+          logger.info("From statement 2")
+          logger.info(check2)
 
           # To prepare to the value to insert to the database 
           val = []
-          if result:
+          if check1 == [] and check2 == []:
               
                 val.append((x["time from"], x["time to"], x["price"], x["discount"], x["total"], \
                                 x["rentier grad"], x["renter grade"], x["house id"],x["last_modified"],x["rentier id"], x["leased status"]),)
                 # Sql statement to insert data to the database  
                 sql="Insert into tblLeasedHouses (time_from,time_to,price,discount,price_total,rentier_grade_description, \
-                retner_grade_description,houseId,last_modified,renterId,leasedStatus) values (%s, %s, %s, %s,%s, %s, \
+                renter_grade_description,houseId,last_modified,renterId,leasedStatus) values (%s, %s, %s, %s,%s, %s, \
                 %s, %s,%s, %s, %s)"
                 mycursor.executemany(sql,val)
                 db.commit()  
@@ -305,8 +327,8 @@ def save_method(request_body,methodPath):
            logger.exception("Excpetion Occured", exc_info=True)
            return build_response(400, e.response['Error']['Message'])
     # Block for saving reserved houses records
-    elif methodPath == "/reserved": 
-      logger.info("I am inside if block of reserved house  ")
+    elif methodPath == "/reservation": 
+      logger.info("I am inside if block of reserved house")
       try:
           # To check Wether table reserved house is available or not
           stmt = "SHOW TABLES LIKE 'tblHouseReserved'"
@@ -355,10 +377,10 @@ def save_method(request_body,methodPath):
           # To prepare to the value to insert to the database 
           val = []
           if result:
-                val.append((x["rate id"], x["lease id"], x["rate category id"], x["rate"], x["rate description"], \
+                val.append(( x["lease id"], x["rate category id"], x["rate"], x["rate description"], \
                                 x["last modified"], x["rate status"]),)
                 # Sql statement to insert data to the database  
-                sql="Insert into tblRate (rateId,leasedId,rateCategoryId,rate,rateDes,last_modified,rateStatus) values (%s, %s, %s, %s,%s, %s, \
+                sql="Insert into tblRate (leasedId,rateCategoryId,rate,rateDes,last_modified,rateStatus) values ( %s, %s, %s,%s, %s, \
                 %s)"
                 mycursor.executemany(sql,val)
                 db.commit()  
@@ -646,7 +668,7 @@ def delete_method(id,methodPath):
 def build_response(status_code, body):
     return {
      "statusCode": status_code,
-	 "body": json.dumps(body),
+	 "body": json.dumps(body, cls=DecimalEncoder),
 	 "headers": {
 	     "Content-Type": "application/json"
 		   }
@@ -699,6 +721,7 @@ def connect_to_database():
 
             )
         logger.info("Connected to the database Successfully")
+    
    except Exception as e:
        logger.error("Can not connect to the database error occured", exc_info=True)
    return mydb
@@ -726,6 +749,13 @@ def get_secret():
 
     secret = get_secret_value_response['SecretString']
     return json.loads(secret)
+
+
+class DecimalEncoder(json.JSONEncoder):
+  def default(self, obj):
+    if isinstance(obj, Decimal):
+      return str(obj)
+    return json.JSONEncoder.default(self, obj)
    
 
  
