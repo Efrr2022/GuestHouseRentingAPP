@@ -263,7 +263,7 @@ def save_method(request_body,methodPath):
   logger.info("Inside block code of save method")
   try: 
     db = connect_to_database()
-    mycursor = db.cursor()
+    mycursor = db.cursor(buffered=True)
     logger.info("My Currsor connected to the database")
     # Block for saving leased information of a house 
     if methodPath == '/leased':
@@ -294,7 +294,7 @@ def save_method(request_body,methodPath):
                    WHERE houseId = '{houseId}' \
                    AND time_to >= '{start}' \
                    AND time_from <= '{end}';" 
-          mycursor.reset()
+          
           mycursor.execute(stmt2)
           check2 = mycursor.fetchmany()
           logger.info("From statement 2")
