@@ -280,16 +280,16 @@ def save_method(request_body,methodPath):
           to_date = x["time to"]
           print(houseId, from_date, to_date)
           stmt1 = f"SELECT * from tblHouseReserved where houseId = '{houseId}' AND \
-                date_out <= '{to_date}' AND \
-                  date_in >= '{from_date}';"
+                date_out > '{from_date}' AND \
+                  date_in < '{to_date}';"
           
           mycursor.execute(stmt1)
           check1 = mycursor.fetchmany()
           logger.info("From statement 1")
           logger.info(check1)
           stmt2= f"SELECT * FROM tblLeasedHouses WHERE houseId = '{houseId}' AND \
-              time_to <= '{to_date}' AND \
-                time_from >= '{from_date}';"
+              time_to > '{from_date}' AND \
+                time_from > '{to_date}';"
           mycursor.execute(stmt2)
           check2 = mycursor.fetchmany()
           logger.info("From statement 2")
