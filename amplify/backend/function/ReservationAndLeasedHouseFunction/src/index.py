@@ -4,9 +4,11 @@ from botocore.exceptions import ClientError
 import re
 import boto3
 import logging
-import datetime
+from datetime import datetime, timedelta
 import sys
 from decimal import Decimal
+import schedule
+import time
 
 # Create a custom logger
 logger = logging.getLogger("lambdaOwnerAndRental")
@@ -259,6 +261,7 @@ def get_method(limit,offset,methodPath):
 ############################## Function for for saving method to the database ######################################
 
 def save_method(request_body,methodPath):
+  now = datetime.now()
   
   logger.info("Inside block code of save method")
   try: 
@@ -326,7 +329,7 @@ def save_method(request_body,methodPath):
                 if check1 == [] and check2 == []:
                 
                     val.append((x["date in"], x["date out"], x["price"], x["discount"], x["total"], \
-                                    x["rentier grad"], x["renter grade"], x["house id"],x["last_modified"],x["rentier id"], x["leased status"]),)
+                                    x["rentier grad"], x["renter grade"], x["house id"], now, x["rentier id"], x["leased status"]),)
                     # Sql statement to insert data to the database  
                     sql="Insert into tblLeasedHouses (time_from,time_to,price,discount,price_total,rentier_grade_description, \
                     renter_grade_description,houseId,last_modified,renterId,leasedStatus) values (%s, %s, %s, %s,%s, %s, \
@@ -399,7 +402,7 @@ def save_method(request_body,methodPath):
               
                   val.append((x["renterId"], x["houseId"], x["date in"], x["date out"], \
                             x["price"], x["total"],  \
-                            x["last modified"], x["reserved Status"]),)
+                            now, x["reserved Status"]),)
                   # Sql statement to insert data to the database  
                   sql="Insert into tblHouseReserved (renterId,houseId,date_in,date_out,price,total, \
                   last_modified,reservedStatus) values (%s, %s, %s, %s,%s, %s, \
@@ -442,7 +445,7 @@ def save_method(request_body,methodPath):
           val = []
           if result:
                 val.append(( x["lease id"], x["rate category id"], x["rate"], x["rate description"], \
-                                x["last modified"], x["rate status"]),)
+                                now, x["rate status"]),)
                 # Sql statement to insert data to the database  
                 sql="Insert into tblRate (leasedId,rateCategoryId,rate,rateDes,last_modified,rateStatus) values ( %s, %s, %s,%s, %s, \
                 %s)"
@@ -479,7 +482,7 @@ def save_method(request_body,methodPath):
           if result:
               
                   val.append((x["category name"],
-                            x["last modified"], x["category Status"]),)
+                            now, x["category Status"]),)
                   # Sql statement to insert data to the database  
                   sql="Insert into tblRateCategory (category_name, \
                   last_modified,status) values (%s, %s, %s)"
@@ -820,7 +823,31 @@ class DecimalEncoder(json.JSONEncoder):
     if isinstance(obj, Decimal):
       return str(obj)
     return json.JSONEncoder.default(self, obj)
-   
+  
+def delete_expired_bookings():
+    db = connect_to_database()
+    mycursor = db.cursor()
+    logger.info("My Currsor connected to the database", mycursor)
+    current_time = datetime.now()
+    sql = f"select * from tblHouseReserved"
+    mycursor.execute(sql)
+    result = mycursor.fetchmany()
+    if result:
+        for x in result:
+            if current_time - x[7] > timedelta(hours=24):
+                sql = f"Delete from tblOwner WHERE reservedI={x[0]}"
+                mycursor.execute(sql)
+                db.commit()
+            
+                
+# Schedule the task to delete expired bookings every hour
+schedule.every().hour.do(delete_expired_bookings)
+
+# Main loop to run the scheduler
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+        
 
  
  
