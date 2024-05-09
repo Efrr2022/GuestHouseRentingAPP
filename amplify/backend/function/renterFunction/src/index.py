@@ -258,7 +258,7 @@ def handle_list_renters_by_house_id(event, db):
         # Return success response with list of renters
         return {
             'statusCode': 200,
-            'body': json.dumps(response_data)
+            'body': response_data
         }
     except Exception as e:
         # Return error response if any exception occurs

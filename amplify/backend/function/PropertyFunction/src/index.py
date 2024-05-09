@@ -303,7 +303,7 @@ def handle_get_house_by_id(event, db):
 
         response_get = {
             'statusCode': 200,
-            'body': json.dumps(house_data)
+            'body': house_data
         }
         return response_get
     except Exception as e:
