@@ -276,8 +276,8 @@ def save_method(request_body,methodPath):
          
           x = request_body
           houseId = x["house id"]
-          start = x["time from"]
-          end = x["time to"]
+          start = x["date in"]
+          end = x["date out"]
           print(houseId, start, end)
           stmt1 = f"SELECT * \
                    FROM tblHouseReserved \
@@ -295,10 +295,29 @@ def save_method(request_body,methodPath):
                    AND time_to >= '{start}' \
                    AND time_from <= '{end}';" 
           
+          
+          
           mycursor.execute(stmt2)
           check2 = mycursor.fetchmany()
           logger.info("From statement 2")
           logger.info(check2)
+
+          stmt3 = f"SELECT * \
+                   FROM tblHouseReserved \
+                   WHERE houseId = '{houseId}' \
+                   AND date_out = '{start}' \
+                   AND date_in ='{end}';"
+          mycursor.execute(stmt3)
+          check3 = mycursor.fetchmany()
+          logger.info("From statement 3")
+          logger.info(check3)
+          if check3:
+             stmt3 = f"Delete from tblHouseReserved \
+                   WHERE houseId = '{houseId}' \
+                   AND date_out = '{start}' \
+                   AND date_in ='{end}';"
+             mycursor.execute(stmt3)
+             db.commit()
           
           # To prepare to the value to insert to the database 
           val = []
@@ -306,7 +325,7 @@ def save_method(request_body,methodPath):
             if start < end :
                 if check1 == [] and check2 == []:
                 
-                    val.append((x["time from"], x["time to"], x["price"], x["discount"], x["total"], \
+                    val.append((x["date in"], x["date out"], x["price"], x["discount"], x["total"], \
                                     x["rentier grad"], x["renter grade"], x["house id"],x["last_modified"],x["rentier id"], x["leased status"]),)
                     # Sql statement to insert data to the database  
                     sql="Insert into tblLeasedHouses (time_from,time_to,price,discount,price_total,rentier_grade_description, \
@@ -347,8 +366,36 @@ def save_method(request_body,methodPath):
           result = mycursor.fetchone()
           x = request_body
           # To prepare to the value to insert to the database 
+          houseId = x["house id"]
+          start = x["date in"]
+          end = x["date out"]
+          print(houseId, start, end)
+          stmt1 = f"SELECT * \
+                   FROM tblHouseReserved \
+                   WHERE houseId = '{houseId}' \
+                   AND date_out >= '{start}' \
+                   AND date_in <= '{end}';"
+          
+          mycursor.execute(stmt1)
+          check1 = mycursor.fetchmany()
+          logger.info("From statement 1")
+          logger.info(check1)
+          stmt2= f"SELECT * \
+                   FROM tblLeasedHouses \
+                   WHERE houseId = '{houseId}' \
+                   AND time_to >= '{start}' \
+                   AND time_from <= '{end}';" 
+          
+          
+          
+          mycursor.execute(stmt2)
+          check2 = mycursor.fetchmany()
+          logger.info("From statement 2")
+          logger.info(check2)
           val = []
           if result:
+            if start < end :
+                if check1 == [] and check2 == []:
               
                   val.append((x["renterId"], x["houseId"], x["date in"], x["date out"], \
                             x["price"], x["total"],  \
@@ -366,6 +413,12 @@ def save_method(request_body,methodPath):
                       }
                   StatusCode = 201
                   logger.info("Body to return %s and Status Code %s", body,StatusCode) 
+                else:
+                    StatusCode = 400
+                    body = "The house is reserved or Leased. Please change date."
+            else:
+               StatusCode = 400
+               body = "Please check the selection of your time range, date out must be after date in."
           
           # If table methods not found 
           else:
