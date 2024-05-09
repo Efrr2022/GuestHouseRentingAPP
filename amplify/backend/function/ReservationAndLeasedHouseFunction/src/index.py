@@ -303,26 +303,30 @@ def save_method(request_body,methodPath):
           # To prepare to the value to insert to the database 
           val = []
           if result:
-            if check1 == [] and check2 == [] and start > end:
-              
-                val.append((x["time from"], x["time to"], x["price"], x["discount"], x["total"], \
-                                x["rentier grad"], x["renter grade"], x["house id"],x["last_modified"],x["rentier id"], x["leased status"]),)
-                # Sql statement to insert data to the database  
-                sql="Insert into tblLeasedHouses (time_from,time_to,price,discount,price_total,rentier_grade_description, \
-                renter_grade_description,houseId,last_modified,renterId,leasedStatus) values (%s, %s, %s, %s,%s, %s, \
-                %s, %s,%s, %s, %s)"
-                mycursor.executemany(sql,val)
-                db.commit()  
-                body = {
-                     'Operation': 'SAVE',
-                     'Message': 'SUCCESS',
-                     'Item': request_body
-                      }
-                StatusCode = 201
-                logger.info("Body to return %s and Status Code %s", body,StatusCode) 
+            if start < end :
+                if check1 == [] and check2 == []:
+                
+                    val.append((x["time from"], x["time to"], x["price"], x["discount"], x["total"], \
+                                    x["rentier grad"], x["renter grade"], x["house id"],x["last_modified"],x["rentier id"], x["leased status"]),)
+                    # Sql statement to insert data to the database  
+                    sql="Insert into tblLeasedHouses (time_from,time_to,price,discount,price_total,rentier_grade_description, \
+                    renter_grade_description,houseId,last_modified,renterId,leasedStatus) values (%s, %s, %s, %s,%s, %s, \
+                    %s, %s,%s, %s, %s)"
+                    mycursor.executemany(sql,val)
+                    db.commit()  
+                    body = {
+                        'Operation': 'SAVE',
+                        'Message': 'SUCCESS',
+                        'Item': request_body
+                        }
+                    StatusCode = 201
+                    logger.info("Body to return %s and Status Code %s", body,StatusCode) 
+                else:
+                    StatusCode = 400
+                    body = "The house is reserved or Leased. Please change date."
             else:
                StatusCode = 400
-               body = "The house is reserved or Leased. Please change date."
+               body = "Please check the selection of your time range, date out must be after date in."
               
           # If table methods not found 
           else:
