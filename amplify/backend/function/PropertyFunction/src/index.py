@@ -297,7 +297,7 @@ def handle_get_house_by_id(event, db):
             "latitude": float(result[18]),  
             "longitude": float(result[19]),  
             "houseStatus": result[20],
-            "rating": result[21] if result[21] else None , # If no rating available, set to None
+            "rating":float(result[21] if result[21] else None) , # If no rating available, set to None
             "rateDes": result[22] if result[22] else None 
         }
 
