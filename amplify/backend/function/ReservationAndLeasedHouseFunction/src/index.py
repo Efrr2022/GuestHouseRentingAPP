@@ -280,8 +280,8 @@ def save_method(request_body,methodPath):
           end = x["time to"]
           print(houseId, start, end)
           stmt1 = f"SELECT * from tblHouseReserved where houseId = '{houseId}' AND \
-                date_out > = '{start}' AND \
-                  date_in < = '{end}';"
+                date_out >= '{start}' AND \
+                  date_in <= '{end}';"
           
           mycursor.execute(stmt1)
           check1 = mycursor.fetchmany()
