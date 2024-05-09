@@ -279,7 +279,7 @@ def save_method(request_body,methodPath):
           from_date = x["time from"]
           to_date = x["time to"]
           print(houseId, from_date, to_date)
-          stmt = f"SELECT * from tbleHouseReserved where houseId = {houseId} AND \
+          stmt = f"SELECT * from tblHouseReserved where houseId = {houseId} AND \
                 (time_from BETWEEN {from_date} AND {to_date}) OR  \
                 (time_to BETWEEN {from_date} AND {to_date}) OR  \
                 (time_from <= {from_date} AND time_to >= {to_date})"
