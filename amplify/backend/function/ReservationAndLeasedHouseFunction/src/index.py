@@ -282,11 +282,9 @@ def save_method(request_body,methodPath):
           stmt1 = f"SELECT * from tblHouseReserved where houseId = {houseId} AND \
                 (date_in BETWEEN {from_date} AND {to_date}) OR  \
                 (date_out BETWEEN {from_date} AND {to_date}) OR  \
-                (date_in <= {from_date} AND date_out >= {to_date})"
+                (date_in >= {from_date} AND date_out <= {to_date})"
           stmt2= f"SELECT * from tblLeasedHouses where houseId = {houseId} AND \
-                (time_from BETWEEN {from_date} AND {to_date}) OR  \
-                (time_to BETWEEN {from_date} AND {to_date}) OR  \
-                (time_from <= {from_date} AND time_to >= {to_date})"
+                (time_from >= {from_date} AND time_to <= {to_date})"
           mycursor.execute(stmt1)
           check1 = mycursor.fetchmany()
           logger.info("From statement 1")
@@ -298,7 +296,7 @@ def save_method(request_body,methodPath):
 
           # To prepare to the value to insert to the database 
           val = []
-          if result:
+          if check1 == [] and check2 == []:
               
                 val.append((x["time from"], x["time to"], x["price"], x["discount"], x["total"], \
                                 x["rentier grad"], x["renter grade"], x["house id"],x["last_modified"],x["rentier id"], x["leased status"]),)
