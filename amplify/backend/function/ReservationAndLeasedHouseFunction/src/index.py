@@ -185,7 +185,7 @@ def get_method(limit,offset,methodPath):
                'Price Total': row[5],
                'rentier grade description': row[6],
                'renter grade description ': row[7],
-               'house id': row[8],
+               'houseId': row[8],
                'last modified': row[9].strftime("%d-%m-%Y"),
                'renter id': row[10],
                'leased Status': row[11]
@@ -204,7 +204,7 @@ def get_method(limit,offset,methodPath):
                 table_data.append({
                'reservatio id': row[0],
                'rentier id': row[1],
-               'house id': row[2],
+               'houseId': row[2],
                'date in': row[3].strftime("%d-%m-%Y"),
                'date out': row[4].strftime("%d-%m-%Y"),
                'price': row[5],
@@ -278,7 +278,7 @@ def save_method(request_body,methodPath):
           result = mycursor.fetchone()
          
           x = request_body
-          houseId = x["house id"]
+          houseId = x["houseId"]
           start = x["date in"]
           end = x["date out"]
           print(houseId, start, end)
@@ -329,7 +329,7 @@ def save_method(request_body,methodPath):
                 if check1 == [] and check2 == []:
                 
                     val.append((x["date in"], x["date out"], x["price"], x["discount"], x["total"], \
-                                    x["rentier grad"], x["renter grade"], x["house id"], now, x["rentier id"], x["leased status"]),)
+                                    x["rentier grad"], x["renter grade"], x["houseId"], now, x["rentier id"], x["leased status"]),)
                     # Sql statement to insert data to the database  
                     sql="Insert into tblLeasedHouses (time_from,time_to,price,discount,price_total,rentier_grade_description, \
                     renter_grade_description,houseId,last_modified,renterId,leasedStatus) values (%s, %s, %s, %s,%s, %s, \
@@ -369,7 +369,7 @@ def save_method(request_body,methodPath):
           result = mycursor.fetchone()
           x = request_body
           # To prepare to the value to insert to the database 
-          houseId = x["house id"]
+          houseId = x["houseId"]
           start = x["date in"]
           end = x["date out"]
           print(houseId, start, end)
