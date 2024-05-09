@@ -273,8 +273,12 @@ def save_method(request_body,methodPath):
           stmt = "SHOW TABLES LIKE 'tblLeasedHouses'"
           mycursor.execute(stmt)
           result = mycursor.fetchone()
+         
           x = request_body
-
+          stmt = f"Select * from tblHouseReserved where date_in > = '{x["time from"]}' and date_out < = '{x["time to"]}';"
+          mycursor.execute(stmt)
+          booked = mycursor.fetchone()
+          logger.info(booked)
 
           # To prepare to the value to insert to the database 
           val = []
