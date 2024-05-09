@@ -787,7 +787,7 @@ def connect_to_database():
             database = database_dev
 
             )
-        logger.info("Connected to the database rentalHouse Successfully")
+        logger.info("Connected to the database Successfully")
     
    except Exception as e:
        logger.error("Can not connect to the database error occured", exc_info=True)
@@ -817,13 +817,13 @@ def get_secret():
     secret = get_secret_value_response['SecretString']
     return json.loads(secret)
 
-########################### Decimal Encoder for JSON data
+
 class DecimalEncoder(json.JSONEncoder):
   def default(self, obj):
     if isinstance(obj, Decimal):
       return str(obj)
     return json.JSONEncoder.default(self, obj)
-############################# Function to delete reserved houses after 24hours.   
+  
 def delete_expired_bookings():
     db = connect_to_database()
     mycursor = db.cursor()
