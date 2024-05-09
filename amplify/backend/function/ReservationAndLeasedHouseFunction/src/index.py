@@ -303,7 +303,7 @@ def save_method(request_body,methodPath):
           # To prepare to the value to insert to the database 
           val = []
           if result:
-            if check1 == [] and check2 == []:
+            if check1 == [] and check2 == [] and start > end:
               
                 val.append((x["time from"], x["time to"], x["price"], x["discount"], x["total"], \
                                 x["rentier grad"], x["renter grade"], x["house id"],x["last_modified"],x["rentier id"], x["leased status"]),)
