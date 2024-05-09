@@ -279,27 +279,25 @@ def save_method(request_body,methodPath):
           from_date = x["time from"]
           to_date = x["time to"]
           print(houseId, from_date, to_date)
-          stmt1 = f"SELECT * from tblHouseReserved where houseId = {houseId} AND \
-                (date_in BETWEEN {from_date} AND {to_date}) AND  \
-                (date_out BETWEEN {from_date} AND {to_date}) OR  \
-                (date_in >= {from_date} AND date_out <= {to_date})"
-          stmt2= f"SELECT CASE  WHEN COUNT(*) > 0 THEN 'Leased' \
-                      ELSE 'Available' 
-                        END AS reservation_status 
-                         FROM tblLeasedHouses WHERE 
-                           house_id = {houseId} AND (time_from <= {from_date} AND time_to >= {to_date});"
+          stmt1 = f"SELECT * from tblHouseReserved where houseId = '{houseId}' AND \
+                date_out > '{from_date}' AND \
+                  date_in < '{to_date}';"
+          
           mycursor.execute(stmt1)
           check1 = mycursor.fetchmany()
           logger.info("From statement 1")
           logger.info(check1)
+          stmt2= f"SELECT * FROM tblLeasedHouses WHERE houseId = '{houseId}' AND \
+              time_to > '{from_date}' AND \
+                time_from > '{to_date}';"
           mycursor.execute(stmt2)
           check2 = mycursor.fetchmany()
           logger.info("From statement 2")
           logger.info(check2)
-
+          
           # To prepare to the value to insert to the database 
           val = []
-          if check1 == [] and check2 == []:
+          if result:
               
                 val.append((x["time from"], x["time to"], x["price"], x["discount"], x["total"], \
                                 x["rentier grad"], x["renter grade"], x["house id"],x["last_modified"],x["rentier id"], x["leased status"]),)
