@@ -289,7 +289,7 @@ def save_method(request_body,methodPath):
           logger.info(check1)
           stmt2= f"SELECT * FROM tblLeasedHouses WHERE houseId = '{houseId}' AND \
               time_to > '{from_date}' AND \
-                time_from > '{to_date}';"
+                time_from < '{to_date}';"
           mycursor.execute(stmt2)
           check2 = mycursor.fetchmany()
           logger.info("From statement 2")
