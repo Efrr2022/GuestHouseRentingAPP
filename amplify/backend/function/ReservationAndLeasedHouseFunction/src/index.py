@@ -321,6 +321,7 @@ def save_method(request_body,methodPath):
                 StatusCode = 201
                 logger.info("Body to return %s and Status Code %s", body,StatusCode) 
             else:
+               StatusCode = 400
                body = "The house is reserved or Leased. Please change date."
               
           # If table methods not found 
