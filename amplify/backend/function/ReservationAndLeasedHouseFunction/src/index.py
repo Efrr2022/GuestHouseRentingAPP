@@ -276,20 +276,22 @@ def save_method(request_body,methodPath):
          
           x = request_body
           houseId = x["house id"]
-          from_date = x["time from"]
-          to_date = x["time to"]
-          print(houseId, from_date, to_date)
+          start = x["time from"]
+          end = x["time to"]
+          print(houseId, start, end)
           stmt1 = f"SELECT * from tblHouseReserved where houseId = '{houseId}' AND \
-                date_out > '{from_date}' AND \
-                  date_in < '{to_date}';"
+                date_out > = '{start}' AND \
+                  date_in < = '{end}';"
           
           mycursor.execute(stmt1)
           check1 = mycursor.fetchmany()
           logger.info("From statement 1")
           logger.info(check1)
           stmt2= f"SELECT * from tblLeasedHouses where houseId = '{houseId}' AND \
-                time_to > '{from_date}' AND \
-                  time_from < '{to_date}';"
+                (time_from BETWEEN '{start}' AND '{end}') OR \
+                  (time_to BETWEEN '{start}' AND '{end}') OR \
+                    (time_from < = '{end}' AND time_to > = '{start}')"
+         
           mycursor.execute(stmt2)
           check2 = mycursor.fetchmany()
           logger.info("From statement 2")
@@ -298,6 +300,7 @@ def save_method(request_body,methodPath):
           # To prepare to the value to insert to the database 
           val = []
           if result:
+            if check1 == [] and check2 == []:
               
                 val.append((x["time from"], x["time to"], x["price"], x["discount"], x["total"], \
                                 x["rentier grad"], x["renter grade"], x["house id"],x["last_modified"],x["rentier id"], x["leased status"]),)
@@ -314,6 +317,8 @@ def save_method(request_body,methodPath):
                       }
                 StatusCode = 201
                 logger.info("Body to return %s and Status Code %s", body,StatusCode) 
+            else:
+               body = "The house is reserved or Leased. Please change date."
               
           # If table methods not found 
           else:
