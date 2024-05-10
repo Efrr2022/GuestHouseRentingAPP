@@ -17,23 +17,25 @@ frontend:
     paths:
       - .npm/**/*
 backend:
-  phases:
-    
-    build:
-      commands:
-        - sudo update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.8 11
-        - echo "Installing Pip enviroment and __________________________________"
-        - pip3.8 install pipenv
-        - pip install virtualenv
-        - pip install -r requirements.txt
-        - amplifyPush --simple
   functions:
     ReservationAndLeasedHouseFuncton-dev:
       runtime: python3.8
       handler: index.handler
       environment:
-        VARIABLES: dev
-      dependencies:
-        - schedule      
+        VARIABLES: env
+      build:
+        commands:
+          - sudo update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.8 11
+          - echo "Installing Pip enviroment and __________________________________"
+          - pip3.8 install pipenv
+          - pip install virtualenv
+          - pip install -r requirements.txt
+          - amplifyPush --simple
+      artifacts:
+        # Path to the built Lambda function code
+        baseDirectory: .
+        files:
+          - 'index.py'
+          - 'requirements.txt'   
    
         
