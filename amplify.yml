@@ -22,14 +22,14 @@ backend:
     build:
       commands:
         - echo "Installing Pip enviroment and boto3, schedule, and mysql-connector-python__________________________________"
-        - python3 -m venv myenv
-        - source myenv/bin/activate
+        - python3.8 -m venv venv
+        - source venv/bin/activate
         - pip install pipenv
         - pipenv install
         - pipenv install boto3 schedule mysql-connector-python
         - echo "directly to install dependency to lambda function____________________________________ "
         - echo "take lambda function to the site pacakged inorder to get the dependency"
-        - cp -r myenv/lib/python3.8/site-packages/* $BUILD_DIR
+        - cp -r venv/lib/python3.8/site-packages/* $BUILD_DIR
         - cp -r index.py $BUILD_DIR
     
       
