@@ -304,9 +304,9 @@ def save_method(request_body,methodPath):
                 if check1 == []:
                    stmt2= f"SELECT * \
                    FROM tblHouseReserved \
-                   WHERE houseId = {houseId} \
-                   AND date_out = '{start}' \
-                   AND date_in ='{end}';"
+                   WHERE houseId = '{houseId}' \
+                   AND date_in ='{start}' \
+                   AND date_out ='{end}';"
                    mycursor.execute(stmt2)
                    check2 = mycursor.fetchmany()
                    logger.info(stmt2)
@@ -315,7 +315,7 @@ def save_method(request_body,methodPath):
                    if check2:
                         stmt3 = f"Delete from tblHouseReserved \
                             WHERE houseId = '{houseId}' \
-                            AND date_out = '{start}' \
+                            AND date_out ='{start}' \
                             AND date_in ='{end}';"
                         mycursor.execute(stmt3)
                         db.commit()
