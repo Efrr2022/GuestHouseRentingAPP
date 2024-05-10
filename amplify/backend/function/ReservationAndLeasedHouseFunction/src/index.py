@@ -304,7 +304,7 @@ def save_method(request_body,methodPath):
                 if check1 == []:
                    stmt2= f"SELECT * \
                    FROM tblHouseReserved \
-                   WHERE houseId = '{houseId}' \
+                   WHERE houseId = {houseId} \
                    AND date_out = '{start}' \
                    AND date_in ='{end}';"
                    mycursor.execute(stmt2)
