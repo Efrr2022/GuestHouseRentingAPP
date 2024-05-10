@@ -27,11 +27,11 @@ backend:
         - pip install pipenv
         - pipenv install
         - pipenv install boto3 schedule mysql-connector-python
+         # Install dependencies
         - echo "directly to install dependency to lambda function____________________________________ "
-        - echo "take lambda function to the site pacakged inorder to get the dependency"
-        - cp -r venv/lib/python3.8/site-packages/* $BUILD_DIR
-        - cp -r index.py $BUILD_DIR
-    
+        - cd amplify/backend/function/ReservationAndLeasedHouseFunction
+        - pipenv install schedule boto3 mysql-connector-python
+        - amplifyPush --simple
       
     
   
