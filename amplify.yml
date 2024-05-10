@@ -27,6 +27,13 @@ backend:
         - pip install virtualenv
         - pip install -r requirements.txt
         - amplifyPush --simple
-       
+  functions:
+    ReservationAndLeasedHouseFuncton-dev:
+      runtime: python3.8
+      handler: index.handler
+      environment:
+        VARIABLES: dev
+      dependencies:
+        - schedule      
    
         
