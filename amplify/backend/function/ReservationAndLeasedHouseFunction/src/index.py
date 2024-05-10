@@ -280,7 +280,7 @@ def save_method(request_body,methodPath):
           houseId = x["houseId"]
           start = x["date in"]
           end = x["date out"]
-          logger.info(houseId, start, end)
+          
           
           stmt1= f"SELECT * \
                    FROM tblLeasedHouses \
