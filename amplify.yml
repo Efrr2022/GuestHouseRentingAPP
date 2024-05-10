@@ -30,14 +30,19 @@ backend:
         # Install dependencies
         - cd amplify/backend/function/OwnerAndRenterFunction
         - pipenv install boto3 schedule mysql-connector-python
+        - cd ../../../..
         - cd amplify/backend/function/paymentFunction
         - pipenv install boto3 schedule mysql-connector-python
+        - cd ../../../..
         - cd amplify/backend/function/PropertyFunction
         - pipenv install boto3 schedule mysql-connector-python
+        - cd ../../../..
         - cd amplify/backend/function/renterFunction
         - pipenv install boto3 schedule mysql-connector-python
+        - cd ../../../..
         - cd amplify/backend/function/ReservationAndLeasedHouseFunction
         - pipenv install boto3 schedule mysql-connector-python
+        - cd ../../../..
         # Add additional lambda functions as needed
         - amplifyPush --simple
   
