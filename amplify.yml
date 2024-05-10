@@ -21,12 +21,12 @@ backend:
     
     build:
       commands:
-        - sudo update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.8 11
-        - echo "Installing Pip enviroment and __________________________________"
-        - pip3.8 install pipenv
-        - pip install virtualenv
-        - pip install -r requirements.txt 
-        - amplifyPush --simple
+        - echo "Installing Pip enviroment and boto3, schedule, and mysql-connector-python__________________________________"
+        - python3 -m venv venv
+        - source venv/bin/activate
+        - pip install pipenv
+        - pipenv install
+        - pipenv install boto3 schedule mysql-connector-python
   functions:
   - name: ReservationAndLeasedHouseFunction
     handler: index.handler
@@ -34,14 +34,12 @@ backend:
       VARIABLES: env
     build:
       commands:
-        - python3.8 -m venv .venv
-        - source .venv/bin/activate
-        - pipenv install boto3 schedule mysql-connector-python
-    artifacts:
-      baseDirectory: .
-      files:
-        - 'index.py'
-        - 'requirements1.txt'
+       - echo "take lambda function to the site pacakged inorder to get the dependency"
+       - cp -r venv/lib/python3.8/site-packages/* $BUILD_DIR
+       - cp -r index.py $BUILD_DIR
+    memory: 1024
+    timeout: 30
+    
   
           
        
