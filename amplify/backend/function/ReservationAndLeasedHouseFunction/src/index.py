@@ -309,6 +309,7 @@ def save_method(request_body,methodPath):
                    AND date_in ='{end}';"
                    mycursor.execute(stmt2)
                    check2 = mycursor.fetchmany()
+                   logger.info(stmt2)
                    logger.info("To check weather it is oready booked or not")
                    logger.info(check2)
                    if check2:
