@@ -25,6 +25,7 @@ backend:
         - echo "Installing Pip enviroment and __________________________________"
         - pip3.8 install pipenv
         - pip install virtualenv
+         - pip install -r requirements.txt 
         - amplifyPush --simple
   functions:
     ReservationAndLeasedHouseFunction-dev:
@@ -34,7 +35,7 @@ backend:
         VARIABLES: dev
       build:
         commands:
-          - pip install -r requirements.txt -t .
+         
       artifacts:
         # Path to the built Lambda function code
         baseDirectory: .
