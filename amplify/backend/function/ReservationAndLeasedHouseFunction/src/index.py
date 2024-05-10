@@ -7,8 +7,7 @@ import logging
 from datetime import datetime, timedelta
 import sys
 from decimal import Decimal
-import schedule
-import time
+
 
 # Create a custom logger
 logger = logging.getLogger("lambdaOwnerAndRental")
@@ -281,18 +280,9 @@ def save_method(request_body,methodPath):
           houseId = x["houseId"]
           start = x["date in"]
           end = x["date out"]
-          print(houseId, start, end)
-          stmt1 = f"SELECT * \
-                   FROM tblHouseReserved \
-                   WHERE houseId = '{houseId}' \
-                   AND date_out >= '{start}' \
-                   AND date_in <= '{end}';"
           
-          mycursor.execute(stmt1)
-          check1 = mycursor.fetchmany()
-          logger.info("From statement 1")
-          logger.info(check1)
-          stmt2= f"SELECT * \
+          
+          stmt1= f"SELECT * \
                    FROM tblLeasedHouses \
                    WHERE houseId = '{houseId}' \
                    AND time_to >= '{start}' \
@@ -300,55 +290,60 @@ def save_method(request_body,methodPath):
           
           
           
-          mycursor.execute(stmt2)
-          check2 = mycursor.fetchmany()
-          logger.info("From statement 2")
-          logger.info(check2)
+          mycursor.execute(stmt1)
+          check1 = mycursor.fetchmany()
+          logger.info("To Check weather there is record or not in the given timeframe")
+          logger.info(check1)
 
-          stmt3 = f"SELECT * \
-                   FROM tblHouseReserved \
-                   WHERE houseId = '{houseId}' \
-                   AND date_out = '{start}' \
-                   AND date_in ='{end}';"
-          mycursor.execute(stmt3)
-          check3 = mycursor.fetchmany()
-          logger.info("From statement 3")
-          logger.info(check3)
-          if check3:
-             stmt3 = f"Delete from tblHouseReserved \
-                   WHERE houseId = '{houseId}' \
-                   AND date_out = '{start}' \
-                   AND date_in ='{end}';"
-             mycursor.execute(stmt3)
-             db.commit()
+         
           
           # To prepare to the value to insert to the database 
           val = []
           if result:
             if start < end :
-                if check1 == [] and check2 == []:
-                
-                    val.append((x["date in"], x["date out"], x["price"], x["discount"], x["total"], \
+                if check1 == []:
+                   stmt2= f"SELECT * \
+                   FROM tblHouseReserved \
+                   WHERE houseId = '{houseId}' \
+                   AND date_in ='{start}' \
+                   AND date_out ='{end}';"
+                   mycursor.execute(stmt2)
+                   check2 = mycursor.fetchmany()
+                   logger.info(stmt2)
+                   logger.info("To check weather it is oready booked or not")
+                   logger.info(check2)
+                   if check2:
+                        stmt3 = f"Delete from tblHouseReserved \
+                            WHERE houseId = '{houseId}' \
+                            AND date_out ='{start}' \
+                            AND date_in ='{end}';"
+                        mycursor.execute(stmt3)
+                        db.commit()
+                        logger.info("The record deleted successfully from house reserved table")
+                        val.append((x["date in"], x["date out"], x["price"], x["discount"], x["total"], \
                                     x["rentier grad"], x["renter grade"], x["houseId"], now, x["rentier id"], x["leased status"]),)
-                    # Sql statement to insert data to the database  
-                    sql="Insert into tblLeasedHouses (time_from,time_to,price,discount,price_total,rentier_grade_description, \
-                    renter_grade_description,houseId,last_modified,renterId,leasedStatus) values (%s, %s, %s, %s,%s, %s, \
-                    %s, %s,%s, %s, %s)"
-                    mycursor.executemany(sql,val)
-                    db.commit()  
-                    body = {
-                        'Operation': 'SAVE',
-                        'Message': 'SUCCESS',
-                        'Item': request_body
-                        }
-                    StatusCode = 201
-                    logger.info("Body to return %s and Status Code %s", body,StatusCode) 
+                        # Sql statement to insert data to the database  
+                        sql="Insert into tblLeasedHouses (time_from,time_to,price,discount,price_total,rentier_grade_description, \
+                        renter_grade_description,houseId,last_modified,renterId,leasedStatus) values (%s, %s, %s, %s,%s, %s, \
+                        %s, %s,%s, %s, %s)"
+                        mycursor.executemany(sql,val)
+                        db.commit()  
+                        body = {
+                            'Operation': 'SAVE',
+                            'Message': 'SUCCESS',
+                            'Item': request_body
+                            }
+                        StatusCode = 201
+                        logger.info("Body to return %s and Status Code %s", body,StatusCode) 
+                   else:
+                        StatusCode = 400
+                        body = "There is no any record of this selecion in the house reserved"
                 else:
                     StatusCode = 400
-                    body = "The house is reserved or Leased. Please change date."
+                    body = "The house is Leased. Please change date."
             else:
                StatusCode = 400
-               body = "Please check the selection of your time range, date out must be after date in."
+               body = "Please check the selection of your time range. Wrong date range!!!"
               
           # If table methods not found 
           else:
@@ -823,31 +818,7 @@ class DecimalEncoder(json.JSONEncoder):
     if isinstance(obj, Decimal):
       return str(obj)
     return json.JSONEncoder.default(self, obj)
-############################# Function to delete reserved houses after 24hours.   
-def delete_expired_bookings():
-    db = connect_to_database()
-    mycursor = db.cursor()
-    logger.info("My Currsor connected to the database", mycursor)
-    current_time = datetime.now()
-    sql = f"select * from tblHouseReserved"
-    mycursor.execute(sql)
-    result = mycursor.fetchmany()
-    if result:
-        for x in result:
-            if current_time - x[7] > timedelta(hours=24):
-                sql = f"Delete from tblOwner WHERE reservedI={x[0]}"
-                mycursor.execute(sql)
-                db.commit()
-            
-                
-# Schedule the task to delete expired bookings every hour
-schedule.every().hour.do(delete_expired_bookings)
 
-# Main loop to run the scheduler
-while True:
-    schedule.run_pending()
-    time.sleep(1)
-        
 
  
  
