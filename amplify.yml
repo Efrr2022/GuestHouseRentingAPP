@@ -10,7 +10,7 @@ frontend:
         - echo "I am runing on build commands"
         - npm run build
   artifacts:
-    baseDirectory: dist/amplify-app
+    baseDirectory: dist
     files:
       - '**/*'
   cache:
@@ -28,20 +28,22 @@ backend:
         - pip install -r requirements.txt 
         - amplifyPush --simple
   functions:
-    ReservationAndLeasedHouseFunction-dev:
-      runtime: python3.8
-      handler: index.handler
-      environment:
-        VARIABLES: dev
-      build:
-        commands:
-         
-      artifacts:
-        # Path to the built Lambda function code
-        baseDirectory: .
-        files:
-          - 'index.py'
-          - 'requirements.txt'
+  - name: ReservationAndLeasedHouseFunction
+    handler: index.handler
+    environment:
+      VARIABLES: env
+    build:
+      commands:
+        - python3.8 -m venv .venv
+        - source .venv/bin/activate
+        - pipenv install boto3 schedule mysql-connector-python
+    artifacts:
+      baseDirectory: .
+      files:
+        - 'index.py'
+        - 'requirements1.txt'
+  
+          
        
    
         
