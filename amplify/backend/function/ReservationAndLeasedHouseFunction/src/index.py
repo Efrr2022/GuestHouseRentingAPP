@@ -7,8 +7,7 @@ import logging
 from datetime import datetime, timedelta
 import sys
 from decimal import Decimal
-import schedule
-import time
+
 
 # Create a custom logger
 logger = logging.getLogger("lambdaOwnerAndRental")
@@ -823,31 +822,7 @@ class DecimalEncoder(json.JSONEncoder):
     if isinstance(obj, Decimal):
       return str(obj)
     return json.JSONEncoder.default(self, obj)
-############################# Function to delete reserved houses after 24hours.   
-def delete_expired_bookings():
-    db = connect_to_database()
-    mycursor = db.cursor()
-    logger.info("My Currsor connected to the database", mycursor)
-    current_time = datetime.now()
-    sql = f"select * from tblHouseReserved"
-    mycursor.execute(sql)
-    result = mycursor.fetchmany()
-    if result:
-        for x in result:
-            if current_time - x[7] > timedelta(hours=24):
-                sql = f"Delete from tblOwner WHERE reservedI={x[0]}"
-                mycursor.execute(sql)
-                db.commit()
-            
-                
-# Schedule the task to delete expired bookings every hour
-schedule.every().hour.do(delete_expired_bookings)
 
-# Main loop to run the scheduler
-while True:
-    schedule.run_pending()
-    time.sleep(1)
-        
 
  
  
