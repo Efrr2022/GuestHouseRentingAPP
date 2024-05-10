@@ -26,19 +26,19 @@ backend:
         - source myenv/bin/activate
         - pip install pipenv
         - pipenv install
-        - pipenv install boto3 schedule mysql-connector-python
+        - pipenv install boto3  mysql-connector-python
         # Install dependencies
         - cd amplify/backend/function/OwnerAndRenterFunction
-        - pipenv install boto3 schedule mysql-connector-python
+        - pipenv install boto3 mysql-connector-python
         - cd ../../../..
         - cd amplify/backend/function/paymentFunction
-        - pipenv install boto3 schedule mysql-connector-python
+        - pipenv install boto3  mysql-connector-python
         - cd ../../../..
         - cd amplify/backend/function/PropertyFunction
-        - pipenv install boto3 schedule mysql-connector-python
+        - pipenv install boto3  mysql-connector-python
         - cd ../../../..
         - cd amplify/backend/function/renterFunction
-        - pipenv install boto3 schedule mysql-connector-python
+        - pipenv install boto3  mysql-connector-python
         - cd ../../../..
         - cd amplify/backend/function/ReservationAndLeasedHouseFunction
         - pipenv install boto3 schedule mysql-connector-python
