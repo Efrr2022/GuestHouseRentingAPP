@@ -11,7 +11,7 @@ frontend:
         - npm install
         - npm run build
   artifacts:
-    baseDirectory: dist/GuestHouseRentingAPP
+    baseDirectory: dist/amplify-app
     files:
       - '**/*'
   cache:
