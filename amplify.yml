@@ -16,9 +16,9 @@ frontend:
   cache:
     paths:
       - .npm/**/*
+
 backend:
   phases:
-    
     build:
       commands:
         - echo "Installing Pip enviroment and boto3, schedule, and mysql-connector-python__________________________________"
@@ -27,9 +27,20 @@ backend:
         - pip install pipenv
         - pipenv install
         - pipenv install boto3 schedule mysql-connector-python
-         # Install dependencies
-        - echo "directly to install dependency to lambda function____________________________________ "
+        # Install dependencies
+        - cd amplify/backend/function/OwnerAndRenterFunction
+        - pipenv install boto3 schedule mysql-connector-python
+        - cd amplify/backend/function/paymentFunction
+        - pipenv install boto3 schedule mysql-connector-python
+        - cd amplify/backend/function/PropertyFunction
+        - pipenv install boto3 schedule mysql-connector-python
+        - cd amplify/backend/function/renterFunction
+        - pipenv install boto3 schedule mysql-connector-python
+        - cd amplify/backend/function/ReservationAndLeasedHouseFunction
+        - pipenv install boto3 schedule mysql-connector-python
+        # Add additional lambda functions as needed
         - amplifyPush --simple
+  
       
     
   
