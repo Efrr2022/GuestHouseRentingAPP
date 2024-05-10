@@ -4,6 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+boto3 = "*"
+schedule = "*"
+mysql-connector-python = "*"
 
 [dev-packages]
 
