@@ -11,9 +11,6 @@ logging.basicConfig(
     datefmt="%Y-%m-%dT%H:%M:%SZ",
     level=logging.DEBUG
 )
-logger=logging.getLogger("myLogger")
-
-
 
 
 def get_secret():
@@ -50,7 +47,6 @@ def connect_to_database():
             database=secrets['database'],
             password=secrets['password']
         )
-        logger.info('Database connected')
         # print("Database connected")
         return db
     except Exception as e:
@@ -58,8 +54,6 @@ def connect_to_database():
         # print(f'There was an exception: {e}')
 
 def handler(event, context):
-    logger.info("Received event:")
-    logger.info(event)
     # print('Received event:')
     # print(event)
     
@@ -164,12 +158,6 @@ def handle_post_request(event,db):
         mycursor.close()
     return response_post
 
-
-
-
-def handle_get_house_by_id(event, db):
-    logger.info("Received event inside handle_get_house_by_id:")
-    logger.info(event)
     
     # Extract house ID from query string parameters
     house_id = event.get("queryStringParameters", {}).get("houseId")
@@ -253,7 +241,6 @@ def handle_get_house_by_id(event, db):
 
 def handle_get_request(event,db):
     logging.error("received event inside handle_get_request:")
-    logger.info(event)
     print(f'this is print statment:received event inside handle_get_request:')
     # print(event)
     
@@ -278,7 +265,6 @@ def handle_get_request(event,db):
     
      # Execute a SQL query to select all records from the "Expense" table
     mycursor.execute(sql_query)
-    logger.info('executed query')
     # print("executed query")
 
     # Fetch all the rows from the result set
