@@ -29,7 +29,7 @@ backend:
         - pipenv install boto3 schedule mysql-connector-python
         - echo "directly to install dependency to lambda function____________________________________ "
         - echo "take lambda function to the site pacakged inorder to get the dependency"
-        - cp -r myenv/lib/site-packages/* $BUILD_DIR
+        - cp -r myenv/lib/python3.8/site-packages/* $BUILD_DIR
         - cp -r index.py $BUILD_DIR
     
       
