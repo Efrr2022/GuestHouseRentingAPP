@@ -22,14 +22,17 @@ backend:
     build:
       commands:
         - echo "Installing Pip enviroment and boto3, schedule, and mysql-connector-python__________________________________"
-        - python3 -m venv myenv
-        - source myenv/bin/activate
-        - pip install pipenv
-        - pipenv install
-        - pipenv install boto3 schedule mysql-connector-python
+       
+        # Install Python, Virtualenv, Pipenv
+        - apt-get update && apt-get install -y python3 python3-pip virtualenv
+        - pip3 install pipenv
+
+        # Install dependencies
         - echo "directly to install dependency to lambda function____________________________________ "
-        - cd amplify/backend/function/ReservationAndLeasedHouseFunction-dev/src
-        - pipenv install boto3 schedule mysql-connector-python
+        - cd amplify/backend/function/ReservationAndLeasedHouseFunction
+        - pipenv install schedule boto3 mysql-connector-python
+
+       
     
       
     
