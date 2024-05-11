@@ -10,6 +10,7 @@ frontend:
         - echo "I am runing on build commands"
         - npm install
         - npm run build
+        - ng build --prod
   artifacts:
     baseDirectory: dist/amplify-app
     files:
