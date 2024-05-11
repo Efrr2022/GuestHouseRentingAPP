@@ -4,7 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-mysql-connector-python = "==8.0.33"
+mysql-connector-python = "*"
+boto3 = "*"
 
 [dev-packages]
 
