@@ -38,5 +38,27 @@
         "paymentAPI": {}
       }
     }
+  },
+  "env": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-guesthouserentalapp-env-00743-authRole",
+      "UnauthRoleArn": "arn:aws:iam::086680218742:role/amplify-guesthouserentalapp-env-00743-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::086680218742:role/amplify-guesthouserentalapp-env-00743-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-guesthouserentalapp-env-00743-deployment",
+      "UnauthRoleName": "amplify-guesthouserentalapp-env-00743-unauthRole",
+      "StackName": "amplify-guesthouserentalapp-env-00743",
+      "StackId": "arn:aws:cloudformation:us-east-1:086680218742:stack/amplify-guesthouserentalapp-env-00743/e891f5c0-0fe2-11ef-8c60-12fe925cbd71",
+      "AmplifyAppId": "dgkuiwqj76y6e"
+    },
+    "categories": {
+      "function": {
+        "OwnerAndRenterFunction": {},
+        "PropertyFunction": {},
+        "ReservationAndLeasedHouseFunction": {},
+        "paymentFunction": {},
+        "renterFunction": {}
+      }
+    }
   }
 }
