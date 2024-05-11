@@ -44,6 +44,7 @@ export type AmplifyDependentResourcesAttributes = {
     "ReservationAndLeasedHouseFunction": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
     },
