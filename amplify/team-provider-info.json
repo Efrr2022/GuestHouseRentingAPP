@@ -36,6 +36,9 @@
         "PropertyAPI": {},
         "renterAPI": {},
         "paymentAPI": {}
+      },
+      "auth": {
+        "guesthouserentalappdcf3d0b4": {}
       }
     }
   }
