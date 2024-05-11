@@ -38,10 +38,12 @@
         "OwnerAPI": {},
         "PropertyAPI": {},
         "renterAPI": {},
-        "paymentAPI": {}
+
+        "paymentAPI": {},
+        "ReservationAndLeasedHouses": {}
       },
-      "auth": {
-        "guesthouserentalappdcf3d0b4": {}
+      "hosting": {
+        "S3AndCloudFront": {}
       }
     }
   }
