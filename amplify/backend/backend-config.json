@@ -98,12 +98,6 @@
       "service": "Lambda"
     }
   },
-  "hosting": {
-    "S3AndCloudFront": {
-      "providerPlugin": "awscloudformation",
-      "service": "S3AndCloudFront"
-    }
-  },
   "parameters": {
     "AMPLIFY_function_OwnerAndRenterFunction_deploymentBucketName": {
       "usedBy": [
@@ -134,22 +128,6 @@
         {
           "category": "function",
           "resourceName": "PropertyFunction"
-        }
-      ]
-    },
-    "AMPLIFY_function_ReservationAndLeasedHouseFunction_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "ReservationAndLeasedHouseFunction"
-        }
-      ]
-    },
-    "AMPLIFY_function_ReservationAndLeasedHouseFunction_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "ReservationAndLeasedHouseFunction"
         }
       ]
     },
