@@ -272,6 +272,8 @@ def handle_get_request(event,db):
 
     sql_query=f""" SELECT *
         FROM tblHouses
+        where 
+        and 
         LIMIT {limit}
         OFFSET {offset};
         """
