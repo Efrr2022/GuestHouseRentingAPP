@@ -1,4 +1,3 @@
-index.py
 setup.py
 mysql/__init__.py
 mysql/connector/__init__.py
