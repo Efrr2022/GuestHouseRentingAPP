@@ -12,7 +12,7 @@ frontend:
         - npm run build
         - ng build --prod
   artifacts:
-    baseDirectory: dist/amplify-app
+    baseDirectory: dist
     files:
       - '**/*'
   cache:
