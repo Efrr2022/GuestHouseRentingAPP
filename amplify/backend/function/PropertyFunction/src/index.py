@@ -13,6 +13,8 @@ logging.basicConfig(
 )
 
 
+
+
 def get_secret():
     secret_name = "dev/rentalHouseApp"
     region_name = "us-east-1"
@@ -47,6 +49,7 @@ def connect_to_database():
             database=secrets['database'],
             password=secrets['password']
         )
+        logging.info('Database connected')
         # print("Database connected")
         return db
     except Exception as e:
@@ -54,6 +57,8 @@ def connect_to_database():
         # print(f'There was an exception: {e}')
 
 def handler(event, context):
+    logging.info("Received event:")
+    logging.info(event)
     # print('Received event:')
     # print(event)
     
@@ -158,6 +163,83 @@ def handle_post_request(event,db):
         mycursor.close()
     return response_post
 
+
+
+# def handle_get_house_by_id(event, db):
+#     logging.info("Received event inside handle_get_house_by_id:")
+#     logging.info(event)
+    
+#     # Extract house ID from query string parameters
+#     house_id = event.get("queryStringParameters", {}).get("houseId")
+    
+#     if not house_id:
+#         return {
+#             'statusCode': 400,
+#             'body': json.dumps({'error': 'House ID is missing'})
+#         }
+    
+#     # Create a cursor object to execute SQL queries
+#     mycursor = db.cursor()
+
+#     try:
+#         # Construct SQL query to select a single house by its ID
+#         sql_query = f"SELECT * FROM tblHouses WHERE houseId = {house_id}"
+
+#         # Execute the SQL query
+#         mycursor.execute(sql_query)
+        
+#         # Fetch the result
+#         result = mycursor.fetchone()
+        
+#         if not result:
+#             return {
+#                 'statusCode': 404,
+#                 'body': json.dumps({'error': 'House not found'})
+#             }
+
+#         # Prepare response data
+#         house_data = {
+#             "houseId": result[0],  
+#             "houseHeading": result[1],  
+#             "numberOfBedroom": result[2],  
+#             "numberOfBathroom": result[3],  
+#             "numberOfBalcony": result[4],  
+#             "dateOfPosting": str(result[5]),  
+#             "isActive": result[6],  
+#             "houseDescription": result[7],  
+#             "houseNumber": result[8],  
+#             "houseFloorNumber": result[9],  
+#             "housePaymentType": result[10],  
+#             "locationId": result[11],  
+#             "isVerified": result[12],  
+#             "price": float(result[13]), 
+#             "ownerId": result[14],  
+#             "lastModified": str(result[15]), 
+#             "area": result[16], 
+#             "houseType": result[17],  
+#             "latitude": float(result[18]),  
+#             "longitude": float(result[19]),  
+#             "houseStatus": result[20]  
+#         }
+        
+#         response_get= {
+#             'statusCode': 200,
+#             'body': house_data
+#         }
+#         return response_get
+#     except Exception as e:
+#         logging.error(f'Error retrieving house: {e}')
+#         return {
+#             'statusCode': 500,
+#             'body': json.dumps({'error': 'Internal Server Error'})
+#         }
+#     finally:
+#         # Close the cursor
+#         mycursor.close()
+
+def handle_get_house_by_id(event, db):
+    logging.info("Received event inside handle_get_house_by_id:")
+    logging.info(event)
     
     # Extract house ID from query string parameters
     house_id = event.get("queryStringParameters", {}).get("houseId")
@@ -241,6 +323,7 @@ def handle_post_request(event,db):
 
 def handle_get_request(event,db):
     logging.error("received event inside handle_get_request:")
+    logging.info(event)
     print(f'this is print statment:received event inside handle_get_request:')
     # print(event)
     
@@ -259,14 +342,13 @@ def handle_get_request(event,db):
 
     sql_query=f""" SELECT *
         FROM tblHouses
-        where 
-        and 
         LIMIT {limit}
         OFFSET {offset};
         """
     
      # Execute a SQL query to select all records from the "Expense" table
     mycursor.execute(sql_query)
+    logging.info('executed query')
     # print("executed query")
 
     # Fetch all the rows from the result set
