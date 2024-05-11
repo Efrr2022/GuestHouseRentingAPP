@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/renter": {
+      "name": "/renter",
+      "lambdaFunction": "renterFunction",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

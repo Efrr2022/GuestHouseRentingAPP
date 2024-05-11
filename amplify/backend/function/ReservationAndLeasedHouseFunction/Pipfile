@@ -7,9 +7,6 @@ verify_ssl = true
 
 [packages]
 src = {editable = true, path = "./src"}
-boto3 = "*"
-schedule = "*"
-mysql-connector-python = "*"
 
 [requires]
 python_version = "3.8"
