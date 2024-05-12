@@ -137,22 +137,6 @@
         }
       ]
     },
-    "AMPLIFY_function_ReservationAndLeasedHouseFunction_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "ReservationAndLeasedHouseFunction"
-        }
-      ]
-    },
-    "AMPLIFY_function_ReservationAndLeasedHouseFunction_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "ReservationAndLeasedHouseFunction"
-        }
-      ]
-    },
     "AMPLIFY_function_paymentFunction_deploymentBucketName": {
       "usedBy": [
         {
