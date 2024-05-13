@@ -7,7 +7,7 @@ frontend:
         - npm ci --force
     build:
       commands:
-        - echo "I am runing on build commands"
+        - echo "I am running build commands"
         - npm install
         - npm run build
         - ng build --prod
@@ -23,29 +23,21 @@ backend:
   phases:
     build:
       commands:
-        - echo "Installing Pip enviroment and boto3, schedule, and mysql-connector-python__________________________________"
+        - echo "Installing Pip environment and boto3, schedule, and mysql-connector-python__________________________________"
         - python3.8 -m venv myenv
         - source myenv/bin/activate
         - pip install pipenv
         - pipenv install
-        - pipenv install boto3  mysql-connector-python
-        Install dependencies
+        - pipenv install boto3 mysql-connector-python
+        - echo "Install dependencies"
         - cd amplify/backend/function/OwnerAndRenterFunction
         - pipenv install boto3 mysql-connector-python
         - cd ../../../..
         - cd amplify/backend/function/PropertyFunction
-        - pipenv install boto3  mysql-connector-python
+        - pipenv install boto3 mysql-connector-python
         - cd ../../../..
         - cd amplify/backend/function/ReservationAndLeasedHouseFunction
         - pipenv install boto3 schedule mysql-connector-python
         - cd ../../../..
-        Add additional lambda functions as needed
-        - amplifyPush --simple'''
-  
-      
-    
-  
-          
-       
-   
-        
+        - echo "Add additional lambda functions as needed"
+        - amplifyPush --simple
