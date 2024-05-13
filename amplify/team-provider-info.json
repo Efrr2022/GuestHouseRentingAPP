@@ -24,22 +24,12 @@
         "ReservationAndLeasedHouseFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-env-00743-deployment",
           "s3Key": "amplify-builds/ReservationAndLeasedHouseFunction-6b46696b4b68652f2f34-build.zip"
-        },
-        "paymentFunction": {
-          "deploymentBucketName": "amplify-guesthouserentalapp-env-00743-deployment",
-          "s3Key": "amplify-builds/paymentFunction-3661357a685943484639-build.zip"
-        },
-        "renterFunction": {
-          "deploymentBucketName": "amplify-guesthouserentalapp-env-00743-deployment",
-          "s3Key": "amplify-builds/renterFunction-6356526b4643624e3438-build.zip"
         }
       },
       "api": {
         "OwnerAPI": {},
         "PropertyAPI": {},
-        "ReservationAndLeasedHouses": {},
-        "paymentAPI": {},
-        "renterAPI": {}
+        "ReservationAndLeasedHouses": {}
       },
       "hosting": {
         "S3AndCloudFront": {}
@@ -62,6 +52,7 @@
       "function": {
         "OwnerAndRenterFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
+
           "s3Key": "amplify-builds/OwnerAndRenterFunction-70386a554d2f51446c37-build.zip"
         },
         "PropertyFunction": {
@@ -71,28 +62,35 @@
         "renterFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
           "s3Key": "amplify-builds/renterFunction-536e4f76305a72494772-build.zip"
+
         },
-        "paymentFunction": {
+        "ReservationAndLeasedHouseFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
+
           "s3Key": "amplify-builds/paymentFunction-377a6b69764a664a4c61-build.zip"
         },
         "ReservationAndLeasedHouseFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
           "s3Key": "amplify-builds/ReservationAndLeasedHouseFunction-526553597052344a4744-build.zip"
+
         }
       },
       "api": {
         "OwnerAPI": {},
         "PropertyAPI": {},
+
         "renterAPI": {},
         "paymentAPI": {},
+
         "ReservationAndLeasedHouses": {}
       },
       "hosting": {
         "S3AndCloudFront": {}
+
       },
       "auth": {
         "guesthouserentalapp761beb7a": {}
+
       }
     }
   }
