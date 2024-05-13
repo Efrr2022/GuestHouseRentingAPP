@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "guesthouserentalapp761beb7a_identitypool_761beb7a",
+    "identityPoolName": "guesthouserentalappc309bbc0_identitypool_c309bbc0",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "guesth761beb7a",
-    "userPoolName": "guesthouserentalapp761beb7a_userpool_761beb7a",
+    "resourceNameTruncated": "guesthc309bbc0",
+    "userPoolName": "guesthouserentalappc309bbc0_userpool_c309bbc0",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -31,10 +31,10 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "guesth761beb7a_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "guesthc309bbc0_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "761beb7a",
-    "resourceName": "guesthouserentalapp761beb7a",
+    "sharedId": "c309bbc0",
+    "resourceName": "guesthouserentalappc309bbc0",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "default",
     "usernameAttributes": [

@@ -44,7 +44,7 @@
     }
   },
   "auth": {
-    "guesthouserentalapp761beb7a": {
+    "guesthouserentalappc309bbc0": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
