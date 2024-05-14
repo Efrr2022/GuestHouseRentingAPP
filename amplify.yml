@@ -11,7 +11,7 @@ frontend:
         - npm install
         - npm run build
   artifacts:
-    baseDirectory: dist/amplify-app
+    baseDirectory: dist/amplify-app/browser
     files:
       - '**/*'
   cache:
