@@ -12,7 +12,7 @@ frontend:
         - npm run build
        
   artifacts:
-    baseDirectory: dist\amplify-app\browser
+    baseDirectory: dist
       - '**/*'
   cache:
     paths:
