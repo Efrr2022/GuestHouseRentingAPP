@@ -9,9 +9,10 @@
     "framework": "angular",
     "config": {
       "SourceDir": "src",
-      "DistributionDir": "dist",
+      "DistributionDir": "dist\\amplify-app\\browser",
       "BuildCommand": "npm.cmd run-script build",
-      "StartCommand": "ng serve"
+      "StartCommand": "ng serve",
+      "ServerlessContainers": false
     }
   }
 }
