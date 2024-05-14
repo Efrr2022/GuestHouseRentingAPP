@@ -41,6 +41,20 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
+    },
+    "paymentAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "paymentFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
     }
   },
   "auth": {
@@ -84,6 +98,11 @@
       "service": "Lambda"
     },
     "ReservationAndLeasedHouseFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "paymentFunction": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
