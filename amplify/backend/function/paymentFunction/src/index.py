@@ -45,7 +45,7 @@ def connect_to_database():
             print(f'There was an exception: {e}')
 
 def handler(event, context):
-        print('received event:')
+        print('received event from customers:')
         print(event)
 
         db = connect_to_database()
