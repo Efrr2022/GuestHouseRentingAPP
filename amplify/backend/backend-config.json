@@ -87,78 +87,17 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "paymentFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "hosting": {
     "S3AndCloudFront": {
       "providerPlugin": "awscloudformation",
       "service": "S3AndCloudFront"
-    }
-  },
-  "parameters": {
-    "AMPLIFY_function_OwnerAndRenterFunction_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "OwnerAndRenterFunction"
-        }
-      ]
-    },
-    "AMPLIFY_function_OwnerAndRenterFunction_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "OwnerAndRenterFunction"
-        }
-      ]
-    },
-    "AMPLIFY_function_PropertyFunction_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "PropertyFunction"
-        }
-      ]
-    },
-    "AMPLIFY_function_PropertyFunction_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "PropertyFunction"
-        }
-      ]
-    },
-    "AMPLIFY_function_ReservationAndLeasedHouseFunction_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "ReservationAndLeasedHouseFunction"
-        }
-      ]
-    },
-    "AMPLIFY_function_ReservationAndLeasedHouseFunction_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "ReservationAndLeasedHouseFunction"
-        }
-      ]
-    },
-    "AMPLIFY_function_renterFunction_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "renterFunction"
-        }
-      ]
-    },
-    "AMPLIFY_function_renterFunction_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "renterFunction"
-        }
-      ]
     }
   }
 }
