@@ -56,10 +56,8 @@ def handler(event, context):
             'statusCode': 500,
             'body': json.dumps({'error': 'Failed to connect to the database'})
         }
-    #added comment for amplify push trial
-    #added comment for amplify push trial
 
-    # Handle HTTP requests
+
     if event["httpMethod"] == "GET":
         response = handle_get_request(event, db)
     elif event["httpMethod"] == "POST":
