@@ -23,36 +23,21 @@ backend:
   phases:
     build:
       commands:
-        - echo "Installing Pip enviroment and boto3, schedule, and mysql-connector-python__________________________________"
+        - echo "Installing Pip environment and boto3, schedule, and mysql-connector-python__________________________________"
         - python3.8 -m venv myenv
         - source myenv/bin/activate
         - pip install pipenv
         - pipenv install
-        - pipenv install boto3  mysql-connector-python
-        # Install dependencies
-        #- cd amplify/backend/function/OwnerAndRenterFunction
-        #- pipenv install boto3 mysql-connector-python
-        #- cd ../../../..
-        #- cd amplify/backend/function/paymentFunction
-        #- pipenv install boto3  mysql-connector-python
-        #- cd ../../../..
-        #- cd amplify/backend/function/PropertyFunction
-        
-        #- pipenv install boto3  mysql-connector-python
-        #- cd ../../../..
-        #- cd amplify/backend/function/renterFunction
-        #- pipenv install boto3  mysql-connector-python
-        #- cd ../../../..
-        #- cd amplify/backend/function/ReservationAndLeasedHouseFunction
-        #- pipenv install boto3 schedule mysql-connector-python
-        #- cd ../../../..
-        # Add additional lambda functions as needed
-        - amplifyPush --simple'''
-  
-      
-    
-  
-          
-       
-   
-        
+        - pipenv install boto3 mysql-connector-python
+        - echo "Install dependencies"
+        - cd amplify/backend/function/OwnerAndRenterFunction
+        - pipenv install boto3 mysql-connector-python
+        - cd ../../../..
+        - cd amplify/backend/function/PropertyFunction
+        - pipenv install boto3 mysql-connector-python
+        - cd ../../../..
+        - cd amplify/backend/function/ReservationAndLeasedHouseFunction
+        - pipenv install boto3 schedule mysql-connector-python
+        - cd ../../../..
+        - echo "Add additional lambda functions as needed"
+        - amplifyPush --simple
