@@ -182,6 +182,22 @@
         }
       ]
     },
+    "AMPLIFY_function_paymentFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "paymentFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_paymentFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "paymentFunction"
+        }
+      ]
+    },
     "AMPLIFY_function_renterFunction_deploymentBucketName": {
       "usedBy": [
         {
