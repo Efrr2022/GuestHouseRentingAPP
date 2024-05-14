@@ -8,7 +8,7 @@ frontend:
     build:
       commands:
         - echo "I am runing on build commands"
-        - npm install
+        - npm install --legacy-peer-deps
         - npm run build
         - ng build --prod
   artifacts:
