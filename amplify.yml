@@ -8,11 +8,11 @@ frontend:
     build:
       commands:
         - echo "I am runing on build commands"
-        - npm install --legacy-peer-deps
+        - npm install
         - npm run build
-       
   artifacts:
-    baseDirectory: dist
+    baseDirectory: dist/amplify-app
+    files:
       - '**/*'
   cache:
     paths:
