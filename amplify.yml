@@ -10,7 +10,7 @@ frontend:
         - echo "I am runing on build commands"
         - npm install --legacy-peer-deps
         - npm run build
-        - ng build --prod
+       
   artifacts:
     baseDirectory: dist
     files:
