@@ -149,73 +149,98 @@ def handle_post_request(event,db):
 
 
 
-def handle_get_request(event,db):
-    print('received event inside handle_get_request:')
-    print(event)
+def handle_get_request(event, db):
+    # logging.info("Received event inside handle_get_request:")
+    # logging.info(event)
     
-    # db=db_connected()
     # Create a cursor object to execute SQL queries
-    mycursor=db.cursor()
+    mycursor = db.cursor()
     
-    query_param=event.get("queryStringParameters",None)
-    if query_param is not None:
-        limit = int(query_param.get('limit', 10))  # Convert limit to an integer
-        offset = int(query_param.get('offset', 0))  # Convert offset to an integer
+    query_params = event.get("queryStringParameters", None)
+    if query_params is not None:
+        limit = int(query_params.get('limit', 10))  # Convert limit to an integer
+        offset = int(query_params.get('offset', 0))  # Convert offset to an integer
+        no_of_bedrooms = query_params.get('noOfBedrooms')  # Number of bedrooms filter
+        no_of_bathrooms = query_params.get('noOfBathrooms')  # Number of bathrooms filter
     else:
-        limit=10
-        offset=0
-      
+        limit = 10
+        offset = 0
+        no_of_bedrooms = None
+        no_of_bathrooms = None
 
-    sql_query=f""" SELECT *
+    # Construct the base SQL query
+    sql_query = """
+        SELECT *
         FROM tblHouses
-        LIMIT {limit}
-        OFFSET {offset};
-        """
-    
-     # Execute a SQL query to select all records from the "Expense" table
-    mycursor.execute(sql_query)
-    print("executed query")
+    """
 
-    # Fetch all the rows from the result set
-    result = mycursor.fetchall()
+    # Add WHERE clause for filtering based on parameters
+    conditions = []
+    if no_of_bedrooms:
+        conditions.append(f"numberOfBedroom = {no_of_bedrooms}")
+    if no_of_bathrooms:
+        conditions.append(f"numberOfBathroom = {no_of_bathrooms}")
+   
+    if conditions:
+        sql_query += " WHERE " + " AND ".join(conditions)
 
-    # Prepare response data
-    response_list = []
-    for row in result:
-        response_list.append({
-            "houseId": row[0],  
-            "houseHeading": row[1],  
-            "numberOfBedroom": row[2],  
-            "numberOfBathroom": row[3],  
-            "numberOfBalcony": row[4],  
-            "dateOfPosting": str(row[5]),  
-            "isActive": row[6],  
-            "houseDescription": row[7],  
-            "houseNumber": row[8],  
-            "houseFloorNumber": row[9],  
-            "housePaymentType": row[10],  
-            "locationId": row[11],  
-            "isVerified": row[12],  
-            "price": float(row[13]), 
-            "ownerId": row[14],  
-            "lastModified": str(row[15]), 
-            "area": row[16], 
-            "houseType": row[17],  
-            "latitude": float(row[18]),  
-            "longitude": float(row[19]),  
-            "houseStatus": row[20]  
-    })
+    # Add LIMIT and OFFSET clauses for pagination
+    sql_query += f" LIMIT {limit} OFFSET {offset};"
+
+    try:
+        # Execute the SQL query
+        mycursor.execute(sql_query)
+        # logging.info('executed query')
+
+        # Fetch all the rows from the result set
+        result = mycursor.fetchall()
+
+        # Prepare response data
+        response_list = []
+        for row in result:
+            response_list.append({
+                "houseId": row[0],  
+                "houseHeading": row[1],  
+                "numberOfBedroom": row[2],  
+                "numberOfBathroom": row[3],  
+                "numberOfBalcony": row[4],  
+                "dateOfPosting": str(row[5]),  
+                "isActive": row[6],  
+                "houseDescription": row[7],  
+                "houseNumber": row[8],  
+                "houseFloorNumber": row[9],  
+                "housePaymentType": row[10],  
+                "locationId": row[11],  
+                "isVerified": row[12],  
+                "price": float(row[13]), 
+                "ownerId": row[14],  
+                "lastModified": str(row[15]), 
+                "area": row[16], 
+                "houseType": row[17],  
+                "latitude": float(row[18]),  
+                "longitude": float(row[19]),  
+                "houseStatus": row[20]  
+            })
+
+        # Close the cursor, but do not close the database connection
+        mycursor.close()
+
+        # Construct response object
+        response = {
+            "statusCode": 200,
+            "body": response_list
+        }
+        return response
+
+    except Exception as e:
+        # logging.error(f'Error executing SQL query: {e}')
+        # Return error response
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': 'Internal Server Error'})
+        }
 
 
-    # Close the cursor, but do not close the database connection
-    mycursor.close()
-    
-    response={}
-    response["body"]=response_list
-    response["statusCode"]=200
-    return response
-
-    
 
 def handle_delete_request(event,db):
     mycursor = db.cursor()
