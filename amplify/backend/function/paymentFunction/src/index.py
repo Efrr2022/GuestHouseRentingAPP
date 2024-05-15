@@ -64,7 +64,8 @@ def handler(event, context):
                 response = handle_get_payment(event, db)
             elif 'renterId' in event['queryStringParameters']:
                 response = handle_get_payment_by_renter(event, db)
-                
+        elif httpMethod == "DELETE" :
+             response=handle_delete_payment_request(event,db)      
         else:
             return {
                 'statusCode': 405,
@@ -171,4 +172,36 @@ def handle_get_payment_by_renter(event, db):
         }
     finally:
         db.close()
+
+
+def handle_delete_payment_request(event,db):
+    
+
+    try:
+        mycursor = db.cursor()
+        query_params=event.get('queryStringParameters')
+        paymentId=query_params['id']
+
+        if not paymentId:
+            raise ValueError("No paymentId provided for deletion.")
+
+        sql_query = f" UPDATE tblPayment Set paymentStatus = 0 WHERE paymentId = {paymentId}"
+        mycursor.execute(sql_query)
+        
+        db.commit()
+
+        response_delete = {
+            'statusCode': 200,
+            'body': json.dumps('Houses deleted successfully')
+        }
+    except Exception as e:
+        print(f'There was an exception: {e}')
+        response_delete = {
+            'statusCode': 500,
+            'body': json.dumps({'error': 'Internal Server Error'})
+        }
+    finally:
+        mycursor.close()
+    
+    return response_delete
         
