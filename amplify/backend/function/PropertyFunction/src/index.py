@@ -164,9 +164,9 @@ def handle_get_request(event, db):
         if query_params is not None:
             limit = int(query_params.get('limit', 10))  
             offset = int(query_params.get('offset', 0)) 
-            no_of_bedrooms = int(query_params.get('noOfBedrooms',2))
+            no_of_bedrooms = int(query_params.get('noOfBedrooms',None))
             print(f"number of bedrooms: {no_of_bedrooms}")  
-            no_of_bathrooms = int(query_params.get('noOfBathrooms',1))  
+            no_of_bathrooms = int(query_params.get('noOfBathrooms',None))  
             print(f"number of bathrooms: {no_of_bathrooms}")
         else:
             limit = 10
@@ -189,7 +189,7 @@ def handle_get_request(event, db):
             conditions.append(f"number_of_bathroom = {no_of_bathrooms}")
     
         if conditions:
-            sql_query += " AND ".join(conditions)
+            sql_query += " AND " + " AND ".join(conditions)
 
         # Add LIMIT and OFFSET for pagination
         sql_query += f" LIMIT {limit} OFFSET {offset};"
