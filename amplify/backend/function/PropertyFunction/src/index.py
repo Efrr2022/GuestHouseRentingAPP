@@ -152,45 +152,47 @@ def handle_post_request(event,db):
 def handle_get_request(event, db):
     # logging.info("Received event inside handle_get_request:")
     # logging.info(event)
-    print("Received event inside handle_get_request:")
     
-    # Create a cursor object to execute SQL queries
-    mycursor = db.cursor()
-    
-    query_params = event.get("queryStringParameters", None)
-    if query_params is not None:
-        limit = int(query_params.get('limit', 10))  
-        offset = int(query_params.get('offset', 0)) 
-        no_of_bedrooms = int(query_params.get('noOfBedrooms'))
-        print(f"number of bedrooms: {no_of_bedrooms}")  
-        no_of_bathrooms = int(query_params.get('noOfBathrooms'))  
-        print(f"number of bathrooms: {no_of_bathrooms}")
-    else:
-        limit = 10
-        offset = 0
-        no_of_bedrooms = None
-        no_of_bathrooms = None
-
-    # Construct the base SQL query
-    sql_query = """
-        SELECT *
-        FROM tblHouses
-    """
-
-    # Add WHERE clause for filtering based on parameters
-    conditions = []
-    if no_of_bedrooms is not None:
-        conditions.append(f"number_of_bedroom = {no_of_bedrooms}")
-    if no_of_bathrooms is not None:
-        conditions.append(f"number_of_bathroom = {no_of_bathrooms}")
-   
-    if conditions:
-        sql_query += " WHERE houseStatus=1" + " AND ".join(conditions)
-
-    # Add LIMIT and OFFSET for pagination
-    sql_query += f" LIMIT {limit} OFFSET {offset};"
 
     try:
+        print("Received event inside handle_get_request:")
+    
+        # Create a cursor object to execute SQL queries
+        mycursor = db.cursor()
+        
+        query_params = event.get("queryStringParameters", None)
+        if query_params is not None:
+            limit = int(query_params.get('limit', 10))  
+            offset = int(query_params.get('offset', 0)) 
+            no_of_bedrooms = int(query_params.get('noOfBedrooms'))
+            print(f"number of bedrooms: {no_of_bedrooms}")  
+            no_of_bathrooms = int(query_params.get('noOfBathrooms'))  
+            print(f"number of bathrooms: {no_of_bathrooms}")
+        else:
+            limit = 10
+            offset = 0
+            no_of_bedrooms = None
+            no_of_bathrooms = None
+
+        # Construct the base SQL query
+        sql_query = """
+            SELECT *
+            FROM tblHouses
+            WHERE houseStatus=1
+        """
+
+        # Add WHERE clause for filtering based on parameters
+        conditions = []
+        if no_of_bedrooms is not None:
+            conditions.append(f"number_of_bedroom = {no_of_bedrooms}")
+        if no_of_bathrooms is not None:
+            conditions.append(f"number_of_bathroom = {no_of_bathrooms}")
+    
+        if conditions:
+            sql_query += " AND ".join(conditions)
+
+        # Add LIMIT and OFFSET for pagination
+        sql_query += f" LIMIT {limit} OFFSET {offset};"
         mycursor.execute(sql_query)
         # logging.info('executed query')
         print("executed query")
@@ -238,6 +240,7 @@ def handle_get_request(event, db):
     except Exception as e:
         # logging.error(f'Error executing SQL query: {e}')
         # Return error response
+        print(f"Error in try block: {e}")
         return {
             'statusCode': 500,
             'body': json.dumps({'error': 'Internal Server Error'})
