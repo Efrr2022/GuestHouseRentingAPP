@@ -161,8 +161,10 @@ def handle_get_request(event, db):
     if query_params is not None:
         limit = int(query_params.get('limit', 10))  
         offset = int(query_params.get('offset', 0)) 
-        no_of_bedrooms = int(query_params.get('noOfBedrooms'))  
+        no_of_bedrooms = int(query_params.get('noOfBedrooms'))
+        print(f"number of bedrooms: {no_of_bedrooms}")  
         no_of_bathrooms = int(query_params.get('noOfBathrooms'))  
+        print(f"number of bathrooms: {no_of_bathrooms}")
     else:
         limit = 10
         offset = 0
@@ -172,7 +174,7 @@ def handle_get_request(event, db):
     # Construct the base SQL query
     sql_query = """
         SELECT *
-        FROM tblHouses WHERE houseStatus=1
+        FROM tblHouses
     """
 
     # Add WHERE clause for filtering based on parameters
@@ -183,7 +185,7 @@ def handle_get_request(event, db):
         conditions.append(f"number_of_bathroom = {no_of_bathrooms}")
    
     if conditions:
-        sql_query += " AND ".join(conditions)
+        sql_query += " WHERE houseStatus=1" + " AND ".join(conditions)
 
     # Add LIMIT and OFFSET for pagination
     sql_query += f" LIMIT {limit} OFFSET {offset};"
