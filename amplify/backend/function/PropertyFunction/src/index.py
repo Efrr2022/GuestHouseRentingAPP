@@ -263,7 +263,7 @@ def handle_delete_request(event,db):
 
         # Construct SQL query for each house ID
         for house_id in house_ids:
-            sql_query = f"DELETE FROM tblHouses WHERE houseId = {house_id}"
+            sql_query = f" UPDATE tblHouses Set houseStatus = 0 WHERE houseId = {house_id}"
             mycursor.execute(sql_query)
         
         db.commit()
