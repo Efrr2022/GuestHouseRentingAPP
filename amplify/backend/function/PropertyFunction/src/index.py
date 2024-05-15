@@ -164,9 +164,9 @@ def handle_get_request(event, db):
         if query_params is not None:
             limit = int(query_params.get('limit', 10))  
             offset = int(query_params.get('offset', 0)) 
-            no_of_bedrooms = int(query_params.get('noOfBedrooms'))
+            no_of_bedrooms = int(query_params.get('noOfBedrooms',2))
             print(f"number of bedrooms: {no_of_bedrooms}")  
-            no_of_bathrooms = int(query_params.get('noOfBathrooms'))  
+            no_of_bathrooms = int(query_params.get('noOfBathrooms',1))  
             print(f"number of bathrooms: {no_of_bathrooms}")
         else:
             limit = 10
