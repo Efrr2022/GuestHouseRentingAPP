@@ -178,9 +178,9 @@ def handle_get_request(event, db):
     # Add WHERE clause for filtering based on parameters
     conditions = []
     if no_of_bedrooms is not None:
-        conditions.append(f"numberOfBedroom = {no_of_bedrooms}")
+        conditions.append(f"number_of_bedroom = {no_of_bedrooms}")
     if no_of_bathrooms is not None:
-        conditions.append(f"numberOfBathroom = {no_of_bathrooms}")
+        conditions.append(f"number_of_bathroom = {no_of_bathrooms}")
    
     if conditions:
         sql_query += " WHERE " + " AND ".join(conditions)
@@ -226,7 +226,7 @@ def handle_get_request(event, db):
         # Close the cursor, but do not close the database connection
         mycursor.close()
 
-        # Construct response object
+        # Construct response object 
         response = {
             "statusCode": 200,
             "body": json.dumps(response_list)
