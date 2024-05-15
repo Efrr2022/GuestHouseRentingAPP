@@ -152,16 +152,17 @@ def handle_post_request(event,db):
 def handle_get_request(event, db):
     # logging.info("Received event inside handle_get_request:")
     # logging.info(event)
+    print("Received event inside handle_get_request:")
     
     # Create a cursor object to execute SQL queries
     mycursor = db.cursor()
     
     query_params = event.get("queryStringParameters", None)
     if query_params is not None:
-        limit = int(query_params.get('limit', 10))  # Convert limit to an integer
-        offset = int(query_params.get('offset', 0))  # Convert offset to an integer
-        no_of_bedrooms = query_params.get('noOfBedrooms')  # Number of bedrooms filter
-        no_of_bathrooms = query_params.get('noOfBathrooms')  # Number of bathrooms filter
+        limit = int(query_params.get('limit', 10))  
+        offset = int(query_params.get('offset', 0)) 
+        no_of_bedrooms = int(query_params.get('noOfBedrooms'))  
+        no_of_bathrooms = int(query_params.get('noOfBathrooms'))  
     else:
         limit = 10
         offset = 0
@@ -184,13 +185,13 @@ def handle_get_request(event, db):
     if conditions:
         sql_query += " WHERE " + " AND ".join(conditions)
 
-    # Add LIMIT and OFFSET clauses for pagination
+    # Add LIMIT and OFFSET for pagination
     sql_query += f" LIMIT {limit} OFFSET {offset};"
 
     try:
-        # Execute the SQL query
         mycursor.execute(sql_query)
         # logging.info('executed query')
+        print("executed query")
 
         # Fetch all the rows from the result set
         result = mycursor.fetchall()
@@ -239,6 +240,8 @@ def handle_get_request(event, db):
             'statusCode': 500,
             'body': json.dumps({'error': 'Internal Server Error'})
         }
+    finally:
+        db.close()
 
 
 
