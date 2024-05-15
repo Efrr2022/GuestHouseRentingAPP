@@ -8,8 +8,8 @@ import sys
 import boto3
 import datetime
 
-# Create a custom logger
-logger = logging.getLogger("lambdaOwnerAndRental")
+# Create a custom logger 
+logger = logging.getLogger("lambdaOwnerAndRental Function")
         
 # Create handlers
 c_handler = logging.StreamHandler(stream=sys.stdout)
