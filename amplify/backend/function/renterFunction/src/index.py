@@ -134,10 +134,9 @@ def handle_delete_renter(event, db):
         
         # Construct SQL query to delete renter
         sql_query = f"""
-                    DELETE FROM tblRenter
+                    UPDATE tblHouses Set status = 0
                     WHERE renterId = {renter_id}
                     """
-        
         # Create a cursor
         cursor = db.cursor()
         

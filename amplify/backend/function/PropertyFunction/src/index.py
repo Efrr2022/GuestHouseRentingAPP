@@ -229,7 +229,7 @@ def handle_get_request(event, db):
         # Construct response object 
         response = {
             "statusCode": 200,
-            "body": json.dumps(response_list)
+            "body": response_list
         }
         return response
 
