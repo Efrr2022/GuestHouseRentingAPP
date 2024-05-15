@@ -172,7 +172,7 @@ def handle_get_request(event, db):
     # Construct the base SQL query
     sql_query = """
         SELECT *
-        FROM tblHouses
+        FROM tblHouses WHERE houseStatus=1
     """
 
     # Add WHERE clause for filtering based on parameters
@@ -183,7 +183,7 @@ def handle_get_request(event, db):
         conditions.append(f"number_of_bathroom = {no_of_bathrooms}")
    
     if conditions:
-        sql_query += " WHERE " + " AND ".join(conditions)
+        sql_query += " AND ".join(conditions)
 
     # Add LIMIT and OFFSET for pagination
     sql_query += f" LIMIT {limit} OFFSET {offset};"
@@ -263,7 +263,7 @@ def handle_delete_request(event,db):
 
         # Construct SQL query for each house ID
         for house_id in house_ids:
-            sql_query = f"DELETE FROM tblHouses WHERE houseId = {house_id}"
+            sql_query = f" UPDATE tblHouses Set houseStatus = 0 WHERE houseId = {house_id}"
             mycursor.execute(sql_query)
         
         db.commit()

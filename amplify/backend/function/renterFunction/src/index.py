@@ -169,7 +169,7 @@ def handle_list_renters(event, db):
         sql_query = """
                     SELECT renterId, first_name, last_name, address, contact_number, 
                     email_address, password, registration_time, last_modified,status
-                    FROM tblRenter
+                    FROM tblRenter WHERE status=1
                     """
         
         # Create a cursor
@@ -227,7 +227,7 @@ def handle_list_renters_by_house_id(event, db):
                     SELECT r.renterId, r.first_name, r.last_name, r.address, r.contact_number, r.email_address, r.registration_time, r.last_modified, r.status
                     FROM tblRenter r
                     JOIN tblLeasedHouses hr ON r.renterId = hr.renterId
-                    WHERE hr.houseId = {house_id}
+                    WHERE hr.houseId = {house_id} AND r.status=1
                     """
         
         # Create a cursor
