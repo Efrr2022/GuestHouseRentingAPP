@@ -188,6 +188,7 @@ def handle_get_request(event, db):
         if no_of_bathrooms is not None:
             conditions.append(f"number_of_bathroom = {no_of_bathrooms}")
     
+        
         if conditions:
             sql_query += " AND " + " AND ".join(conditions)
 
