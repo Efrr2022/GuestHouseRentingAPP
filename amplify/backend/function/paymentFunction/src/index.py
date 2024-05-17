@@ -96,7 +96,7 @@ def handle_get_payment(event,db):
 
             mycursor=db.cursor()
 
-            sql_query=f"""Select * from tblPayment where paymentId = {paymentId} AND userStatus=1"""
+            sql_query=f"""Select * from tblPayment where paymentId = {paymentId} AND paymentStatus=1"""
 
             mycursor.execute(sql_query)
 
@@ -141,7 +141,7 @@ def handle_get_payment_by_renter(event, db):
 
         mycursor = db.cursor()
 
-        sql_query = f"""SELECT * FROM tblPayment WHERE renterId = {renter_id} AND userStatus=1"""
+        sql_query = f"""SELECT * FROM tblPayment WHERE renterId = {renter_id} AND paymentStatus=1"""
 
         mycursor.execute(sql_query)
 
