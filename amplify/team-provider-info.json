@@ -86,7 +86,6 @@
       }
     }
   },
-<<<<<<< Updated upstream
   "qa": {
     "awscloudformation": {
       "AuthRoleName": "amplify-guesthouserentalapp-qa-225cc-authRole",
@@ -134,12 +133,6 @@
       },
       "hosting": {
         "S3AndCloudFront": {}
-=======
-  "test": {
-    "categories": {
-      "auth": {
-        "guesthouserentalappc309bbc0": {}
->>>>>>> Stashed changes
       }
     }
   }
