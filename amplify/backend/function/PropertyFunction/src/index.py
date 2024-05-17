@@ -168,11 +168,13 @@ def handle_get_request(event, db):
             print(f"number of bedrooms: {no_of_bedrooms}")  
             no_of_bathrooms = int(query_params.get('noOfBathrooms',None))  
             print(f"number of bathrooms: {no_of_bathrooms}")
+            price = int(query_params.get('price',None))
         else:
             limit = 10
             offset = 0
             no_of_bedrooms = None
             no_of_bathrooms = None
+            price=None
 
         # Construct the base SQL query
         sql_query = """
@@ -187,6 +189,8 @@ def handle_get_request(event, db):
             conditions.append(f"number_of_bedroom = {no_of_bedrooms}")
         if no_of_bathrooms is not None:
             conditions.append(f"number_of_bathroom = {no_of_bathrooms}")
+        if price is not None:
+            conditions.append(f"price >= {price}")
     
         
         if conditions:
