@@ -6,8 +6,12 @@ import { LoginComponent } from './login/login.component';
 import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsModule } from '@angular/forms';
+import { Amplify } from 'aws-amplify';
+import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
+import amplifyconfiguration from '../amplifyconfiguration.json';
+import { FormFieldComponent } from '@aws-amplify/ui-angular';
 
-
+Amplify.configure(amplifyconfiguration);
 
 
 @NgModule({
@@ -15,12 +19,15 @@ import { FormsModule } from '@angular/forms';
     AppComponent,
     LoginComponent,
     LayoutComponent,
-    DashboardComponent
+    DashboardComponent,
+    
   ],
   imports: [
+    AmplifyAuthenticatorModule,
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]
