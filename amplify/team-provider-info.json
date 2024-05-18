@@ -85,5 +85,66 @@
         "guesthouserentalappc309bbc0": {}
       }
     }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-guesthouserentalapp-prod-8048a-authRole",
+      "UnauthRoleArn": "arn:aws:iam::730335654565:role/amplify-guesthouserentalapp-prod-8048a-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::730335654565:role/amplify-guesthouserentalapp-prod-8048a-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-guesthouserentalapp-prod-8048a-deployment",
+      "UnauthRoleName": "amplify-guesthouserentalapp-prod-8048a-unauthRole",
+      "StackName": "amplify-guesthouserentalapp-prod-8048a",
+      "StackId": "arn:aws:cloudformation:us-east-1:730335654565:stack/amplify-guesthouserentalapp-prod-8048a/dffe9710-1483-11ef-ad09-0affdf017a9d",
+      "AmplifyAppId": "d2kz9vhsbs7hot"
+    },
+    "categories": {
+      "auth": {
+        "guesthouserentalappc309bbc0": {}
+      },
+      "function": {
+        "OwnerAndRenterFunction": {
+          "deploymentBucketName": "amplify-guesthouserentalapp-prod-8048a-deployment",
+          "s3Key": "amplify-builds/OwnerAndRenterFunction-784a676e586e4642345a-build.zip"
+        },
+        "PropertyFunction": {
+          "deploymentBucketName": "amplify-guesthouserentalapp-prod-8048a-deployment",
+          "s3Key": "amplify-builds/PropertyFunction-39752b63374457457864-build.zip"
+        },
+        "ReservationAndLeasedHouseFunction": {
+          "deploymentBucketName": "amplify-guesthouserentalapp-prod-8048a-deployment",
+          "s3Key": "amplify-builds/ReservationAndLeasedHouseFunction-68713748796c4c614e42-build.zip"
+        },
+        "paymentFunction": {
+          "deploymentBucketName": "amplify-guesthouserentalapp-prod-8048a-deployment",
+          "s3Key": "amplify-builds/paymentFunction-5965504557707130506f-build.zip"
+        },
+        "renterFunction": {
+          "deploymentBucketName": "amplify-guesthouserentalapp-prod-8048a-deployment",
+          "s3Key": "amplify-builds/renterFunction-6f6c676564756d596a56-build.zip"
+        }
+      },
+      "api": {
+        "OwnerAPI": {},
+        "PropertyAPI": {},
+        "ReservationAndLeasedHouses": {},
+        "paymentAPI": {},
+        "renterAPI": {}
+      },
+      "hosting": {
+        "S3AndCloudFront": {}
+      }
+    }
+  },
+  "qa": {
+    "categories": {
+      "function": {
+        "OwnerAndRenterFunction": {},
+        "PropertyFunction": {},
+        "ReservationAndLeasedHouseFunction": {},
+        "paymentFunction": {},
+        "renterFunction": {}
+      }
+    }
   }
 }
