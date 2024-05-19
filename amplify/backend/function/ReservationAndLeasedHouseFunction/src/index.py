@@ -53,9 +53,9 @@ def handler(event, context):
         # GET Method with leased path    
         elif http_method == 'GET' and path == leased_path:
             if event['queryStringParameters'] == None:
-             response = get_method(5,0,leased_path)
+             response = get_method(10,1,leased_path)
             else:
-             response = get_method(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'],leased_path)
+             response = get_method(event['queryStringParameters']['page_size'],event['queryStringParameters']['page_number'],leased_path)
         # GET Method with reservation path    
         elif http_method == 'GET' and path == reservation_path:
             if event['queryStringParameters'] == None:
@@ -158,38 +158,20 @@ def handler(event, context):
 
 
 ###################################### Function to get methods with Limit and Offset ##############################  
-def get_method(limit,offset,methodPath):
+def get_method(page_size,page_number,methodPath):
     
     logger.info("i am inisde block get method")
+    logger.info(page_size)
+    logger.info(page_number)
     db = connect_to_database()
     mycursor = db.cursor()
     logger.info("My Currsor connected to the database")
     # Block for reterving data from leased table
     if methodPath == '/leased':
         logger.info("inside if block of leased path")
-        stmt = f"SELECT * From tblLeasedHouses LIMIT {limit} OFFSET {offset};"
-        mycursor.execute(stmt)
-        result = mycursor.fetchall()
-        logger.info(result)
-        if result:
-           table_data = []
-           for row in result:
-               logger.info(row[6])
-               table_data.append({
-               'LeasedId': row[0],
-               'time from': row[1].strftime("%d-%m-%Y"),
-               'time to': row[2].strftime("%d-%m-%Y"),
-               'price': row[3],
-               'discount': row[4],
-               'Price Total': row[5],
-               'rentier grade description': row[6],
-               'renter grade description ': row[7],
-               'houseId': row[8],
-               'last modified': row[9].strftime("%d-%m-%Y"),
-               'renter id': row[10],
-               'leased Status': row[11]
-               })
-        logger.info(table_data)
+        mycursor.execute(f"SELECT COUNT(*) FROM ({stmt}) AS count_table")
+        total_count = mycursor.fetchone
+        
                
     #Block fo selecting data from reservation table  
     elif methodPath == "/reservation":
@@ -254,7 +236,7 @@ def get_method(limit,offset,methodPath):
                 
     mycursor.close()
     db.close()
-    return build_response(200, table_data)
+    return build_response(200, db, stmt, total_count, page_size, page_number)
 ############################### End of Functon methods #############################################################
 
 ############################## Function for for saving method to the database ######################################
@@ -727,10 +709,30 @@ def delete_method(id,methodPath):
 ############################## Function for building responses to API #######################################
 
 
-def build_response(status_code, body):
+def build_response(status_code,connection, query,total_count,page_size,page_number):
+    if page_number < 1:
+      raise ValueError("Invalid page number")
+    # Calculate total pages on first request to avoid redundant queries
+    total_pages = int((total_count - 1) / page_size) + 1
+    if page_number > total_pages:
+      raise ValueError("Page number exceeds total pages")
+    start_index = (page_number - 1) * page_size
+    end_index = start_index + page_size
+    paginated_query = f"{query} LIMIT {start_index}, OFFSET {page_size}"
+    mycursor = connection.cursor()
+    mycursor.execute(paginated_query)
+    data = mycursor.fetchall()
+    mycursor.close()
     return {
+    
      "statusCode": status_code,
-	 "body": json.dumps(body, cls=DecimalEncoder),
+	 "body": json.dumps({
+       "data": [dict(row) for row in data],  # Convert rows to dictionaries
+       "page": page_number,
+       "page_size": page_size,
+       "total_pages": total_pages, 
+       
+       },cls=DecimalEncoder),
 	 "headers": {
 	     "Content-Type": "application/json"
 		   }
