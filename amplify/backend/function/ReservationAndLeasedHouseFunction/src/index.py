@@ -172,8 +172,8 @@ def get_method(page_size,page_number,methodPath):
         stmt = "SELECT * From tblLeasedHouses  Where leasedStatus=1"
        
         
-        mycursor.execute(f'SELECT COUNT(*) FROM ({stmt}) AS subquery')
-        total_count = mycursor.fetchone()
+        mycursor.execute(f'SELECT CAST(COUNT(*) AS UNSIGNED)FROM ({stmt}) AS subquery')
+        total_count, = mycursor.fetchone()
         logger.info(total_count)
         
                
