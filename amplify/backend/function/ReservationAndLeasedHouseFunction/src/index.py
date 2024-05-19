@@ -173,7 +173,7 @@ def get_method(page_size,page_number,methodPath):
        
         
         mycursor.execute(f'SELECT COUNT(*) FROM ({stmt}) AS subquery;')
-        total_count = mycursor.fetchone
+        total_count = mycursor.fetchone()
         logger.info(total_count)
         
                
