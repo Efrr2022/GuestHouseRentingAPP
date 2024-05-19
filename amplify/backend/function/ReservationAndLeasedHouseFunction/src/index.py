@@ -169,9 +169,10 @@ def get_method(page_size,page_number,methodPath):
     # Block for reterving data from leased table
     if methodPath == '/leased':
         logger.info("inside if block of leased path")
-        stmt = "SELECT * From tblLeasedHouses OFFSET Where leasedStatus=1;"
+        stmt = "SELECT * From tblLeasedHouses  Where leasedStatus=1;"
         mycursor.execute(f"SELECT COUNT(*) FROM ({stmt}) AS count_table")
         total_count = mycursor.fetchone
+        logger.info(total_count)
         
                
     #Block fo selecting data from reservation table  
@@ -711,6 +712,8 @@ def delete_method(id,methodPath):
 
 
 def build_response(status_code,connection, query,total_count,page_size,page_number):
+    logger.info("I am inside build respose function")
+    
     if page_number < 1:
       raise ValueError("Invalid page number")
     # Calculate total pages on first request to avoid redundant queries
