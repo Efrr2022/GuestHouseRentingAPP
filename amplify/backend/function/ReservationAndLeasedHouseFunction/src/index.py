@@ -240,7 +240,7 @@ def get_method(page_size,page_number,methodPath):
                 
     mycursor.close()
     db.close()
-    return build_response(200, db, stmt, total_count, page_size, page_number)
+    return build_response(200, stmt, total_count, page_size, page_number)
 ############################### End of Functon methods #############################################################
 
 ############################## Function for for saving method to the database ######################################
@@ -713,9 +713,9 @@ def delete_method(id,methodPath):
 ############################## Function for building responses to API #######################################
 
 
-def build_response(status_code,connection, query,total_count,page_size,page_number):
+def build_response(status_code, query,total_count,page_size,page_number):
     logger.info("I am inside build respose function")
-    
+    db = connect_to_database()
     if page_number < 1:
       raise ValueError("Invalid page number")
     # Calculate total pages on first request to avoid redundant queries
@@ -725,10 +725,12 @@ def build_response(status_code,connection, query,total_count,page_size,page_numb
     start_index = (page_number - 1) * page_size
     end_index = start_index + page_size
     paginated_query = f"{query} LIMIT {start_index}, OFFSET {end_index}"
-    mycursor = connection.cursor()
+    mycursor = db.cursor()
     mycursor.execute(paginated_query)
     data = mycursor.fetchall()
+    logger.info(data)
     mycursor.close()
+    db.close()
     return {
     
      "statusCode": status_code,
