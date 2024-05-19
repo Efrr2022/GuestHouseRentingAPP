@@ -169,6 +169,7 @@ def get_method(page_size,page_number,methodPath):
     # Block for reterving data from leased table
     if methodPath == '/leased':
         logger.info("inside if block of leased path")
+        stmt = "SELECT * From tblLeasedHouses OFFSET Where leasedStatus=1;"
         mycursor.execute(f"SELECT COUNT(*) FROM ({stmt}) AS count_table")
         total_count = mycursor.fetchone
         
@@ -718,7 +719,7 @@ def build_response(status_code,connection, query,total_count,page_size,page_numb
       raise ValueError("Page number exceeds total pages")
     start_index = (page_number - 1) * page_size
     end_index = start_index + page_size
-    paginated_query = f"{query} LIMIT {start_index}, OFFSET {page_size}"
+    paginated_query = f"{query} LIMIT {start_index}, OFFSET {end_index}"
     mycursor = connection.cursor()
     mycursor.execute(paginated_query)
     data = mycursor.fetchall()
