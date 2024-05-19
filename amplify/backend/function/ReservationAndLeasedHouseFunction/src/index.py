@@ -723,7 +723,7 @@ def build_response(status_code, query,total_count,page_size,page_number):
       
     # Calculate total pages on first request to avoid redundant queries
    
-    if int_page_number != 0:
+    if int_page_number != 0 or int_page_size != 0:
       total_pages = int((int_total_count - 1) / int_page_size) + 1
       if int(int_page_number) > int(total_pages):
           status_code = 400
@@ -738,9 +738,9 @@ def build_response(status_code, query,total_count,page_size,page_number):
                 "Content-Type": "application/json"
                 }
             }
-    elif int_page_number == 0:
+    elif int_page_number == 0 or int_page_size == 0:
         status_code = 400
-        data = "Invalid page number"
+        data = "Invalid page number or Invalid page size"
         return {
         "statusCode": status_code,
         "body": json.dumps({
