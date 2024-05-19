@@ -718,7 +718,7 @@ def build_response(status_code, query,total_count,page_size,page_number):
     int_page_size = int(page_size)
     int_total_count = int(total_count)
     logger.info("I am inside build respose function")
-    db = connect_to_database()
+    
     
       
     # Calculate total pages on first request to avoid redundant queries
@@ -751,6 +751,7 @@ def build_response(status_code, query,total_count,page_size,page_number):
             }
         }
     else: 
+        db = connect_to_database()
         total_pages = int((int_total_count - 1) / int_page_size) + 1
         start_index = (int_page_number - 1) * int_page_size
         
@@ -758,6 +759,7 @@ def build_response(status_code, query,total_count,page_size,page_number):
         mycursor = db.cursor()
         mycursor.execute(paginated_query)
         data = mycursor.fetchall()
+        logger.info(data)
         table_data = []
         for row in data:
             logger.info(row[6])
