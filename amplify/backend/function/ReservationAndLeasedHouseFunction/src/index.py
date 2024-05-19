@@ -170,7 +170,10 @@ def get_method(page_size,page_number,methodPath):
     if methodPath == '/leased':
         logger.info("inside if block of leased path")
         stmt = "SELECT * From tblLeasedHouses  Where leasedStatus=1;"
-        mycursor.execute(f"SELECT COUNT(*) FROM ({stmt}) AS count_table")
+        mycursor.execute(stmt)
+        result =mycursor.fetchall()
+        logger.info(result)
+        mycursor.execute(f"SELECT COUNT(*) FROM ({stmt}) AS subquery;")
         total_count = mycursor.fetchone
         logger.info(total_count)
         
