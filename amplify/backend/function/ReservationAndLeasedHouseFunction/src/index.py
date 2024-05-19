@@ -719,54 +719,77 @@ def build_response(status_code, query,total_count,page_size,page_number):
     int_total_count = int(total_count)
     logger.info("I am inside build respose function")
     db = connect_to_database()
-    if int_page_number < 1:
-      raise ValueError("Invalid page number")
+    
+      
     # Calculate total pages on first request to avoid redundant queries
     total_pages = int((int_total_count - 1) / int_page_size) + 1
-    if int(int_page_number) > int(total_pages):
-      raise ValueError("Page number exceeds total pages")
-    start_index = (int_page_number - 1) * int_page_size
-    end_index = start_index + int_page_size
-    paginated_query = f"{query} LIMIT {int_page_size} OFFSET {start_index}"
-    mycursor = db.cursor()
-    mycursor.execute(paginated_query)
-    data = mycursor.fetchall()
-    table_data = []
-    for row in data:
-        logger.info(row[6])
-        table_data.append({
-        'LeasedId': row[0],
-        'time from': row[1].strftime("%d-%m-%Y"),
-        'time to': row[2].strftime("%d-%m-%Y"),
-        'price': row[3],
-        'discount': row[4],
-        'Price Total': row[5],
-        'rentier grade description': row[6],
-        'renter grade description ': row[7],
-        'houseId': row[8],
-        'last modified': row[9].strftime("%d-%m-%Y"),
-        'renter id': row[10],
-        'leased Status': row[11]
-               })
-    logger.info(table_data)
-    logger.info(data)
-    mycursor.close()
-    db.close()
-    return {
-    
+    if int_page_number < 1:
+      status_code = 400
+      data = "Invalid page number"
+    elif int(int_page_number) > int(total_pages):
+      status_code = 400
+      data = "Page number exceeds total pages"
+      return {
      "statusCode": status_code,
 	 "body": json.dumps({
-       "data": table_data,  # Convert rows to dictionaries
-       "page": int_page_number,
-       "page_size": int_page_size,
-       "total_pages": total_pages, 
-       
+       "data": data,  # Convert rows to dictionaries
        },cls=DecimalEncoder),
 	 "headers": {
 	     "Content-Type": "application/json"
 		   }
    	}
-   	
+      return {
+     "statusCode": status_code,
+	 "body": json.dumps({
+       "data": data,  # Convert rows to dictionaries
+       },cls=DecimalEncoder),
+	 "headers": {
+	     "Content-Type": "application/json"
+		   }
+   	}
+    else: 
+      
+        start_index = (int_page_number - 1) * int_page_size
+        
+        paginated_query = f"{query} LIMIT {int_page_size} OFFSET {start_index}"
+        mycursor = db.cursor()
+        mycursor.execute(paginated_query)
+        data = mycursor.fetchall()
+        table_data = []
+        for row in data:
+            logger.info(row[6])
+            table_data.append({
+            'LeasedId': row[0],
+            'time from': row[1].strftime("%d-%m-%Y"),
+            'time to': row[2].strftime("%d-%m-%Y"),
+            'price': row[3],
+            'discount': row[4],
+            'Price Total': row[5],
+            'rentier grade description': row[6],
+            'renter grade description ': row[7],
+            'houseId': row[8],
+            'last modified': row[9].strftime("%d-%m-%Y"),
+            'renter id': row[10],
+            'leased Status': row[11]
+                })
+        logger.info(table_data)
+        logger.info(data)
+        mycursor.close()
+        db.close()
+        return {
+        "statusCode": status_code,
+        "body": json.dumps({
+        "data": table_data,  # Convert rows to dictionaries
+        "page": int_page_number,
+        "page_size": int_page_size,
+        "total_pages": total_pages, 
+        
+        },cls=DecimalEncoder),
+        "headers": {
+            "Content-Type": "application/json"
+            }
+        }
+        
 ################################ End of Build response ####################################################
 
 ############################### Function to check wether an email is valid or not #########################
