@@ -724,7 +724,7 @@ def build_response(status_code, query,total_count,page_size,page_number):
       raise ValueError("Page number exceeds total pages")
     start_index = (page_number - 1) * page_size
     end_index = start_index + page_size
-    paginated_query = f"{query} LIMIT {start_index}, OFFSET {end_index}"
+    paginated_query = f"{query} LIMIT {page_size}, OFFSET {start_index}"
     mycursor = db.cursor()
     mycursor.execute(paginated_query)
     data = mycursor.fetchall()
