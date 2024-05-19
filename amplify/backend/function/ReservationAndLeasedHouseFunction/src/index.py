@@ -714,17 +714,20 @@ def delete_method(id,methodPath):
 
 
 def build_response(status_code, query,total_count,page_size,page_number):
+    int_page_number = int(page_number)
+    int_page_size = int(page_size)
+    int_total_count = int(total_count)
     logger.info("I am inside build respose function")
     db = connect_to_database()
-    if page_number < 1:
+    if int_page_number < 1:
       raise ValueError("Invalid page number")
     # Calculate total pages on first request to avoid redundant queries
-    total_pages = int((total_count - 1) / page_size) + 1
-    if page_number > total_pages:
+    total_pages = int((int_total_count - 1) / int_page_size) + 1
+    if int(int_page_number) > int(total_pages):
       raise ValueError("Page number exceeds total pages")
-    start_index = (page_number - 1) * page_size
-    end_index = start_index + page_size
-    paginated_query = f"{query} LIMIT {page_size} OFFSET {start_index}"
+    start_index = (int_page_number - 1) * int_page_size
+    end_index = start_index + int_page_size
+    paginated_query = f"{query} LIMIT {int_page_size} OFFSET {start_index}"
     mycursor = db.cursor()
     mycursor.execute(paginated_query)
     data = mycursor.fetchall()
@@ -754,8 +757,8 @@ def build_response(status_code, query,total_count,page_size,page_number):
      "statusCode": status_code,
 	 "body": json.dumps({
        "data": table_data,  # Convert rows to dictionaries
-       "page": page_number,
-       "page_size": page_size,
+       "page": int_page_number,
+       "page_size": int_page_size,
        "total_pages": total_pages, 
        
        },cls=DecimalEncoder),
