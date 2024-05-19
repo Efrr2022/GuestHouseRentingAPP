@@ -169,10 +169,10 @@ def get_method(page_size,page_number,methodPath):
     # Block for reterving data from leased table
     if methodPath == '/leased':
         logger.info("inside if block of leased path")
-        stmt = "SELECT * From tblLeasedHouses  Where leasedStatus=1;"
+        stmt = "SELECT * From tblLeasedHouses  Where leasedStatus=1"
        
         
-        mycursor.execute(f'SELECT COUNT(*) FROM ({stmt}) AS subquery;')
+        mycursor.execute(f'SELECT COUNT(*) FROM ({stmt}) AS subquery')
         total_count = mycursor.fetchone()
         logger.info(total_count)
         
