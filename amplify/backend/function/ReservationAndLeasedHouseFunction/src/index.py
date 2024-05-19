@@ -728,6 +728,24 @@ def build_response(status_code, query,total_count,page_size,page_number):
     mycursor = db.cursor()
     mycursor.execute(paginated_query)
     data = mycursor.fetchall()
+    table_data = []
+    for row in data:
+        logger.info(row[6])
+        table_data.append({
+        'LeasedId': row[0],
+        'time from': row[1].strftime("%d-%m-%Y"),
+        'time to': row[2].strftime("%d-%m-%Y"),
+        'price': row[3],
+        'discount': row[4],
+        'Price Total': row[5],
+        'rentier grade description': row[6],
+        'renter grade description ': row[7],
+        'houseId': row[8],
+        'last modified': row[9].strftime("%d-%m-%Y"),
+        'renter id': row[10],
+        'leased Status': row[11]
+               })
+    logger.info(table_data)
     logger.info(data)
     mycursor.close()
     db.close()
@@ -735,7 +753,7 @@ def build_response(status_code, query,total_count,page_size,page_number):
     
      "statusCode": status_code,
 	 "body": json.dumps({
-       "data": [dict(row) for row in data],  # Convert rows to dictionaries
+       "data": table_data,  # Convert rows to dictionaries
        "page": page_number,
        "page_size": page_size,
        "total_pages": total_pages, 
