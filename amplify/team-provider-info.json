@@ -85,5 +85,55 @@
         "guesthouserentalappc309bbc0": {}
       }
     }
+  },
+  "qa": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-guesthouserentalapp-qa-225cc-authRole",
+      "UnauthRoleArn": "arn:aws:iam::730335654565:role/amplify-guesthouserentalapp-qa-225cc-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::730335654565:role/amplify-guesthouserentalapp-qa-225cc-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-guesthouserentalapp-qa-225cc-deployment",
+      "UnauthRoleName": "amplify-guesthouserentalapp-qa-225cc-unauthRole",
+      "StackName": "amplify-guesthouserentalapp-qa-225cc",
+      "StackId": "arn:aws:cloudformation:us-east-1:730335654565:stack/amplify-guesthouserentalapp-qa-225cc/30049d20-142c-11ef-a695-12249e0a313d",
+      "AmplifyAppId": "d2kz9vhsbs7hot"
+    },
+    "categories": {
+      "auth": {
+        "guesthouserentalappc309bbc0": {}
+      },
+      "function": {
+        "OwnerAndRenterFunction": {
+          "deploymentBucketName": "amplify-guesthouserentalapp-qa-225cc-deployment",
+          "s3Key": "amplify-builds/OwnerAndRenterFunction-743946696e6b4a513133-build.zip"
+        },
+        "PropertyFunction": {
+          "deploymentBucketName": "amplify-guesthouserentalapp-qa-225cc-deployment",
+          "s3Key": "amplify-builds/PropertyFunction-434f6a49394551684137-build.zip"
+        },
+        "ReservationAndLeasedHouseFunction": {
+          "deploymentBucketName": "amplify-guesthouserentalapp-qa-225cc-deployment",
+          "s3Key": "amplify-builds/ReservationAndLeasedHouseFunction-7a4e4568624b7a626a4c-build.zip"
+        },
+        "paymentFunction": {
+          "deploymentBucketName": "amplify-guesthouserentalapp-qa-225cc-deployment",
+          "s3Key": "amplify-builds/paymentFunction-4a7a41744153737a4334-build.zip"
+        },
+        "renterFunction": {
+          "deploymentBucketName": "amplify-guesthouserentalapp-qa-225cc-deployment",
+          "s3Key": "amplify-builds/renterFunction-772f736a6b43447a4e30-build.zip"
+        }
+      },
+      "api": {
+        "OwnerAPI": {},
+        "PropertyAPI": {},
+        "ReservationAndLeasedHouses": {},
+        "paymentAPI": {},
+        "renterAPI": {}
+      },
+      "hosting": {
+        "S3AndCloudFront": {}
+      }
+    }
   }
 }
