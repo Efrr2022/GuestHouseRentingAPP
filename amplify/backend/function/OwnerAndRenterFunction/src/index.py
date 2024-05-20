@@ -167,7 +167,7 @@ def save_user(request_body,userPath):
   logger.info("Inside block code of save user")
   db = connect_to_database()
   mycursor = db.cursor()
-  logger.info("My Currsor connected to the database", mycursor)
+  logger.info("My Currsor connected to the database")
   
   if userPath == '/owner':
       logger.info("I am inside block owner safe")
