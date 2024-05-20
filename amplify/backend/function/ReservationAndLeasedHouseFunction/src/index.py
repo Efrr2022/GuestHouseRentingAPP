@@ -738,23 +738,10 @@ def build_response(status_code, query,total_count,page_size,page_number):
                 "Content-Type": "application/json"
                 }
             }
-    elif int_page_number == 0 or int_page_size == 0:
-        status_code = 400
-        data = "Invalid page number or Invalid page size"
-        return {
-        "statusCode": status_code,
-        "body": json.dumps({
-        "data": data,  # Convert rows to dictionaries
-        },cls=DecimalEncoder),
-        "headers": {
-            "Content-Type": "application/json"
-            }
-        }
-    else: 
+      else: 
         db = connect_to_database()
         total_pages = int((int_total_count - 1) / int_page_size) + 1
         start_index = (int_page_number - 1) * int_page_size
-        
         paginated_query = f"{query} LIMIT {int_page_size} OFFSET {start_index}"
         mycursor = db.cursor()
         mycursor.execute(paginated_query)
@@ -794,6 +781,19 @@ def build_response(status_code, query,total_count,page_size,page_number):
             "Content-Type": "application/json"
             }
         }
+    elif int_page_number == 0 or int_page_size == 0:
+        status_code = 400
+        data = "Invalid page number or Invalid page size"
+        return {
+        "statusCode": status_code,
+        "body": json.dumps({
+        "data": data,  # Convert rows to dictionaries
+        },cls=DecimalEncoder),
+        "headers": {
+            "Content-Type": "application/json"
+            }
+        }
+    
         
 ################################ End of Build response ####################################################
 
