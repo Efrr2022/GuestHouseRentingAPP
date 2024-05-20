@@ -59,21 +59,21 @@ def handler(event, context):
         # GET Method with reservation path    
         elif http_method == 'GET' and path == reservation_path:
             if event['queryStringParameters'] == None:
-             response = get_method(5,0,reservation_path)
+             response = get_method(10,1,reservation_path)
             else:
-             response = get_method(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'], reservation_path)  
+             response = get_method(event['queryStringParameters']['page_size'],event['queryStringParameters']['page_number'], reservation_path)  
         # GET Method with rate path    
         elif http_method == 'GET' and path == rate_path:
             if event['queryStringParameters'] == None:
-             response = get_method(5,0,rate_path)
+             response = get_method(10,1,rate_path)
             else:
-             response = get_method(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'],rate_path)
+             response = get_method(event['queryStringParameters']['page_size'],event['queryStringParameters']['page_number'],rate_path)
         # GET Method with category path    
         elif http_method == 'GET' and path == category_path:
             if event['queryStringParameters'] == None:
-             response = get_method(5,0,category_path)
+             response = get_method(10,1,category_path)
             else:
-             response = get_method(event['queryStringParameters']['limit'],event['queryStringParameters']['offset'], category_path)      
+             response = get_method(event['queryStringParameters']['page_size'],event['queryStringParameters']['page_number'], category_path)      
 ##################################### End of Get Method ############################################################# 
 
 
@@ -165,82 +165,41 @@ def get_method(page_size,page_number,methodPath):
     logger.info(page_number)
     db = connect_to_database()
     mycursor = db.cursor()
+
     logger.info("My Currsor connected to the database")
     # Block for reterving data from leased table
     if methodPath == '/leased':
         logger.info("inside if block of leased path")
         stmt = "SELECT * From tblLeasedHouses  Where leasedStatus=1"
-       
-        
         mycursor.execute(f'SELECT CAST(COUNT(*) AS UNSIGNED)FROM ({stmt}) AS subquery')
         total_count, = mycursor.fetchone()
-        logger.info(total_count)
-        
-               
+        logger.info(total_count)           
     #Block fo selecting data from reservation table  
     elif methodPath == "/reservation":
         logger.info("inside if block of reservation path")
-        stmt = f"SELECT * From tblHouseReserved LIMIT {limit} OFFSET {offset}"
-        mycursor.execute(stmt)
-        result = mycursor.fetchall()
-        if result:
-            table_data = []
-            for row in result:
-                table_data.append({
-               'reservatio id': row[0],
-               'rentier id': row[1],
-               'houseId': row[2],
-               'date in': row[3].strftime("%d-%m-%Y"),
-               'date out': row[4].strftime("%d-%m-%Y"),
-               'price': row[5],
-               'total': row[6],
-               'last modified': row[7].strftime("%d-%m-%Y"),
-               'reserved status': row[8],
-               
-            }) 
-            logger.info( table_data)
+        stmt = "SELECT * From tblHouseReserved Where reservedStatus=1"
+        mycursor.execute(f'SELECT CAST(COUNT(*) AS UNSIGNED)FROM ({stmt}) AS subquery')
+        total_count, = mycursor.fetchone()
+        logger.info(total_count)        
     #Block fo selecting data from  table rate  
     elif methodPath == "/rate":
         logger.info("inside if block of rate path")
-        stmt = f"SELECT * From tblRate LIMIT {limit} OFFSET {offset}"
-        mycursor.execute(stmt)
-        result = mycursor.fetchall()
-        if result:
-            table_data = []
-            for row in result:
-                table_data.append({
-               'rate id': row[0],
-               'leased id': row[1],
-               'rate category id': row[2],
-               'rate': row[3],
-               'rate description': row[4],
-               'last modified': row[5].strftime("%d-%m-%Y"),
-               'rate status': row[6],
-               
-            }) 
-            logger.info( table_data)
+        stmt = "SELECT * From tblRate Where rateStatus=1"
+        mycursor.execute(f'SELECT CAST(COUNT(*) AS UNSIGNED)FROM ({stmt}) AS subquery')
+        total_count, = mycursor.fetchone()
+        logger.info(total_count)     
 
     #Block fo selecting data from category table  
     elif methodPath == "/category":
         logger.info("inside if block of category path")
-        stmt = f"SELECT * From tblRateCategory LIMIT {limit} OFFSET {offset}"
-        mycursor.execute(stmt)
-        result = mycursor.fetchall()
-        if result:
-            table_data = []
-            for row in result:
-                table_data.append({
-               'rate category id': row[0],
-               'category name': row[1],
-               'last modified': row[2].strftime("%d-%m-%Y"),
-               'status': row[3],
-               
-            }) 
-            logger.info( table_data)
+        stmt = "SELECT * From tblRateCategory Where status=1"
+        mycursor.execute(f'SELECT CAST(COUNT(*) AS UNSIGNED)FROM ({stmt}) AS subquery')
+        total_count, = mycursor.fetchone()
+        logger.info(total_count)     
                 
     mycursor.close()
     db.close()
-    return build_response(200, stmt, total_count, page_size, page_number)
+    return build_response_get(200, stmt, total_count, page_size, page_number,methodPath)
 ############################### End of Functon methods #############################################################
 
 ############################## Function for for saving method to the database ######################################
@@ -713,7 +672,7 @@ def delete_method(id,methodPath):
 ############################## Function for building responses to API #######################################
 
 
-def build_response(status_code, query,total_count,page_size,page_number):
+def build_response_get(status_code, query,total_count,page_size,page_number,methodPath):
     int_page_number = int(page_number)
     int_page_size = int(page_size)
     int_total_count = int(total_count)
@@ -722,14 +681,69 @@ def build_response(status_code, query,total_count,page_size,page_number):
     
       
     # Calculate total pages on first request to avoid redundant queries
-   
-    if int_page_number != 0 and int_page_size != 0:
-      total_pages = int((int_total_count - 1) / int_page_size) + 1
-      if int(int_page_number) > int(total_pages):
-          status_code = 400
-          data = "Page number exceeds total pages"
-        
-          return {
+    if methodPath == "/leased":
+        if int_page_number != 0 and int_page_size != 0:
+            total_pages = int((int_total_count - 1) / int_page_size) + 1
+            if int(int_page_number) > int(total_pages):
+                status_code = 400
+                data = "Page number exceeds total pages"
+                
+                return {
+                    "statusCode": status_code,
+                    "body": json.dumps({
+                    "data": data,  # Convert rows to dictionaries
+                    },cls=DecimalEncoder),
+                    "headers": {
+                        "Content-Type": "application/json"
+                        }
+                    }
+            else: 
+                db = connect_to_database()
+                total_pages = int((int_total_count - 1) / int_page_size) + 1
+                start_index = (int_page_number - 1) * int_page_size
+                paginated_query = f"{query} LIMIT {int_page_size} OFFSET {start_index}"
+                mycursor = db.cursor()
+                mycursor.execute(paginated_query)
+                data = mycursor.fetchall()
+                logger.info(data)
+                table_data = []
+                for row in data:
+                    logger.info(row[6])
+                    table_data.append({
+                    'LeasedId': row[0],
+                    'time from': row[1].strftime("%d-%m-%Y"),
+                    'time to': row[2].strftime("%d-%m-%Y"),
+                    'price': row[3],
+                    'discount': row[4],
+                    'Price Total': row[5],
+                    'rentier grade description': row[6],
+                    'renter grade description ': row[7],
+                    'houseId': row[8],
+                    'last modified': row[9].strftime("%d-%m-%Y"),
+                    'renter id': row[10],
+                    'leased Status': row[11]
+                        })
+                logger.info(table_data)
+                logger.info(data)
+                mycursor.close()
+                db.close()
+                return {
+                "statusCode": status_code,
+                "body": json.dumps({
+                "data": table_data,  # Convert rows to dictionaries
+                "page": int_page_number,
+                "page_size": int_page_size,
+                "total_pages": total_pages, 
+                
+                },cls=DecimalEncoder),
+                "headers": {
+                    "Content-Type": "application/json"
+                    }
+                }
+        elif int_page_number == 0 or int_page_size == 0:
+            status_code = 400
+            data = "Invalid page number or Invalid page size"
+            return {
             "statusCode": status_code,
             "body": json.dumps({
             "data": data,  # Convert rows to dictionaries
@@ -738,61 +752,203 @@ def build_response(status_code, query,total_count,page_size,page_number):
                 "Content-Type": "application/json"
                 }
             }
-      else: 
-        db = connect_to_database()
-        total_pages = int((int_total_count - 1) / int_page_size) + 1
-        start_index = (int_page_number - 1) * int_page_size
-        paginated_query = f"{query} LIMIT {int_page_size} OFFSET {start_index}"
-        mycursor = db.cursor()
-        mycursor.execute(paginated_query)
-        data = mycursor.fetchall()
-        logger.info(data)
-        table_data = []
-        for row in data:
-            logger.info(row[6])
-            table_data.append({
-            'LeasedId': row[0],
-            'time from': row[1].strftime("%d-%m-%Y"),
-            'time to': row[2].strftime("%d-%m-%Y"),
-            'price': row[3],
-            'discount': row[4],
-            'Price Total': row[5],
-            'rentier grade description': row[6],
-            'renter grade description ': row[7],
-            'houseId': row[8],
-            'last modified': row[9].strftime("%d-%m-%Y"),
-            'renter id': row[10],
-            'leased Status': row[11]
-                })
-        logger.info(table_data)
-        logger.info(data)
-        mycursor.close()
-        db.close()
-        return {
-        "statusCode": status_code,
-        "body": json.dumps({
-        "data": table_data,  # Convert rows to dictionaries
-        "page": int_page_number,
-        "page_size": int_page_size,
-        "total_pages": total_pages, 
-        
-        },cls=DecimalEncoder),
-        "headers": {
-            "Content-Type": "application/json"
+    elif methodPath == "/reservation":
+        if int_page_number != 0 and int_page_size != 0:
+            total_pages = int((int_total_count - 1) / int_page_size) + 1
+            if int(int_page_number) > int(total_pages):
+                status_code = 400
+                data = "Page number exceeds total pages"
+                
+                return {
+                    "statusCode": status_code,
+                    "body": json.dumps({
+                    "data": data,  # Convert rows to dictionaries
+                    },cls=DecimalEncoder),
+                    "headers": {
+                        "Content-Type": "application/json"
+                        }
+                    }
+            else: 
+                db = connect_to_database()
+                total_pages = int((int_total_count - 1) / int_page_size) + 1
+                start_index = (int_page_number - 1) * int_page_size
+                paginated_query = f"{query} LIMIT {int_page_size} OFFSET {start_index}"
+                mycursor = db.cursor()
+                mycursor.execute(paginated_query)
+                data = mycursor.fetchall()
+                logger.info(data)
+                table_data = []
+                for row in data:
+                    logger.info(row[6])
+                    table_data.append({
+                    'reservatio id': row[0],
+                    'rentier id': row[1],
+                    'houseId': row[2],
+                    'date in': row[3].strftime("%d-%m-%Y"),
+                    'date out': row[4].strftime("%d-%m-%Y"),
+                    'price': row[5],
+                    'total': row[6],
+                    'last modified': row[7].strftime("%d-%m-%Y"),
+                    'reserved status': row[8],
+                        })
+                logger.info(table_data)
+                logger.info(data)
+                mycursor.close()
+                db.close()
+                return {
+                "statusCode": status_code,
+                "body": json.dumps({
+                "data": table_data,  # Convert rows to dictionaries
+                "page": int_page_number,
+                "page_size": int_page_size,
+                "total_pages": total_pages, 
+                
+                },cls=DecimalEncoder),
+                "headers": {
+                    "Content-Type": "application/json"
+                    }
+                }
+        elif int_page_number == 0 or int_page_size == 0:
+            status_code = 400
+            data = "Invalid page number or Invalid page size"
+            return {
+            "statusCode": status_code,
+            "body": json.dumps({
+            "data": data,  # Convert rows to dictionaries
+            },cls=DecimalEncoder),
+            "headers": {
+                "Content-Type": "application/json"
+                }
             }
-        }
-    elif int_page_number == 0 or int_page_size == 0:
-        status_code = 400
-        data = "Invalid page number or Invalid page size"
-        return {
-        "statusCode": status_code,
-        "body": json.dumps({
-        "data": data,  # Convert rows to dictionaries
-        },cls=DecimalEncoder),
-        "headers": {
-            "Content-Type": "application/json"
+    elif methodPath == "/category":
+        if int_page_number != 0 and int_page_size != 0:
+            total_pages = int((int_total_count - 1) / int_page_size) + 1
+            if int(int_page_number) > int(total_pages):
+                status_code = 400
+                data = "Page number exceeds total pages"
+                
+                return {
+                    "statusCode": status_code,
+                    "body": json.dumps({
+                    "data": data,  # Convert rows to dictionaries
+                    },cls=DecimalEncoder),
+                    "headers": {
+                        "Content-Type": "application/json"
+                        }
+                    }
+            else: 
+                db = connect_to_database()
+                total_pages = int((int_total_count - 1) / int_page_size) + 1
+                start_index = (int_page_number - 1) * int_page_size
+                paginated_query = f"{query} LIMIT {int_page_size} OFFSET {start_index}"
+                mycursor = db.cursor()
+                mycursor.execute(paginated_query)
+                data = mycursor.fetchall()
+                logger.info(data)
+                table_data = []
+                for row in data:
+                    logger.info(row[6])
+                    table_data.append({
+                    'rate category id': row[0],
+                    'category name': row[1],
+                    'last modified': row[2].strftime("%d-%m-%Y"),
+                    'status': row[3],
+                        })
+                logger.info(table_data)
+                logger.info(data)
+                mycursor.close()
+                db.close()
+                return {
+                "statusCode": status_code,
+                "body": json.dumps({
+                "data": table_data,  # Convert rows to dictionaries
+                "page": int_page_number,
+                "page_size": int_page_size,
+                "total_pages": total_pages, 
+                
+                },cls=DecimalEncoder),
+                "headers": {
+                    "Content-Type": "application/json"
+                    }
+                }
+        elif int_page_number == 0 or int_page_size == 0:
+            status_code = 400
+            data = "Invalid page number or Invalid page size"
+            return {
+            "statusCode": status_code,
+            "body": json.dumps({
+            "data": data,  # Convert rows to dictionaries
+            },cls=DecimalEncoder),
+            "headers": {
+                "Content-Type": "application/json"
+                }
             }
-        }
+    elif methodPath == "/rate":
+        if int_page_number != 0 and int_page_size != 0:
+            total_pages = int((int_total_count - 1) / int_page_size) + 1
+            if int(int_page_number) > int(total_pages):
+                status_code = 400
+                data = "Page number exceeds total pages"
+                
+                return {
+                    "statusCode": status_code,
+                    "body": json.dumps({
+                    "data": data,  # Convert rows to dictionaries
+                    },cls=DecimalEncoder),
+                    "headers": {
+                        "Content-Type": "application/json"
+                        }
+                    }
+            else: 
+                db = connect_to_database()
+                total_pages = int((int_total_count - 1) / int_page_size) + 1
+                start_index = (int_page_number - 1) * int_page_size
+                paginated_query = f"{query} LIMIT {int_page_size} OFFSET {start_index}"
+                mycursor = db.cursor()
+                mycursor.execute(paginated_query)
+                data = mycursor.fetchall()
+                logger.info(data)
+                table_data = []
+                for row in data:
+                    logger.info(row[6])
+                    table_data.append({
+                    'rate id': row[0],
+                    'leased id': row[1],
+                    'rate category id': row[2],
+                    'rate': row[3],
+                    'rate description': row[4],
+                    'last modified': row[5].strftime("%d-%m-%Y"),
+                    'rate status': row[6],
+                        })
+                logger.info(table_data)
+                logger.info(data)
+                mycursor.close()
+                db.close()
+                return {
+                "statusCode": status_code,
+                "body": json.dumps({
+                "data": table_data,  # Convert rows to dictionaries
+                "page": int_page_number,
+                "page_size": int_page_size,
+                "total_pages": total_pages, 
+                
+                },cls=DecimalEncoder),
+                "headers": {
+                    "Content-Type": "application/json"
+                    }
+                }
+        elif int_page_number == 0 or int_page_size == 0:
+            status_code = 400
+            data = "Invalid page number or Invalid page size"
+            return {
+            "statusCode": status_code,
+            "body": json.dumps({
+            "data": data,  # Convert rows to dictionaries
+            },cls=DecimalEncoder),
+            "headers": {
+                "Content-Type": "application/json"
+                }
+            }
     
         
 ################################ End of Build response ####################################################
@@ -877,6 +1033,15 @@ class DecimalEncoder(json.JSONEncoder):
     if isinstance(obj, Decimal):
       return str(obj)
     return json.JSONEncoder.default(self, obj)
+  
+def build_response(status_code, body):
+    return {
+     "statusCode": status_code,
+	 "body": json.dumps(body),
+	 "headers": {
+	     "Content-Type": "application/json"
+		   }
+   	}
 
 
  
