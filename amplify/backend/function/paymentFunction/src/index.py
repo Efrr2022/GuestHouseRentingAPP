@@ -61,9 +61,9 @@ def handler(event, context):
 
         if httpMethod == "GET":
             if 'id' in event['queryStringParameters']:
-                response = handle_get_payment(event, db)
+                handle_get_payment(event, db)
             elif 'renterId' in event['queryStringParameters']:
-                response = handle_get_payment_by_renter(event, db)
+                handle_get_payment_by_renter(event, db)
         elif httpMethod == "DELETE" :
              response=handle_delete_payment_request(event,db)      
         else:
@@ -85,7 +85,6 @@ def handler(event, context):
 
 
 
-    
 
 def handle_get_payment(event,db):
         
@@ -115,12 +114,11 @@ def handle_get_payment(event,db):
 
             mycursor.close()
 
-            response_get={
+            return {
                 'statusCode': 200,
-                'body': response_list # Serialize datetime objects using default=str
+                'body': json.dumps(response_list,default=str) # Serialize datetime objects using default=str
             }
 
-            return response_get
                    
                 
         except Exception as e:
@@ -158,12 +156,11 @@ def handle_get_payment_by_renter(event, db):
 
         mycursor.close()
 
-        response_get = {
+        return {
             'statusCode': 200,
             'body': json.dumps(response_list, default=str)  # Serialize datetime objects using default=str
         }
 
-        return response_get
     except Exception as e:
         return {
             'statusCode': 500,
