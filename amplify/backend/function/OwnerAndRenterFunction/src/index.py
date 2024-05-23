@@ -266,7 +266,7 @@ def modify_user(userId, updateKey, updateValue,userPath):
   # Block of code for updating owner record
   db = connect_to_database()
   mycursor = db.cursor()
-  logger.info("My Currsor connected to the database", mycursor)
+  logger.info("My Currsor connected to the database")
   
   if userPath == '/owner':
     sql = f"select * from tblOwner where ownerId={userId}"
