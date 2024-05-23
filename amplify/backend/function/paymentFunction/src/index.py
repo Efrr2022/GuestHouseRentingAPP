@@ -65,23 +65,22 @@ def handler(event, context):
             elif 'renterId' in event['queryStringParameters']:
                 handle_get_payment_by_renter(event, db)
         elif httpMethod == "DELETE" :
-             response=handle_delete_payment_request(event,db)      
+             handle_delete_payment_request(event,db)      
         else:
             return {
                 'statusCode': 405,
                 'body': json.dumps({'message': 'Method Not Allowed'})
             }
         
-        return {
-        'statusCode': response.get('statusCode', 200),
-        'headers': {
-            'Access-Control-Allow-Headers': '*',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-        },
-        'body': json.dumps(response.get('body'))
-    }
-
+    #     return {
+    #     'statusCode': response.get('statusCode', 200),
+    #     'headers': {
+    #         'Access-Control-Allow-Headers': '*',
+    #         'Access-Control-Allow-Origin': '*',
+    #         'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+    #     },
+    #     'body': json.dumps(response.get('body'))
+    # }
 
 
 
@@ -118,8 +117,7 @@ def handle_get_payment(event,db):
                 'statusCode': 200,
                 'body': json.dumps(response_list,default=str) # Serialize datetime objects using default=str
             }
-
-                   
+        
                 
         except Exception as e:
             return {
@@ -186,18 +184,18 @@ def handle_delete_payment_request(event,db):
         
         db.commit()
 
-        response_delete = {
+        return {
             'statusCode': 200,
             'body': json.dumps('Houses deleted successfully')
         }
     except Exception as e:
         print(f'There was an exception: {e}')
-        response_delete = {
+        return {
             'statusCode': 500,
             'body': json.dumps({'error': 'Internal Server Error'})
         }
     finally:
         mycursor.close()
     
-    return response_delete
+    
         
