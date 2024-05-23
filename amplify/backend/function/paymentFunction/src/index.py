@@ -117,8 +117,7 @@ def handle_get_payment(event,db):
 
             response_get={
                 'statusCode': 200,
-                'body': json.dumps(response_list, default=str)  # Serialize datetime objects using default=str
-
+                'body': response_list # Serialize datetime objects using default=str
             }
 
             return response_get
