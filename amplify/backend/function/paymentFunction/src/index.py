@@ -148,7 +148,7 @@ def handle_get_payment_by_renter(event, db):
                 'paymentId': payment[0],
                 'leasedId': payment[1],
                 'paymentAmount': payment[2],
-                'paymentDate': str(payment[3])
+                'paymentDate': payment[3].strftime('%Y-%m-%d %H:%M:%S')
             })
         print(f"Type of payment date: {type(payment[3])} Data: {payment[3]}")
 
