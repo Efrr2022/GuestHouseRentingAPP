@@ -86,7 +86,7 @@ def handler(event, context):
 
 
 def handle_get_payment(event,db):
-        
+        print("inside get payment method")
 
         try:
             query_params=event.get('queryStringParameters')
@@ -130,6 +130,7 @@ def handle_get_payment(event,db):
 
 
 def handle_get_payment_by_renter(event, db):
+    print("inside get payment method using renter id")
     try:
         query_params = event.get('queryStringParameters')
         renter_id = query_params['renterId']
