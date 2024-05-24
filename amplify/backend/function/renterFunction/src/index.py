@@ -200,7 +200,7 @@ def handle_list_renters(event, db):
         # Return success response with list of renters
         return {
             'statusCode': 200,
-            'body': json.dumps(response_data, default=str)  # Serialize datetime objects using default=str
+            'body': json.dumps(response_data)  # Serialize datetime objects using default=str
         }
     except Exception as e:
         # Return error response if any exception occurs
