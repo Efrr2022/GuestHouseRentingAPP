@@ -61,26 +61,26 @@ def handler(event, context):
 
         if httpMethod == "GET":
             if 'id' in event['queryStringParameters']:
-                handle_get_payment(event, db)
+                response = handle_get_payment(event, db)
             elif 'renterId' in event['queryStringParameters']:
-                handle_get_payment_by_renter(event, db)
+                response = handle_get_payment_by_renter(event, db)
         elif httpMethod == "DELETE" :
-             handle_delete_payment_request(event,db)      
+             response = handle_delete_payment_request(event,db)      
         else:
             return {
                 'statusCode': 405,
                 'body': json.dumps({'message': 'Method Not Allowed'})
             }
         
-    #     return {
-    #     'statusCode': response.get('statusCode', 200),
-    #     'headers': {
-    #         'Access-Control-Allow-Headers': '*',
-    #         'Access-Control-Allow-Origin': '*',
-    #         'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-    #     },
-    #     'body': json.dumps(response.get('body'))
-    # }
+        return {
+        'statusCode': response.get('statusCode', 200),
+        'headers': {
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+        },
+        'body': json.dumps(response.get('body'))
+    }
 
 
 
@@ -113,10 +113,11 @@ def handle_get_payment(event,db):
 
             mycursor.close()
 
-            return {
+            response_data = {
                 'statusCode': 200,
-                'body': json.dumps(response_list,default=str) # Serialize datetime objects using default=str
+                'body': response_list # Serialize datetime objects using default=str
             }
+            return response_data
         
                 
         except Exception as e:
@@ -149,16 +150,18 @@ def handle_get_payment_by_renter(event, db):
                 'paymentId': payment[0],
                 'leasedId': payment[1],
                 'paymentAmount': payment[2],
-                'paymentDate': payment[3]
+                'paymentDate': str(payment[3])
             })
         print(f"Type of payment date: {type(payment[3])} Data: {payment[3]}")
 
         mycursor.close()
 
-        return {
+        response_data = {
             'statusCode': 200,
-            'body': json.dumps(response_list, default=str)  # Serialize datetime objects using default=str
+            'body': response_list # Serialize datetime objects using default=str
         }
+
+        return response_data
 
     except Exception as e:
         return {
@@ -185,10 +188,12 @@ def handle_delete_payment_request(event,db):
         
         db.commit()
 
-        return {
+        response_data = {
             'statusCode': 200,
             'body': json.dumps('Houses deleted successfully')
         }
+
+        return response_data
     except Exception as e:
         print(f'There was an exception: {e}')
         return {
