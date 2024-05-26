@@ -188,8 +188,8 @@ def handle_list_renters(event, db):
                 "address": renter[3],
                 "contactNumber": renter[4],
                 "emailAddress": renter[5],
-                "registrationTime": renter[6],
-                "lastModified": renter[7].strftime('%Y-%m-%d %H:%M:%S') if isinstance(renter[7], datetime.datetime) else renter[7], 
+                "registrationTime": str(renter[6]),
+                "lastModified": str(renter[7]),
                 "status": renter[8]
             })
             print(f"data:{renter[6]} type:{type(renter[6])}") #{renter[6].strftime('%Y-%m-%d %H:%M:%S')} isinstance: {isinstance(renter[6], datetime.datetime)}")
