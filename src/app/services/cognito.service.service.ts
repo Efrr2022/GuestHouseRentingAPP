@@ -150,7 +150,7 @@ register(email:any, password: any, phoneNumber: any) {
      Username: username,
      Pool: this.userPool,
      };
-     console.log("The confirmation code recived", code);
+     console.log("The confirmation code recived is", code);
      
      const cognitoUser = new AmazonCognitoIdentity.CognitoUser(
       userData);
