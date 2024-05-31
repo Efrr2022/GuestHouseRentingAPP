@@ -1,0 +1,16 @@
+<div class="otp-verify-container">
+    <h2>Confirmation Code</h2>
+    
+    <form class="form-group"   [formGroup]="codeForm" (ngSubmit)="verifyOtp()">
+      <div class="otp-input">
+        <label for="otp">Your code</label>
+        <input name="otp" id="otp" type="text" formControlName="code" placeholder="Code" required>
+      </div>
+  
+      <button>Verify</button>
+    </form>
+  
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </div>
