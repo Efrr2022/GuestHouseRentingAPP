@@ -135,5 +135,12 @@
         "S3AndCloudFront": {}
       }
     }
+  },
+  "prod": {
+    "categories": {
+      "auth": {
+        "guesthouserentalappc309bbc0": {}
+      }
+    }
   }
 }
