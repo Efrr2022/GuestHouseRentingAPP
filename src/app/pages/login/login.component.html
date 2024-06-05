@@ -14,10 +14,12 @@
               <span>or use your email for registeration</span>
               
               <input name="email" type="email" formControlName="email" placeholder="Email" required>
-             
-              <input type="password" formControlName="password" placeholder="Password" required>
-              
-              <input type="phoneNumber" formControlName="phoneNumber" placeholder="Phone Number" required>
+              <input type="password" name="password" formControlName="password" placeholder="Password" required>
+              <input type="text" name="Name" formControlName="Name" placeholder="Name" required>
+              <input type="text" name="address" formControlName="address" placeholder="address" required>
+              <input name="age" type="number" formControlName="age" placeholder="age" required>
+              <input type="text" formControlName="teleNumber" placeholder="Phone Number" name="teleNumber" required>
+
               <button>Register</button>
         </form>
       </div>
@@ -38,16 +40,17 @@
       </div>
       <div class="toggle-container">
           <div class="toggle">
+             
               <div class="toggle-panel toggle-left">
-                  <h1>Welcome Back!</h1>
-                  <p>Enter your personal details to use all of site features</p>
-                  <button type="button" class="hidden" id="login" (click)="isSignDivVisiable = false">Sign In</button>
-              </div>
-              <div class="toggle-panel toggle-right">
                   <h1>Hello, Friend!</h1>
                   <p>Register with your personal details to use all of site features</p>
-                  <button type="button" class="hidden" id="register" (click)="isSignDivVisiable = true">Sign Up</button>
+                  <button type="button" class="hidden" id="register" (click)="isSignDivVisiable = false">Sign Up</button>
               </div>
+              <div class="toggle-panel toggle-right">
+                <h1>Welcome Back!</h1>
+                <p>Enter your personal details to use all of site features</p>
+                <button type="button" class="hidden" id="login" (click)="isSignDivVisiable = true">Sign In</button>
+            </div>
           </div>
       </div>
   </div>

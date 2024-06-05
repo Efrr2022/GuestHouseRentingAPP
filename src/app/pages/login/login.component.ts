@@ -19,7 +19,7 @@ export class LoginComponent {
   
 
   errorMessage: string='';
-  isSignDivVisiable: boolean  = true;
+  isSignDivVisiable: boolean  = false;
 
   userPool: any;
   cognitoUser: any;
@@ -37,16 +37,21 @@ export class LoginComponent {
   protected registerForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
-    phoneNumber: new FormControl('', [Validators.required])
+    address: new FormControl('', [Validators.required]),
+    age: new FormControl('', [Validators.required, ]),
+    Name: new FormControl('', [Validators.required]),
+    teleNumber: new FormControl('', [Validators.required])
   })
 
 
   register() {
     
     console.log("inside the function of register of login componenet")
+    console.log(this.registerForm.value.teleNumber)
     this.authService
     .register(this.registerForm.value.email, this.registerForm.value.password,
-              this.registerForm.value.phoneNumber)
+              this.registerForm.value.address, this.registerForm.value.age,
+              this.registerForm.value.Name, this.registerForm.value.teleNumber)
     .then((user) => {
    
     const dialogRef = this.dialog.open(OtpVerifyComponent, {
@@ -74,9 +79,24 @@ export class LoginComponent {
     // Add any other user attributes you want to store
     };
     console.log(user);
+    console.log(result.idToken.payload);
+    const groups = result.idToken.payload['cognito:groups'] || [];
+
     //Authentication successful, you can navigate to the home page or perform other actions.
+    // Determine the user's group and navigate accordingly
+    if (groups.includes('Admin')) {
+      console.log('I am inside admin')
+      this.router.navigate(['/admin']);
+    } else if (groups.includes('Buyer')) {
+      this.router.navigate(['/buyer']);
+    } else if (groups.includes('Seller')) {
+      this.router.navigate(['/seller']);
+    } else {
+      this.router.navigate(['/unauthorized']);
+    }
+    console.log(groups);
     console.log('Authentication Succcessful', result);
-    this.router.navigate(['/home'], {state: {user} });
+   // this.router.navigate(['/'], {state: {user} });
     })
     .catch((error) => {
     this.errorMessage = 'Authentication failed. Please check your credentials.';
