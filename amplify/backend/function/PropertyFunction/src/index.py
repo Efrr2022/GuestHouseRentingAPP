@@ -64,6 +64,7 @@ def connect_to_database():
 
 def handler(event, context):
     print("inside property function")
+    logger.info("logger message")
     print('Received event:')
     print(event)
 

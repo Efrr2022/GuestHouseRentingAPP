@@ -56,7 +56,7 @@
         },
         "PropertyFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
-          "s3Key": "amplify-builds/PropertyFunction-766a4e316d4c4c476a79-build.zip"
+          "s3Key": "amplify-builds/PropertyFunction-4967444d38762f466273-build.zip"
         },
         "renterFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
