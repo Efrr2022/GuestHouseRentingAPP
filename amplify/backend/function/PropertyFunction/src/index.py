@@ -63,9 +63,8 @@ def connect_to_database():
         print(f'There was an exception: {e}')
 
 def handler(event, context):
-    print("inside property function")
-    logger.info("logger message")
-    print('Received event:')
+    logger.info("Inside property handler")
+    logger.info('Received event:')
     print(event)
 
     # Connect to the database
@@ -175,7 +174,7 @@ def handle_get_request(event, db):
     
 
     try:
-        print("Received event inside handle_get_request:")
+        logger.info("Received event inside handle_get_request:")
     
         # Create a cursor object to execute SQL queries
         mycursor = db.cursor()
@@ -218,7 +217,7 @@ def handle_get_request(event, db):
         sql_query += f" LIMIT {limit} OFFSET {offset};"
         mycursor.execute(sql_query)
         # logging.info('executed query')
-        print("executed query")
+        logger.info("executed query")
 
         # Fetch all the rows from the result set
         result = mycursor.fetchall()
@@ -263,7 +262,7 @@ def handle_get_request(event, db):
     except Exception as e:
         # logging.error(f'Error executing SQL query: {e}')
         # Return error response
-        print(f"Error in try block: {e}")
+        logger.info(f"Error in try block: {e}")
         return {
             'statusCode': 500,
             'body': json.dumps({'error': 'Internal Server Error'})
@@ -301,7 +300,7 @@ def handle_delete_request(event,db):
             'body': json.dumps('Houses deleted successfully')
         }
     except Exception as e:
-        print(f'There was an exception: {e}')
+        logger.error(f'There was an exception: {e}')
         response_delete = {
             'statusCode': 500,
             'body': json.dumps({'error': 'Internal Server Error'})

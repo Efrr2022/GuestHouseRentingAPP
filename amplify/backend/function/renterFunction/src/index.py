@@ -1,8 +1,24 @@
 import datetime
 import json
+import logging
+import sys
 import mysql.connector
 import boto3
 from botocore.exceptions import ClientError
+
+# Create a custom logger 
+logger = logging.getLogger("Property function")
+        
+# Create handlers
+c_handler = logging.StreamHandler(stream=sys.stdout)
+c_handler.setLevel(logging.INFO)
+fmt = logging.Formatter(
+    "%(name)s: %(asctime)s | %(levelname)s | %(filename)s:%(lineno)s | %(process)d >>> %(message)s"
+)
+c_handler.setFormatter(fmt)
+# Add handlers to the logger
+logger.addHandler(c_handler)
+logger.setLevel(logging.INFO)
 
 
 def get_secret():
@@ -37,10 +53,10 @@ def connect_to_database():
             database=secrets['database'],
             password=secrets['password']
         )
-        print("Database connected")
+        logger.info("Database connected")
         return db
     except Exception as e:
-        print(f'There was an exception: {e}')
+        logger.error(f'There was an exception: {e}')
 
 
 def handler(event, context):
