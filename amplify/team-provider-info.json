@@ -56,11 +56,11 @@
         },
         "PropertyFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
-          "s3Key": "amplify-builds/PropertyFunction-5137416e755949443049-build.zip"
+          "s3Key": "amplify-builds/PropertyFunction-42306f684b536f65575a-build.zip"
         },
         "renterFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
-          "s3Key": "amplify-builds/renterFunction-5a365063667573365638-build.zip"
+          "s3Key": "amplify-builds/renterFunction-5a735239466a39397544-build.zip"
         },
         "ReservationAndLeasedHouseFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
@@ -68,7 +68,7 @@
         },
         "paymentFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
-          "s3Key": "amplify-builds/paymentFunction-4c33456f4a6c77387839-build.zip"
+          "s3Key": "amplify-builds/paymentFunction-4732536a4346624b5257-build.zip"
         }
       },
       "api": {
