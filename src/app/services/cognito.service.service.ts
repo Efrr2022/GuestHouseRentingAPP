@@ -9,8 +9,13 @@ import AWS from 'aws-sdk';
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import { environment } from "../../environments/environment";
 import { Router } from '@angular/router';
-import { AwsSecretsManagerService } from './aws-secrets-manager.service.ts.service';
 
+AWS.config.update({
+  accessKeyId: environment.cognito.AWS_ACCESS_KEY_ID,
+  secretAccessKey: environment.cognito.AWS_SECRET_ACCESS_KEY,
+  region: environment.cognito.region,
+});
+console.log('AWS Config updated with new credentials');
 
    
 
@@ -30,7 +35,7 @@ export class CognitoServiceService {
   };
   public userPool = new AmazonCognitoIdentity.CognitoUserPool(this.poolData)
   
-  constructor(private router: Router,private secretsManagerService: AwsSecretsManagerService) {
+  constructor(private router: Router) {
     
   }
 
