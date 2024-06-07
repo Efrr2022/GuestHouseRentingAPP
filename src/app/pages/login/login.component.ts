@@ -40,7 +40,8 @@ export class LoginComponent {
     address: new FormControl('', [Validators.required]),
     age: new FormControl('', [Validators.required, ]),
     Name: new FormControl('', [Validators.required]),
-    teleNumber: new FormControl('', [Validators.required])
+    teleNumber: new FormControl('', [Validators.required]),
+    groupName: new FormControl('', [Validators.required])
   })
 
 
@@ -51,7 +52,7 @@ export class LoginComponent {
     this.authService
     .register(this.registerForm.value.email, this.registerForm.value.password,
               this.registerForm.value.address, this.registerForm.value.age,
-              this.registerForm.value.Name, this.registerForm.value.teleNumber)
+              this.registerForm.value.Name, this.registerForm.value.teleNumber, this.registerForm.value.groupName)
     .then((user) => {
    
     const dialogRef = this.dialog.open(OtpVerifyComponent, {
