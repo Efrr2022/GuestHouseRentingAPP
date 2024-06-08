@@ -8,9 +8,8 @@ export const environment = {
             region: "us-east-1",
             userPoolId:'us-east-1_JYVPbsTOO',
             userPoolWebClientId:'407mt8ve12lkmr5vl85hpaba0g',
-            IdentityPoolId: 'us-east-1:8c34b8e9-bfea-4d1d-9e99-4c785e150bf8',
-            AWS_ACCESS_KEY_ID: 'AKIA2UC3FWKS4YFBXBNR',
-           AWS_SECRET_ACCESS_KEY: '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',
+            IdentityPoolId: 'us-east-1:49615bb0-9acb-49bf-97c3-7b741a04d643',
+            
     }
 };
 
