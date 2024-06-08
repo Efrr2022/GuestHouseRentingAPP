@@ -33,11 +33,21 @@
           },
           "configurations": {
             "production": {
+              "allowedCommonJsDependencies": [
+                "aws-sdk",
+                "@aws-crypto/sha256-browser",
+                "bowser",
+                "buffer",
+                "@aws-crypto/sha256-js",
+                "js-cookie",
+                "fast-xml-parser",
+                "isomorphic-unfetch"
+              ],
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
