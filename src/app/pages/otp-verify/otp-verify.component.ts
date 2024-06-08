@@ -1,5 +1,5 @@
 import { Component, Input,OnInit, Inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router,ActivatedRoute } from '@angular/router';
 import { CognitoServiceService } from '../../services/cognito.service.service';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -22,6 +22,7 @@ export class OtpVerifyComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private authService: CognitoServiceService,
      private router:Router,
+     private route: ActivatedRoute
      ) {}
   protected codeForm = new FormGroup({
     code: new FormControl('', [Validators.required,]),
@@ -41,7 +42,7 @@ export class OtpVerifyComponent {
           // OTP verification successful
         console.log('OTP verification successful', result);
         this.dialogRef.close(true);
-        this.router.navigate(['/home']);
+        this.refreshPage();
 
         })
         .catch((error) => {
@@ -57,5 +58,9 @@ export class OtpVerifyComponent {
 
       closeDialog() {
         this.dialogRef.close(false); // Close dialog without success indication
+      }
+
+      refreshPage() {
+        window.location.reload();
       }
 }

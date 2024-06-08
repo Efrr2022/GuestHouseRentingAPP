@@ -3,11 +3,13 @@ import {
   AuthenticationDetails,
   CognitoUser,
   CognitoUserPool,
-  CognitoUserAttribute
+  CognitoUserSession
 } from "amazon-cognito-identity-js";
+import AWS from 'aws-sdk';
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import { environment } from "../../environments/environment";
 import { Router } from '@angular/router';
+
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,7 @@ import { Router } from '@angular/router';
 export class CognitoServiceService {
 
   //userPool: any;
-  cognitoUser: any;
+  private cognitoUser:any;
   username: string = "";
   private poolData = {
     UserPoolId: environment.cognito.userPoolId,
@@ -26,6 +28,8 @@ export class CognitoServiceService {
   constructor(private router: Router) {
     
   }
+
+ 
 
   // Login
   login(emailaddress: any, password: any) {
@@ -44,7 +48,7 @@ export class CognitoServiceService {
 
     
     return new Promise((resolove, reject) => {
-    cognitoUser.authenticateUser(authenticationDetails, {
+    cognitoUser?.authenticateUser(authenticationDetails, {
       onSuccess: (session) => {
         resolove(session);
         console.log("Success Session : ", session);
@@ -99,31 +103,21 @@ export class CognitoServiceService {
 
   // sign up 
   // Register a new user with Cognito 
-register(email:any, password: any, phoneNumber: any) {
+register(email:any, password: any, address: any, age: any,Name: any,teleNumber: any, groupName: any) {
   console.log("inside of the service register")
- // let poolData = {
-    //UserPoolId: environment.cognito.userPoolId,
-   // ClientId: environment.cognito.userPoolWebClientId,
-  //};
-  const attributeList: AmazonCognitoIdentity.CognitoUserAttribute [] = [] ;
-  // Add the name attribute
- attributeList.push;{
-  new AmazonCognitoIdentity.CognitoUserAttribute ( {
-   Name: 'phoneNumber',
-   Value: phoneNumber,
-  })
-};
-
- /** const attributeList = [
-    new CognitoUserAttribute({ Name: 'gender', Value: gender }),
-    new CognitoUserAttribute({ Name: 'phoneNumber', Value: phoneNumber }), // Add the given_name attribute
-    new CognitoUserAttribute({ Name: 'givenName', Value: givenName }),
-    new CognitoUserAttribute({ Name: 'familyName', Value: familyName }),
-    new CognitoUserAttribute({ Name: 'middleName', Value: middleName})
-  ];*/
-    //this.userPool = new CognitoUserPool(this.poolData);
-  
  
+  this.userPool = new AmazonCognitoIdentity.CognitoUserPool(this.poolData);
+ // Create attribute list
+ const attributeList = [
+  new AmazonCognitoIdentity.CognitoUserAttribute({ Name: 'custom:address', Value: String(address) }),
+  new AmazonCognitoIdentity.CognitoUserAttribute({ Name: 'custom:age', Value: String(age )}),
+  new AmazonCognitoIdentity.CognitoUserAttribute({ Name: 'custom:Name', Value: String(Name )}),
+  new AmazonCognitoIdentity.CognitoUserAttribute({ Name: 'custom:teleNumber', Value: String(teleNumber )}),
+  
+];
+console.log(attributeList);
+
+  
  return new Promise(( resolve, reject) => {
    this.userPool.signUp (
     email,
@@ -136,12 +130,38 @@ register(email:any, password: any, phoneNumber: any) {
      reject(err);
      } else {
        console.log(result.user);
-       resolve (result.user);
+       console.log("waiting to add to the groups")
+       // Add user to group
+        const userPoolId = environment.cognito.userPoolId;
+        const username = result.user.getUsername();
+        this.addUserToGroup(username, groupName);
+        
+        
+        resolve(result.user);
      }
      }
      );
      });
    }
+
+   async addUserToGroup(username: string, groupName: string) {
+    try {
+
+      const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
+
+      const params = {
+        GroupName: groupName,
+        UserPoolId: environment.cognito.userPoolId,
+        Username: username,
+      };
+
+      await cognitoIdentityServiceProvider.adminAddUserToGroup(params).promise();
+      console.log(`User ${username} added to group ${groupName}`);
+    } catch (error) {
+      console.error('Error adding user to group:', error);
+    }
+  }
+ 
 
    // confirm the registration
 	confirmRegistration(username: string, code: string) {
@@ -166,6 +186,38 @@ register(email:any, password: any, phoneNumber: any) {
      }
      });
      })
+    }
+
+    isAuthenticated(): boolean {
+      let poolData = {
+        UserPoolId: environment.cognito.userPoolId,
+        ClientId: environment.cognito.userPoolWebClientId,
+      };
+      this.userPool = new CognitoUserPool(poolData);
+      this.cognitoUser = this.userPool.getCurrentUser();
+      
+      return this.cognitoUser != null;
+    }
+
+
+    getUserGroups(): Promise<string[]> {
+      let poolData = {
+        UserPoolId: environment.cognito.userPoolId,
+        ClientId: environment.cognito.userPoolWebClientId,
+      };
+      this.userPool = new CognitoUserPool(poolData);
+      this.cognitoUser = this.userPool.getCurrentUser();
+      return new Promise((resolve, reject) => {
+        this.cognitoUser?.getSession((err: any, session: CognitoUserSession) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+  
+          const groups = session.getIdToken().payload['cognito:groups'] || [];
+          resolve(groups);
+        });
+      });
     }
 }
 
