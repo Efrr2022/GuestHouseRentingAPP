@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
        await this.secretManager.getSecretValue('dev/rentalHouseApp');
       
     } catch (error) {
-      console.error('Error retrieving secret:');
+      console.error('Error retrieving secret');
     }
   }
 }
