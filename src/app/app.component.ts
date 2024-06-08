@@ -17,8 +17,8 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      const secret = await this.secretManager.getSecretValue('dev/rentalHouseApp');
-      console.log('Retrieved secret:', secret);
+       await this.secretManager.getSecretValue('dev/rentalHouseApp');
+      
     } catch (error) {
       console.error('Error retrieving secret:', error);
     }
