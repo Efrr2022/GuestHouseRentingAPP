@@ -67,3 +67,5 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+#environment
+src/environments/environment.ts
