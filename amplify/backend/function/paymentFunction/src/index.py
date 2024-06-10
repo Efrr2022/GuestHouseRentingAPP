@@ -43,7 +43,6 @@ def get_secret():
         return json.loads(secret)
 
 
-        # Your code goes here.
 def connect_to_database():
         # Fetch secrets from AWS Secrets Manager
         secrets = get_secret()
@@ -100,11 +99,10 @@ def handler(event, context):
 
 
 
-    
 
 def handle_get_payment(event,db):
         
-
+        
         try:
             query_params=event.get('queryStringParameters')
             paymentId=query_params['id']
