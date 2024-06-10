@@ -1,9 +1,24 @@
 
 import json
+import sys
 import mysql.connector
-
+import logging
 import boto3
 from botocore.exceptions import ClientError
+
+# Create a custom logger 
+logger = logging.getLogger("Property function")
+        
+# Create handlers
+c_handler = logging.StreamHandler(stream=sys.stdout)
+c_handler.setLevel(logging.INFO)
+fmt = logging.Formatter(
+    "%(name)s: %(asctime)s | %(levelname)s | %(filename)s:%(lineno)s | %(process)d >>> %(message)s"
+)
+c_handler.setFormatter(fmt)
+# Add handlers to the logger
+logger.addHandler(c_handler)
+logger.setLevel(logging.INFO)
 
 
 def get_secret():
@@ -28,7 +43,6 @@ def get_secret():
         return json.loads(secret)
 
 
-        # Your code goes here.
 def connect_to_database():
         # Fetch secrets from AWS Secrets Manager
         secrets = get_secret()
@@ -40,13 +54,13 @@ def connect_to_database():
                 database=secrets['database'],
                 password=secrets['password']
             )
-            print("Database connected")
+            logger.info("Database connected")
             return db
         except Exception as e:
-            print(f'There was an exception: {e}')
+            logger.error(f'There was an exception: {e}')
 
 def handler(event, context):
-        print('received event:')
+        logger.info('received event:')
         print(event)
 
         db = connect_to_database()
@@ -85,11 +99,10 @@ def handler(event, context):
 
 
 
-    
 
 def handle_get_payment(event,db):
         
-
+        
         try:
             query_params=event.get('queryStringParameters')
             paymentId=query_params['id']
@@ -110,7 +123,7 @@ def handle_get_payment(event,db):
                     'paymentAmount' : payments[2],
                     'paymentDate' : str(payments[3])
                 })
-            print(f" type of paymentdate: {type(payments[3])}  data:{payments[3]} ")
+            logger.info(f" type of paymentdate: {type(payments[3])}  data:{payments[3]} ")
 
 
             mycursor.close()
@@ -155,7 +168,7 @@ def handle_get_payment_by_renter(event, db):
                 'paymentAmount': payment[2],
                 'paymentDate': str(payment[3])
             })
-        print(f"Type of payment date: {type(payment[3])} Data: {payment[3]}")
+        logger.info(f"Type of payment date: {type(payment[3])} Data: {payment[3]}")
 
         mycursor.close()
 
@@ -195,7 +208,7 @@ def handle_delete_payment_request(event,db):
             'body': json.dumps('Houses deleted successfully')
         }
     except Exception as e:
-        print(f'There was an exception: {e}')
+        logger.error(f'There was an exception: {e}')
         response_delete = {
             'statusCode': 500,
             'body': json.dumps({'error': 'Internal Server Error'})
