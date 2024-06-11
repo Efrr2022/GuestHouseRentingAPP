@@ -61,7 +61,7 @@ def connect_to_database():
 
 def handler(event, context):
         logger.info('received event:')
-        print(event)
+        logger.info(f'event: {event}')
 
         db = connect_to_database()
 
