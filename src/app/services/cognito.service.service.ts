@@ -10,11 +10,7 @@ import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js'
 import { environment } from "../../environments/environment";
 import { Router } from '@angular/router';
 
-AWS.config.update({
-  accessKeyId: 'AKIA2UC3FWKS4YFBXBNR', 
-  secretAccessKey: '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', 
-  region: environment.cognito.region 
-});
+
 
 @Injectable({
   providedIn: 'root'
