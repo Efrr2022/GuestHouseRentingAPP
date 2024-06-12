@@ -1,9 +1,26 @@
 import json
+import sys
 import mysql.connector
-
+import logging
 import boto3
 from botocore.exceptions import ClientError
 
+
+
+
+# Create a custom logger 
+logger = logging.getLogger("Property function")
+        
+# Create handlers
+c_handler = logging.StreamHandler(stream=sys.stdout)
+c_handler.setLevel(logging.INFO)
+fmt = logging.Formatter(
+    "%(name)s: %(asctime)s | %(levelname)s | %(filename)s:%(lineno)s | %(process)d >>> %(message)s"
+)
+c_handler.setFormatter(fmt)
+# Add handlers to the logger
+logger.addHandler(c_handler)
+logger.setLevel(logging.INFO)
 
 def get_secret():
     secret_name = "dev/rentalHouseApp"
@@ -39,13 +56,15 @@ def connect_to_database():
             database=secrets['database'],
             password=secrets['password']
         )
+        logger.info("database connected from logger")
         print("Database connected")
         return db
     except Exception as e:
         print(f'There was an exception: {e}')
 
 def handler(event, context):
-    print('Received event:')
+    logger.info("Inside property handler")
+    logger.info('Received event:')
     print(event)
 
     # Connect to the database
@@ -155,7 +174,7 @@ def handle_get_request(event, db):
     
 
     try:
-        print("Received event inside handle_get_request:")
+        logger.info("Received event inside handle_get_request:")
     
         # Create a cursor object to execute SQL queries
         mycursor = db.cursor()
@@ -198,7 +217,7 @@ def handle_get_request(event, db):
         sql_query += f" LIMIT {limit} OFFSET {offset};"
         mycursor.execute(sql_query)
         # logging.info('executed query')
-        print("executed query")
+        logger.info("executed query")
 
         # Fetch all the rows from the result set
         result = mycursor.fetchall()
@@ -243,7 +262,7 @@ def handle_get_request(event, db):
     except Exception as e:
         # logging.error(f'Error executing SQL query: {e}')
         # Return error response
-        print(f"Error in try block: {e}")
+        logger.info(f"Error in try block: {e}")
         return {
             'statusCode': 500,
             'body': json.dumps({'error': 'Internal Server Error'})
@@ -281,7 +300,7 @@ def handle_delete_request(event,db):
             'body': json.dumps('Houses deleted successfully')
         }
     except Exception as e:
-        print(f'There was an exception: {e}')
+        logger.error(f'There was an exception: {e}')
         response_delete = {
             'statusCode': 500,
             'body': json.dumps({'error': 'Internal Server Error'})

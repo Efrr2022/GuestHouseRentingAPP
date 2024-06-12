@@ -1,9 +1,24 @@
 
 import json
+import sys
 import mysql.connector
-
+import logging
 import boto3
 from botocore.exceptions import ClientError
+
+# Create a custom logger 
+logger = logging.getLogger("Property function")
+        
+# Create handlers
+c_handler = logging.StreamHandler(stream=sys.stdout)
+c_handler.setLevel(logging.INFO)
+fmt = logging.Formatter(
+    "%(name)s: %(asctime)s | %(levelname)s | %(filename)s:%(lineno)s | %(process)d >>> %(message)s"
+)
+c_handler.setFormatter(fmt)
+# Add handlers to the logger
+logger.addHandler(c_handler)
+logger.setLevel(logging.INFO)
 
 
 def get_secret():
@@ -28,7 +43,6 @@ def get_secret():
         return json.loads(secret)
 
 
-        # Your code goes here.
 def connect_to_database():
         # Fetch secrets from AWS Secrets Manager
         secrets = get_secret()
@@ -40,14 +54,14 @@ def connect_to_database():
                 database=secrets['database'],
                 password=secrets['password']
             )
-            print("Database connected")
+            logger.info("Database connected")
             return db
         except Exception as e:
-            print(f'There was an exception: {e}')
+            logger.error(f'There was an exception: {e}')
 
 def handler(event, context):
-        print('received event:')
-        print(event)
+        logger.info('received event:')
+        logger.info(f'event: {event}')
 
         db = connect_to_database()
 
@@ -61,33 +75,34 @@ def handler(event, context):
 
         if httpMethod == "GET":
             if 'id' in event['queryStringParameters']:
-                handle_get_payment(event, db)
+                response = handle_get_payment(event, db)
             elif 'renterId' in event['queryStringParameters']:
-                handle_get_payment_by_renter(event, db)
+                response = handle_get_payment_by_renter(event, db)
         elif httpMethod == "DELETE" :
-             handle_delete_payment_request(event,db)      
+             response=handle_delete_payment_request(event,db)      
         else:
             return {
                 'statusCode': 405,
                 'body': json.dumps({'message': 'Method Not Allowed'})
             }
         
-    #     return {
-    #     'statusCode': response.get('statusCode', 200),
-    #     'headers': {
-    #         'Access-Control-Allow-Headers': '*',
-    #         'Access-Control-Allow-Origin': '*',
-    #         'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-    #     },
-    #     'body': json.dumps(response.get('body'))
-    # }
+        return {
+        'statusCode': response.get('statusCode', 200),
+        'headers': {
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+        },
+        'body': json.dumps(response.get('body'))
+    }
+
 
 
 
 
 def handle_get_payment(event,db):
-        print("inside get payment method")
-
+        
+        
         try:
             query_params=event.get('queryStringParameters')
             paymentId=query_params['id']
@@ -108,16 +123,19 @@ def handle_get_payment(event,db):
                     'paymentAmount' : payments[2],
                     'paymentDate' : str(payments[3])
                 })
-            print(f" type of paymentdate: {type(payments[3])}  data:{payments[3]} ")
+            logger.info(f" type of paymentdate: {type(payments[3])}  data:{payments[3]} ")
 
 
             mycursor.close()
 
-            return {
+            response_get={
                 'statusCode': 200,
-                'body': json.dumps(response_list,default=str) # Serialize datetime objects using default=str
+                'body': json.dumps(response_list, default=str)  # Serialize datetime objects using default=str
+
             }
-        
+
+            return response_get
+                   
                 
         except Exception as e:
             return {
@@ -130,7 +148,6 @@ def handle_get_payment(event,db):
 
 
 def handle_get_payment_by_renter(event, db):
-    print("inside get payment method using renter id")
     try:
         query_params = event.get('queryStringParameters')
         renter_id = query_params['renterId']
@@ -149,17 +166,18 @@ def handle_get_payment_by_renter(event, db):
                 'paymentId': payment[0],
                 'leasedId': payment[1],
                 'paymentAmount': payment[2],
-                'paymentDate': payment[3].strftime('%Y-%m-%d %H:%M:%S')
+                'paymentDate': str(payment[3])
             })
-        print(f"Type of payment date: {type(payment[3])} Data: {payment[3]}")
+        logger.info(f"Type of payment date: {type(payment[3])} Data: {payment[3]}")
 
         mycursor.close()
 
-        return {
+        response_get = {
             'statusCode': 200,
             'body': json.dumps(response_list, default=str)  # Serialize datetime objects using default=str
         }
 
+        return response_get
     except Exception as e:
         return {
             'statusCode': 500,
@@ -185,18 +203,18 @@ def handle_delete_payment_request(event,db):
         
         db.commit()
 
-        return {
+        response_delete = {
             'statusCode': 200,
             'body': json.dumps('Houses deleted successfully')
         }
     except Exception as e:
-        print(f'There was an exception: {e}')
-        return {
+        logger.error(f'There was an exception: {e}')
+        response_delete = {
             'statusCode': 500,
             'body': json.dumps({'error': 'Internal Server Error'})
         }
     finally:
         mycursor.close()
     
-    
+    return response_delete
         

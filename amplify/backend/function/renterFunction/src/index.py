@@ -1,8 +1,24 @@
 import datetime
 import json
+import logging
+import sys
 import mysql.connector
 import boto3
 from botocore.exceptions import ClientError
+
+# Create a custom logger 
+logger = logging.getLogger("Property function")
+        
+# Create handlers
+c_handler = logging.StreamHandler(stream=sys.stdout)
+c_handler.setLevel(logging.INFO)
+fmt = logging.Formatter(
+    "%(name)s: %(asctime)s | %(levelname)s | %(filename)s:%(lineno)s | %(process)d >>> %(message)s"
+)
+c_handler.setFormatter(fmt)
+# Add handlers to the logger
+logger.addHandler(c_handler)
+logger.setLevel(logging.INFO)
 
 
 def get_secret():
@@ -37,10 +53,10 @@ def connect_to_database():
             database=secrets['database'],
             password=secrets['password']
         )
-        print("Database connected")
+        logger.info("Database connected")
         return db
     except Exception as e:
-        print(f'There was an exception: {e}')
+        logger.error(f'There was an exception: {e}')
 
 
 def handler(event, context):
@@ -188,8 +204,8 @@ def handle_list_renters(event, db):
                 "address": renter[3],
                 "contactNumber": renter[4],
                 "emailAddress": renter[5],
-                "registrationTime": str(renter[6]),
-                "lastModified": str(renter[7]),
+                "registrationTime": renter[6],
+                "lastModified": renter[7].strftime('%Y-%m-%d %H:%M:%S') if isinstance(renter[7], datetime.datetime) else renter[7], 
                 "status": renter[8]
             })
             print(f"data:{renter[6]} type:{type(renter[6])}") #{renter[6].strftime('%Y-%m-%d %H:%M:%S')} isinstance: {isinstance(renter[6], datetime.datetime)}")
@@ -200,7 +216,7 @@ def handle_list_renters(event, db):
         # Return success response with list of renters
         return {
             'statusCode': 200,
-            'body': json.dumps(response_data)  # Serialize datetime objects using default=str
+            'body': json.dumps(response_data, default=str)  # Serialize datetime objects using default=str
         }
     except Exception as e:
         # Return error response if any exception occurs
