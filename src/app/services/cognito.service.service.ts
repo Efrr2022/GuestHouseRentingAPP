@@ -11,7 +11,6 @@ import { environment } from "../../environments/environment";
 import { Router } from '@angular/router';
 
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -29,6 +28,8 @@ export class CognitoServiceService {
   constructor(private router: Router) {
     
   }
+
+ 
 
   // Login
   login(emailaddress: any, password: any) {
@@ -102,7 +103,7 @@ export class CognitoServiceService {
 
   // sign up 
   // Register a new user with Cognito 
-register(email:any, password: any, address: any, age: any,Name: any,teleNumber: any) {
+register(email:any, password: any, address: any, age: any,Name: any,teleNumber: any, groupName: any) {
   console.log("inside of the service register")
  
   this.userPool = new AmazonCognitoIdentity.CognitoUserPool(this.poolData);
@@ -133,35 +134,34 @@ console.log(attributeList);
        // Add user to group
         const userPoolId = environment.cognito.userPoolId;
         const username = result.user.getUsername();
-
-        // Initialize the CognitoIdentityServiceProvider
-        const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider({
-          region: environment.cognito.region
-        });
-        console.log("cognito Identity",cognitoIdentityServiceProvider )
-
-        // Add user to group
-        const groupParams = {
-          GroupName: 'Seller', // replace with your group name
-          UserPoolId: userPoolId,
-          Username: username
-        };
-
-        console.log("groupParam", groupParams)
-        cognitoIdentityServiceProvider.adminAddUserToGroup(groupParams, (err, data) => {
-          if (err) {
-            console.log("Error From adding to group",err);
-            reject(err);
-          } else {
-            console.log('User added to group:', data);
-          }
-        });
+        this.addUserToGroup(username, groupName);
+        
+        
         resolve(result.user);
      }
      }
      );
      });
    }
+
+   async addUserToGroup(username: string, groupName: string) {
+    try {
+
+      const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
+
+      const params = {
+        GroupName: groupName,
+        UserPoolId: environment.cognito.userPoolId,
+        Username: username,
+      };
+
+      await cognitoIdentityServiceProvider.adminAddUserToGroup(params).promise();
+      console.log(`User ${username} added to group ${groupName}`);
+    } catch (error) {
+      console.error('Error adding user to group:', error);
+    }
+  }
+ 
 
    // confirm the registration
 	confirmRegistration(username: string, code: string) {

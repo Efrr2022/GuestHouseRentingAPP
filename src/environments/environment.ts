@@ -9,7 +9,7 @@ export const environment = {
             userPoolId:'us-east-1_JYVPbsTOO',
             userPoolWebClientId:'407mt8ve12lkmr5vl85hpaba0g',
            IdentityPoolId: 'us-east-1:49615bb0-9acb-49bf-97c3-7b741a04d643',
-            
+
     }
 };
 
