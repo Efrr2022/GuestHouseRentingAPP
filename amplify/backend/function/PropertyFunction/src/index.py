@@ -77,8 +77,13 @@ def handler(event, context):
         }
 
 
+    path = event.get('path', '')
+
     if event["httpMethod"] == "GET":
-        response = handle_get_request(event, db)
+        if path == "/houses/price":
+            response = handle_get_houses_by_price(event, db)
+        else:
+            response = handle_get_request(event, db)
     elif event["httpMethod"] == "POST":
         response = handle_post_request(event, db)
     elif event["httpMethod"] == "DELETE":
@@ -134,7 +139,7 @@ def handle_post_request(event,db):
         house_type = data.get('houseType')
         latitude = data.get('latitude')
         longitude = data.get('longitude')
-        house_status = data.get('houseStatus')  
+        house_status = data.get('houseStatus')      
 
         # Construct SQL query
         sql_query = f"""INSERT INTO tblHouses (houseId, house_heading, number_of_bedroom,number_of_bathroom, number_of_balcony, 
@@ -370,6 +375,91 @@ def handle_update_house_with_features(event, db):
     finally:
         # Close database connection
         db.close()
+
+
+def handle_get_houses_by_price(event, db):
+    try:
+        logger.info("Received event inside handle_get_houses_by_price:")
+
+        # Extract query parameters
+        query_params = event.get("queryStringParameters", {})
+        min_price = query_params.get('minPrice', None)
+        max_price = query_params.get('maxPrice', None)
+
+        # Validate parameters
+        if min_price is None and max_price is None:
+            return {
+                'statusCode': 400,
+                'body': json.dumps({'error': 'minPrice or maxPrice must be provided'})
+            }
+
+        # Construct the SQL query
+        sql_query = """
+            SELECT *
+            FROM tblHouses
+            WHERE houseStatus = 1
+        """
+
+        conditions = []
+        if min_price is not None:
+            conditions.append(f"price >= {float(min_price)}")
+        if max_price is not None:
+            conditions.append(f"price <= {float(max_price)}")
+
+        if conditions:
+            sql_query += " AND " + " AND ".join(conditions)
+
+        # Execute the query
+        mycursor = db.cursor()
+        mycursor.execute(sql_query)
+        logger.info("Executed price query")
+
+        # Fetch results
+        result = mycursor.fetchall()
+
+        # Prepare the response
+        response_list = []
+        for row in result:
+            response_list.append({
+                "houseId": row[0],
+                "houseHeading": row[1],
+                "numberOfBedroom": row[2],
+                "numberOfBathroom": row[3],
+                "numberOfBalcony": row[4],
+                "dateOfPosting": str(row[5]),
+                "isActive": row[6],
+                "houseDescription": row[7],
+                "houseNumber": row[8],
+                "houseFloorNumber": row[9],
+                "housePaymentType": row[10],
+                "locationId": row[11],
+                "isVerified": row[12],
+                "price": float(row[13]),
+                "ownerId": row[14],
+                "lastModified": str(row[15]),
+                "area": row[16],
+                "houseType": row[17],
+                "latitude": float(row[18]),
+                "longitude": float(row[19]),
+                "houseStatus": row[20]
+            })
+
+        mycursor.close()
+
+        return {
+            "statusCode": 200,
+            "body": response_list
+        }
+
+    except Exception as e:
+        logger.error(f"Error in price query: {e}")
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': 'Internal Server Error'})
+        }
+    finally:
+        db.close()
+
 
 
 
