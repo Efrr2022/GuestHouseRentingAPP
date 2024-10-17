@@ -79,11 +79,37 @@ def handler(event, context):
 
     path = event.get('path', '')
 
+def handler(event, context):
+    logger.info("Inside property handler")
+    logger.info('Received event:')
+    print(event)
+
+    # Connect to the database
+    db = connect_to_database()
+
+    if not db:
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': 'Failed to connect to the database'})
+        }
+
+    path = event.get('path', '')
+
     if event["httpMethod"] == "GET":
-        if path == "/houses/price":
-            response = handle_get_houses_by_price(event, db)
+        # Check for price filtering parameters
+        query_params = event.get("queryStringParameters", {})
+        min_price = query_params.get('minPrice')
+        max_price = query_params.get('maxPrice')
+
+        if path == "/property" and (min_price is not None or max_price is not None):
+            response = handle_get_houses_by_price(event, db)  # Handle price filtering
+        elif path == "/property":
+            response = handle_get_request(event, db)  # Handle normal GET request
         else:
-            response = handle_get_request(event, db)
+            response = {
+                'statusCode': 404,
+                'body': json.dumps({'error': 'Not Found'})
+            }
     elif event["httpMethod"] == "POST":
         response = handle_post_request(event, db)
     elif event["httpMethod"] == "DELETE":
@@ -380,7 +406,7 @@ def handle_update_house_with_features(event, db):
 def handle_get_houses_by_price(event, db):
     try:
         logger.info("Received event inside handle_get_houses_by_price:")
-
+        
         # Extract query parameters
         query_params = event.get("queryStringParameters", {})
         min_price = query_params.get('minPrice', None)
@@ -448,7 +474,7 @@ def handle_get_houses_by_price(event, db):
 
         return {
             "statusCode": 200,
-            "body": response_list
+            "body": json.dumps(response_list)  # Ensure this is serialized
         }
 
     except Exception as e:
@@ -459,6 +485,7 @@ def handle_get_houses_by_price(event, db):
         }
     finally:
         db.close()
+
 
 
 
