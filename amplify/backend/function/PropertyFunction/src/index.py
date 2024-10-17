@@ -97,7 +97,7 @@ def handler(event, context):
 
     if event["httpMethod"] == "GET":
         # Check for price filtering parameters
-        query_params = event.get("queryStringParameters", {})
+        query_params = event.get("queryStringParameters") or {}
         min_price = query_params.get('minPrice')
         max_price = query_params.get('maxPrice')
 
@@ -408,7 +408,7 @@ def handle_get_houses_by_price(event, db):
         logger.info("Received event inside handle_get_houses_by_price:")
         
         # Extract query parameters
-        query_params = event.get("queryStringParameters", {})
+        query_params = event.get("queryStringParameters") or {}
         min_price = query_params.get('minPrice', None)
         max_price = query_params.get('maxPrice', None)
 
@@ -472,10 +472,17 @@ def handle_get_houses_by_price(event, db):
 
         mycursor.close()
 
-        return {
+        # return {
+        #     "statusCode": 200,
+        #     "body": json.dumps(response_list)  
+        # }
+    
+
+        response = {
             "statusCode": 200,
-            "body": json.dumps(response_list)  # Ensure this is serialized
+            "body": response_list
         }
+        return response
 
     except Exception as e:
         logger.error(f"Error in price query: {e}")
