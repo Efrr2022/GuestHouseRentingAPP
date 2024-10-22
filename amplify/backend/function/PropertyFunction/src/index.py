@@ -62,22 +62,22 @@ def connect_to_database():
     except Exception as e:
         print(f'There was an exception: {e}')
 
-def handler(event, context):
-    logger.info("Inside property handler")
-    logger.info('Received event:')
-    print(event)
+# def handler(event, context):
+#     logger.info("Inside property handler")
+#     logger.info('Received event:')
+#     print(event)
 
-    # Connect to the database
-    db = connect_to_database()
+#     # Connect to the database
+#     db = connect_to_database()
 
-    if not db:
-        return {
-            'statusCode': 500,
-            'body': json.dumps({'error': 'Failed to connect to the database'})
-        }
+#     if not db:
+#         return {
+#             'statusCode': 500,
+#             'body': json.dumps({'error': 'Failed to connect to the database'})
+#         }
 
 
-    path = event.get('path', '')
+#     path = event.get('path', '')
 
 def handler(event, context):
     logger.info("Inside property handler")
@@ -200,29 +200,31 @@ def handle_post_request(event,db):
 
 
 def handle_get_request(event, db):
-    # logging.info("Received event inside handle_get_request:")
-    # logging.info(event)
-    
-
     try:
         logger.info("Received event inside handle_get_request:")
-    
+
         # Create a cursor object to execute SQL queries
         mycursor = db.cursor()
-        
+
         query_params = event.get("queryStringParameters", None)
-        if query_params is not None:
-            limit = int(query_params.get('limit', 10))  
-            offset = int(query_params.get('offset', 0)) 
-            no_of_bedrooms = int(query_params.get('noOfBedrooms',None)) 
-            no_of_bathrooms = int(query_params.get('noOfBathrooms',None))  
-            price = int(query_params.get('price',None))
-        else:
-            limit = 10
-            offset = 0
-            no_of_bedrooms = None
-            no_of_bathrooms = None
-            price=None
+        limit = 10  # default limit
+        offset = 0  # default offset
+        conditions = []
+
+        if query_params:
+            limit = int(query_params.get('limit', 10))  # Extract limit from query params, default is 10
+            offset = int(query_params.get('offset', 0))  # Extract offset from query params, default is 0
+            no_of_bedrooms = query_params.get('noOfBedrooms', None)
+            no_of_bathrooms = query_params.get('noOfBathrooms', None)
+            price = query_params.get('price', None)
+
+            # Add conditions only if the parameters are provided
+            if no_of_bedrooms:
+                conditions.append(f"number_of_bedroom = {int(no_of_bedrooms)}")
+            if no_of_bathrooms:
+                conditions.append(f"number_of_bathroom = {int(no_of_bathrooms)}")
+            if price:
+                conditions.append(f"price >= {int(price)}")
 
         # Construct the base SQL query
         sql_query = """
@@ -231,24 +233,16 @@ def handle_get_request(event, db):
             WHERE houseStatus=1
         """
 
-        # Add WHERE clause for filtering based on parameters
-        conditions = []
-        if no_of_bedrooms is not None:
-            conditions.append(f"number_of_bedroom = {no_of_bedrooms}")
-        if no_of_bathrooms is not None:
-            conditions.append(f"number_of_bathroom = {no_of_bathrooms}")
-        if price is not None:
-            conditions.append(f"price >= {price}")
-    
-        
+        # Add conditions if present
         if conditions:
             sql_query += " AND " + " AND ".join(conditions)
 
         # Add LIMIT and OFFSET for pagination
         sql_query += f" LIMIT {limit} OFFSET {offset};"
+
+        # Execute the query
         mycursor.execute(sql_query)
-        # logging.info('executed query')
-        logger.info("executed query")
+        logger.info("Executed query")
 
         # Fetch all the rows from the result set
         result = mycursor.fetchall()
@@ -257,33 +251,33 @@ def handle_get_request(event, db):
         response_list = []
         for row in result:
             response_list.append({
-                "houseId": row[0],  
-                "houseHeading": row[1],  
-                "numberOfBedroom": row[2],  
-                "numberOfBathroom": row[3],  
-                "numberOfBalcony": row[4],  
-                "dateOfPosting": str(row[5]),  
-                "isActive": row[6],  
-                "houseDescription": row[7],  
-                "houseNumber": row[8],  
-                "houseFloorNumber": row[9],  
-                "housePaymentType": row[10],  
-                "locationId": row[11],  
-                "isVerified": row[12],  
-                "price": float(row[13]), 
-                "ownerId": row[14],  
-                "lastModified": str(row[15]), 
-                "area": row[16], 
-                "houseType": row[17],  
-                "latitude": float(row[18]),  
-                "longitude": float(row[19]),  
-                "houseStatus": row[20]  
+                "houseId": row[0],
+                "houseHeading": row[1],
+                "numberOfBedroom": row[2],
+                "numberOfBathroom": row[3],
+                "numberOfBalcony": row[4],
+                "dateOfPosting": str(row[5]),
+                "isActive": row[6],
+                "houseDescription": row[7],
+                "houseNumber": row[8],
+                "houseFloorNumber": row[9],
+                "housePaymentType": row[10],
+                "locationId": row[11],
+                "isVerified": row[12],
+                "price": float(row[13]),
+                "ownerId": row[14],
+                "lastModified": str(row[15]),
+                "area": row[16],
+                "houseType": row[17],
+                "latitude": float(row[18]),
+                "longitude": float(row[19]),
+                "houseStatus": row[20]
             })
 
-        # Close the cursor, but do not close the database connection
+        # Close the cursor
         mycursor.close()
 
-        # Construct response object 
+        # Construct response object
         response = {
             "statusCode": 200,
             "body": response_list
@@ -291,8 +285,6 @@ def handle_get_request(event, db):
         return response
 
     except Exception as e:
-        # logging.error(f'Error executing SQL query: {e}')
-        # Return error response
         logger.info(f"Error in try block: {e}")
         return {
             'statusCode': 500,
@@ -300,6 +292,7 @@ def handle_get_request(event, db):
         }
     finally:
         db.close()
+
 
 
 
