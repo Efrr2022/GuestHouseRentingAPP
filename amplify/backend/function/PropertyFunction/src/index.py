@@ -214,9 +214,10 @@ def handle_get_request(event, db):
         if query_params:
             limit = int(query_params.get('limit', 10))  # Extract limit from query params, default is 10
             offset = int(query_params.get('offset', 0))  # Extract offset from query params, default is 0
-            no_of_bedrooms = query_params.get('noOfBedrooms', None)
-            no_of_bathrooms = query_params.get('noOfBathrooms', None)
+            no_of_bedrooms = query_params.get('noOfBedroom', None)
+            no_of_bathrooms = query_params.get('noOfBathroom', None)
             price = query_params.get('price', None)
+            city = query_params.get('city', None)
 
             # Add conditions only if the parameters are provided
             if no_of_bedrooms:
@@ -224,7 +225,9 @@ def handle_get_request(event, db):
             if no_of_bathrooms:
                 conditions.append(f"number_of_bathroom = {int(no_of_bathrooms)}")
             if price:
-                conditions.append(f"price >= {int(price)}")
+                conditions.append(f"price = {int(price)}")
+            if city:
+                conditions.append(f"city = '{city}'")
 
         # Construct the base SQL query
         sql_query = """
