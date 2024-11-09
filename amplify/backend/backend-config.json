@@ -56,6 +56,20 @@
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
     },
+    "registerAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "registernFunc"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
     "renterAPI": {
       "dependsOn": [
         {
@@ -117,6 +131,11 @@
       "service": "Lambda"
     },
     "paymentFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "registernFunc": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"

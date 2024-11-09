@@ -69,7 +69,8 @@
         "paymentFunction": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
           "s3Key": "amplify-builds/paymentFunction-4732536a4346624b5257-build.zip"
-        }
+        },
+        "registernFunc": {}
       },
       "api": {
         "OwnerAPI": {},
