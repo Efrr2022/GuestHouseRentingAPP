@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/register": {
+      "name": "/register",
+      "lambdaFunction": "registernFunc",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
