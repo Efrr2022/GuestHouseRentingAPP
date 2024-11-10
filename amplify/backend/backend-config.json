@@ -217,6 +217,22 @@
         }
       ]
     },
+    "AMPLIFY_function_registernFunc_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "registernFunc"
+        }
+      ]
+    },
+    "AMPLIFY_function_registernFunc_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "registernFunc"
+        }
+      ]
+    },
     "AMPLIFY_function_renterFunction_deploymentBucketName": {
       "usedBy": [
         {

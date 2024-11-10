@@ -79,7 +79,7 @@ def handler(event, context):
         # Register the user in Cognito User Pool        
         response = client.sign_up(
             ClientId='67gj73oagdf5nj1bq9n4g46d2',  # Replace with your App Client ID
-            Username=username,
+            Username=email,
             Password=password,
             UserAttributes=[
                 {'Name': 'email', 'Value': email},
