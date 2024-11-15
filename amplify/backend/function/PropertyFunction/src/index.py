@@ -44,7 +44,7 @@ def get_secret():
     return json.loads(secret)
 
 
-    # Your code goes here.
+    
 def connect_to_database():
     # Fetch secrets from AWS Secrets Manager
     secrets = get_secret()
