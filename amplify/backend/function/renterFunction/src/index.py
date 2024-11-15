@@ -65,6 +65,10 @@ def handler(event, context):
     if not db:
         return {
             'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Optional, if CORS is needed
+            },
             'body': json.dumps({'error': 'Failed to connect to the database'})
         }
     
@@ -89,6 +93,10 @@ def handler(event, context):
     else:
         return {
             'statusCode': 405,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Optional, if CORS is needed
+            },
             'body': json.dumps({'message': 'Method Not Allowed'})
         }
 
@@ -129,6 +137,10 @@ def handle_update_renter(event, db):
         # Return success response
         return {
             'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Optional, if CORS is needed
+            },
             'body': json.dumps({'message': 'Renter updated successfully'})
         }
     except Exception as e:
@@ -166,12 +178,20 @@ def handle_delete_renter(event, db):
         # Return success response
         return {
             'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Optional, if CORS is needed
+            },
             'body': json.dumps({'message': 'Renter deleted successfully'})
         }
     except Exception as e:
         # Return error response if any exception occurs
         return {
             'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Optional, if CORS is needed
+            },
             'body': json.dumps({'error': str(e)})
         }
     finally:
@@ -216,12 +236,20 @@ def handle_list_renters(event, db):
         # Return success response with list of renters
         return {
             'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Optional, if CORS is needed
+            },
             'body': json.dumps(response_data, default=str)  # Serialize datetime objects using default=str
         }
     except Exception as e:
         # Return error response if any exception occurs
         return {
             'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Optional, if CORS is needed
+            },
             'body': json.dumps({'error': str(e)})
         }
     finally:
@@ -273,12 +301,20 @@ def handle_list_renters_by_house_id(event, db):
         # Return success response with list of renters
         return {
             'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Optional, if CORS is needed
+            },
             'body': json.dumps(response_data)
         }
     except Exception as e:
         # Return error response if any exception occurs
         return {
             'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Optional, if CORS is needed
+            },
             'body': json.dumps({'error': str(e)})
         }
     finally:
@@ -323,12 +359,20 @@ def create_renter_in_record(event, db):
         # Return success response
         return {
             'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Optional, if CORS is needed
+            },
             'body': json.dumps({'message': 'Renter In record created successfully'})
         }
     except Exception as e:
         # Return error response if any exception occurs
         return {
             'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Optional, if CORS is needed
+            },
             'body': json.dumps({'error': str(e)})
         }
     finally:
@@ -371,6 +415,10 @@ def create_renter_out_record(event,db):
          # Return success response
         return {
             'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Optional, if CORS is needed
+            },
             'body': json.dumps({'message': 'Renter In record created successfully'})
         }   
 
@@ -379,6 +427,10 @@ def create_renter_out_record(event,db):
         # Return error response if any exception occurs
         return {
             'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Optional, if CORS is needed
+            },
             'body': json.dumps({'error': str(e)})
         }
     finally:
