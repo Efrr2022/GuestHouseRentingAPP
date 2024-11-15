@@ -78,7 +78,7 @@ def handler(event, context):
     try:
         # Register the user in Cognito User Pool        
         response = client.sign_up(
-            ClientId='67gj73oagdf5nj1bq9n4g46d2',  # Replace with your App Client ID
+            ClientId='67gj73oagdf5nj1bq9n4g46d2', 
             Username=email,
             Password=password,
             UserAttributes=[
@@ -87,6 +87,11 @@ def handler(event, context):
         )
         return {
             'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',  
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type',
+            },
             'body': json.dumps({
                 'message': 'User registered successfully!',
                 'response': response
@@ -95,6 +100,11 @@ def handler(event, context):
     except ClientError as e:
         return {
             'statusCode': 400,
+            'headers': {
+                'Access-Control-Allow-Origin': '*', 
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type',
+            },
             'body': json.dumps({
                 'message': 'User registration failed.',
                 'error': str(e)
