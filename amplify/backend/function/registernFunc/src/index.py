@@ -66,14 +66,26 @@ def handler(event, context):
     print('received event:')
     print(event)
   
- # Initialize Cognito client
+    # Initialize Cognito client
     client = boto3.client('cognito-idp')
 
     # Extract user details from the event body
     body = json.loads(event.get('body', '{}'))
-    username = body.get('username')
-    password = body.get('password')
-    email = body.get('email')
+    postdata = body.get('postdata', {})  # Access the 'postdata' key
+    username = postdata.get('username')
+    password = postdata.get('password')
+    email = postdata.get('email')
+
+    if not username or not password or not email:
+        return {
+            'statusCode': 400,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type',
+            },
+            'body': json.dumps({'message': 'Invalid input. Username, password, and email are required.'})
+        }
 
     try:
         # Register the user in Cognito User Pool        
