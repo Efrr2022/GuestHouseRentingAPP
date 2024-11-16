@@ -5,11 +5,9 @@ import logging
 import boto3
 from botocore.exceptions import ClientError
 
-
-
-# Create a custom logger 
+# Create a custom logger
 logger = logging.getLogger("register function")
-        
+
 # Create handlers
 c_handler = logging.StreamHandler(stream=sys.stdout)
 c_handler.setLevel(logging.INFO)
@@ -17,6 +15,7 @@ fmt = logging.Formatter(
     "%(name)s: %(asctime)s | %(levelname)s | %(filename)s:%(lineno)s | %(process)d >>> %(message)s"
 )
 c_handler.setFormatter(fmt)
+
 # Add handlers to the logger
 logger.addHandler(c_handler)
 logger.setLevel(logging.INFO)
@@ -42,8 +41,6 @@ def get_secret():
     secret = get_secret_value_response['SecretString']
     return json.loads(secret)
 
-
-
 def connect_to_database():
     # Fetch secrets from AWS Secrets Manager
     secrets = get_secret()
@@ -61,20 +58,20 @@ def connect_to_database():
     except Exception as e:
         print(f'There was an exception: {e}')
 
-
 def handler(event, context):
     print('received event:')
     print(event)
-  
+
     # Initialize Cognito client
     client = boto3.client('cognito-idp')
 
     # Extract user details from the event body
     body = json.loads(event.get('body', '{}'))
-    postdata = body.get('postdata', {})  # Access the 'postdata' key
-    username = postdata.get('username')
-    password = postdata.get('password')
-    email = postdata.get('email')
+    signup = body.get('signup', {})  # Access the 'signup' key (nested dictionary)
+    
+    username = signup.get('username')
+    password = signup.get('password')
+    email = signup.get('email')
 
     if not username or not password or not email:
         return {
