@@ -15,6 +15,11 @@ export type AmplifyDependentResourcesAttributes = {
       "ApiName": "string",
       "RootUrl": "string"
     },
+    "loginAPI": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
+    },
     "paymentAPI": {
       "ApiId": "string",
       "ApiName": "string",
@@ -58,6 +63,13 @@ export type AmplifyDependentResourcesAttributes = {
       "Region": "string"
     },
     "ReservationAndLeasedHouseFunction": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "loginFunction": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",

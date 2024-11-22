@@ -73,7 +73,8 @@
         "registernFunc": {
           "deploymentBucketName": "amplify-guesthouserentalapp-dev-f9808-deployment",
           "s3Key": "amplify-builds/registernFunc-456c4c2b545678346741-build.zip"
-        }
+        },
+        "loginFunction": {}
       },
       "api": {
         "OwnerAPI": {},
