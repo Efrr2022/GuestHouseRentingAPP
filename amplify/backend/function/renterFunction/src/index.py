@@ -84,6 +84,8 @@ def handler(event, context):
         return handle_update_renter(event, db)
     elif http_method == "DELETE":
         return handle_delete_renter(event, db)
+    elif http_method == "POST" and query_params.get("renterOut", "0") == "0":
+        return create_renter(event, db)
     elif http_method == "POST":
         renter_out = query_params.get("renterOut", "0")
         if renter_out == "1":
@@ -99,6 +101,64 @@ def handler(event, context):
             },
             'body': json.dumps({'message': 'Method Not Allowed'})
         }
+    
+
+
+def create_renter(event, db):
+    try:
+        # Parse request body to get renter information
+        data = json.loads(event["body"])
+        
+        # Extract renter data from the request body
+        renter_id = data.get("renterId")
+        first_name = data.get("firstName")
+        last_name = data.get("lastName")
+        address = data.get("address")
+        contact_number = data.get("contactNumber")
+        email_address = data.get("emailAddress")
+        registration_time = data.get("registrationTime")
+        last_modified = data.get("lastModified")
+        status = data.get("status")
+        
+        # Construct SQL query to insert renter data
+        sql_query = f"""
+            INSERT INTO tblRenter (renterId, first_name, last_name, address, contact_number, email_address, registration_time, last_modified, status)
+            VALUES ({renter_id}, '{first_name}', '{last_name}', '{address}', {contact_number}, '{email_address}', '{registration_time}', '{last_modified}', '{status}')
+        """
+        
+        # Create a cursor
+        cursor = db.cursor()
+        
+        # Execute the SQL query
+        cursor.execute(sql_query)
+        db.commit()
+        
+        # Close the cursor
+        cursor.close()
+        
+        # Return success response
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Optional, if CORS is needed
+            },
+            'body': json.dumps({'message': 'Renter created successfully'})
+        }
+    except Exception as e:
+        # Return error response if any exception occurs
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Optional, if CORS is needed
+            },
+            'body': json.dumps({'error': str(e)})
+        }
+    finally:
+        # Close the database connection
+        db.close()
+
 
 
 
