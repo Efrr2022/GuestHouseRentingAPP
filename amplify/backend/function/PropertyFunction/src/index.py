@@ -137,7 +137,7 @@ def handler(event, context):
 
 # defining handle request method 
 def handle_post_request(event,db):
-    
+    logger.info("inside post method")
     mycursor = db.cursor()
 
     try:
